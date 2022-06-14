@@ -4,7 +4,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import myAccount from './components/pages/myAccount';
 import ManageGrades from './components/pages/manageGrades';
-import purchaseTokens from './components/pages/purchaseTokens';
+import PurchaseTokens from './components/pages/purchaseTokens';
 import transactionLogs from './components/pages/transactionLogs';
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
         <Routes>
           <Route exact path='/' component={ManageGrades} />
           <Route path='/transactionLogs' component={transactionLogs} />
-          <Route path='/purchaseTokens' component={purchaseTokens} />
+          <Route path='/purchaseTokens' element={<PurchaseTokens />} />
           <Route path='/myAccount' component={myAccount} />
         </Routes>
       </Router>

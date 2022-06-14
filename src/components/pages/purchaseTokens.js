@@ -1,6 +1,6 @@
 import React from "react";
 
-const purchaseTokens = () => {
+const PurchaseTokens = () => {
     return (
         <div>
             <small> testing testing </small>
@@ -8,4 +8,4 @@ const purchaseTokens = () => {
     )
 };
 
-export default purchaseTokens;
+export default PurchaseTokens;
