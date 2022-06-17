@@ -2,10 +2,10 @@ import React from 'react';
 import Navbar from './components/Navbar';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import myAccount from './components/pages/myAccount';
+import MyAccount from './components/pages/myAccount';
 import ManageGrades from './components/pages/manageGrades';
 import PurchaseTokens from './components/pages/purchaseTokens';
-import transactionLogs from './components/pages/transactionLogs';
+import TransactionLogs from './components/pages/transactionLogs';
 
 function App() {
   return (
@@ -14,9 +14,10 @@ function App() {
         <Navbar />
         <Routes>
           <Route exact path='/' element={<ManageGrades />} />
-          <Route path='/transactionLogs' component={transactionLogs} />
+          <Route path='/manageGrades' element={<ManageGrades />} />
+          <Route path='/transactionLogs' element={<TransactionLogs />} />
           <Route path='/purchaseTokens' element={<PurchaseTokens />} />
-          <Route path='/myAccount' component={myAccount} />
+          <Route path='/myAccount' element={<MyAccount />} />
         </Routes>
       </Router>
     </>

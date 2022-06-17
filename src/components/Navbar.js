@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from './Button';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
+import Sidebar from './Sidebar';
 
 function Navbar() {
   const [click, setClick] = useState(false);
@@ -26,8 +27,12 @@ function Navbar() {
 
   return (
     <>
+          <Sidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
+
       <nav className='navbar'>
+
         <div className='navbar-container'>
+
           <Link to='/' className='navbar-logo' onClick={closeMobileMenu}>
             GradeGo
             <i class='fab fa-typo3' />
