@@ -13,7 +13,7 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route exact path='/' component={ManageGrades} />
+          <Route exact path='/' element={<ManageGrades />} />
           <Route path='/transactionLogs' component={transactionLogs} />
           <Route path='/purchaseTokens' element={<PurchaseTokens />} />
           <Route path='/myAccount' component={myAccount} />
