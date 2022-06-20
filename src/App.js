@@ -7,6 +7,7 @@ import ManageGrades from './components/pages/manageGrades';
 import PurchaseTokens from './components/pages/purchaseTokens';
 import TransactionLogs from './components/pages/transactionLogs';
 import ManageApprovals from './components/pages/manageApprovals';
+import Login from './components/pages/Login'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
+          <Route path="/login" element={<Login />} />
           <Route path='/manageApprovals' element={<ManageApprovals />} />
           <Route exact path='/' element={<ManageGrades />} />
           <Route path='/manageGrades' element={<ManageGrades />} />
