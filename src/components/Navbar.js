@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Button } from './Button';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-import Sidebar from './Sidebar';
 
 function Navbar() {
   const [click, setClick] = useState(false);
@@ -27,8 +26,6 @@ function Navbar() {
 
   return (
     <>
-          <Sidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
-
       <nav className='navbar'>
 
         <div className='navbar-container'>
@@ -47,11 +44,12 @@ function Navbar() {
               </Link>
             </li>
             <li className='nav-item'>
-              <Link
-                to='/transactionLogs'
-                className='nav-links'
-                onClick={closeMobileMenu}
-              >
+              <Link to='/manageApprovals' className='nav-links' onClick={closeMobileMenu}>
+                Manage Approvals
+              </Link>
+            </li>
+            <li className='nav-item'>
+              <Link to='/transactionLogs' className='nav-links' onClick={closeMobileMenu}>
                 Transaction Logs
               </Link>
             </li>

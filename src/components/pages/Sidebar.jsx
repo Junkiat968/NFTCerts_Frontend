@@ -2,22 +2,17 @@ import React from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import './Sidebar.css';
 
-function Navbar() {
+function Sidebar() {
     return (
     <Menu>
       <a className="menu-item" href="/">
-        Home
+        ICT1001 Introuction to Computing
       </a>
       <a className="menu-item" href="/manageGrades">
-        Manage Grades
-      </a>
-      <a className="menu-item" href="/transactionLogs">
-        Transaction Logs
-      </a>
-      <a className="menu-item" href="/purchaseTokens">
-        Purchase Tokens
+        ICT2102 Introduction to Software Engineering
       </a>
     </Menu>
   );
 };
-export default Navbar;
+
+export default Sidebar;

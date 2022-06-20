@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
+import Sidebar from './Sidebar';
+import './manageGrades.css';
 
 const ManageGrades = () => {
     const [items, setItems] = useState([]);
@@ -37,15 +39,14 @@ const ManageGrades = () => {
   
     return (
       <div>
-        <input
-          type="file"
-          onChange={(e) => {
-            const file = e.target.files[0];
-            readExcel(file);
-          }}
+        <Sidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
+
+        <input type="file" onChange={(e) => {const file = e.target.files[0]; 
+        readExcel(file);}}
         />
-  
-        <table class="table container">
+
+        <div class="table-container">
+          <table>
           <thead>
             <tr>
               <th scope="col">Student</th>
@@ -53,6 +54,7 @@ const ManageGrades = () => {
               <th scope="col">Grade</th>
             </tr>
           </thead>
+
           <tbody>
             {items.map((d) => (
               <tr key={d.Id}>
@@ -62,7 +64,8 @@ const ManageGrades = () => {
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
     );
   };

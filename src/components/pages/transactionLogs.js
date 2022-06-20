@@ -1,9 +1,12 @@
 import './transactionLogs.css';
 import React from 'react';
 
-function transactionLogs () {
+const TransactionLogs = () => {
     return (
         <div className='table-container'>
+            <h2>
+                Token transaction history
+            </h2>
             <table>
                 <thead>
                     <tr>
@@ -25,4 +28,4 @@ function transactionLogs () {
     )
 };
 
-export default transactionLogs;
+export default TransactionLogs;

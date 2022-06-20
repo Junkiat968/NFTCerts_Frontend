@@ -9,33 +9,44 @@
     border-collapse: collapse;
     width: 100%;
   }
+
+  thead{
+  background-color: #F0F8FF;
+  font-size: 21px;
+  color: #23305E;
+  }
+
+  tbody{
+  font-size: 16px;
+  }
   
   th,
   td {
-    border: 1px solid #ffffff;
-    text-align: left;
+    border: 1px solid #DEDEDE;
+    text-align: center;
     padding: 8px;
-    font-size: 32px;
+    font-family: 'Roboto';
   }
-  
-  th {
-    background-color: rgb(117, 201, 250);
-  }
-  
-  td {
-    background-color: rgb(205, 235, 253);
-  }
-  
-  form {
-    display: flex;
-    gap: 5px;
-  }
-  
-  form td:last-child {
-    display: flex;
-    justify-content: space-evenly;
-  }
-  
-  form * {
+
+  h2{
+    font-weight: bold;
+    color: #23305E;
     font-size: 28px;
+    font-family: 'Roboto';
   }
+
+  .accept{
+  color: #FFF;
+  background: #167F39;
+  padding: 5px 10px;
+  border: 1px solid #FFFFFF;
+  border-radius: 6px;  
+}
+
+  .reject{
+    color: #FFF;
+    background: #D41212;
+    padding: 5px 10px;
+    border: 1px solid #FFFFFF;
+    border-radius: 6px;  
+    }

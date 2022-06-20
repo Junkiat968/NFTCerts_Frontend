@@ -8,18 +8,9 @@
     top: 36px;
 }
 
-
 /* Color/shape of burger icon bars */
-
 .bm-burger-bars {
-    background: #373a47;
-}
-
-
-/* Color/shape of burger icon bars on hover*/
-
-.bm-burger-bars-hover {
-    background: #a90000;
+    background: #ffffff;
 }
 
 
@@ -34,7 +25,7 @@
 /* Color/shape of close button cross */
 
 .bm-cross {
-    background: #bdc3c7;
+    background: #ffffff;
 }
 
 
@@ -52,7 +43,7 @@
 /* General sidebar styles */
 
 .bm-menu {
-    background: #373a47;
+    background: #ffffff;
     padding: 2.5em 1.5em 0;
     font-size: 1.15em;
 }
@@ -77,20 +68,15 @@
 
 .bm-item {
     display: inline-block;
-    color: #d1d1d1;
+    color: #23305E;
     margin-bottom: 10px;
     text-align: left;
     text-decoration: none;
     transition: color 0.2s;
+    font-family: 'Roboto';
 }
 
 .bm-item:hover {
     color: #ffffff;
-}
-
-
-/* Styling of overlay */
-
-.bm-overlay {
-    background: rgba(0, 0, 0, 0.3);
+    background: #23305E;
 }

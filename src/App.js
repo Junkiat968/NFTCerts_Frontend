@@ -6,6 +6,7 @@ import MyAccount from './components/pages/myAccount';
 import ManageGrades from './components/pages/manageGrades';
 import PurchaseTokens from './components/pages/purchaseTokens';
 import TransactionLogs from './components/pages/transactionLogs';
+import ManageApprovals from './components/pages/manageApprovals';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
+          <Route path='/manageApprovals' element={<ManageApprovals />} />
           <Route exact path='/' element={<ManageGrades />} />
           <Route path='/manageGrades' element={<ManageGrades />} />
           <Route path='/transactionLogs' element={<TransactionLogs />} />
