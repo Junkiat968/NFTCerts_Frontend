@@ -12,7 +12,7 @@ const Navbar = () => {
             <nav className="py-2 bg-dark">
                <div className="container d-flex flex-wrap">
                   <ul className="nav me-auto">
-                     <li><NavLink className="nav-link px-2 text-white" to="/home">Home</NavLink></li>
+                     <li><NavLink className="nav-link px-2 text-white" to="/Page1">Page1</NavLink></li>
                      <div>
                         <li><NavLink className="nav-link px-2 text-white" to="/Page2">Page2</NavLink></li>
                      </div>

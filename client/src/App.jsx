@@ -13,7 +13,7 @@ import Footer from "./components/Footer";
 import Navbar from './components/Navbar.jsx';
 
 // Import Pages
-import Home from './components/Pages/home.js';
+import Page1 from './components/Pages/Page1.js';
 import Login from './components/Pages/Login';
 import Page2 from './components/Pages/Page2';
 import Error from './components/Pages/Error';
@@ -32,14 +32,14 @@ class App extends Component {
             loginState ?
               <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/home" element={<Home />} />
+                <Route path="/Page1" element={<Page1 />} />
                 <Route path='/Page2' element={<Page2 />} />
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
               :
               <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/home" element={<Error />} />
+                <Route path="/Page1" element={<Error />} />
                 <Route path='/Page2' element={<Error />} />
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
