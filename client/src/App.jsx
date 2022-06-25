@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { EthProvider } from "./contexts/EthContext";
+import { EthProvider, EthContext } from "./contexts/EthContext";
 import "./App.css";
 
 // Demo/Sample Components
@@ -13,32 +13,68 @@ import Footer from "./components/Footer";
 import Navbar from './components/Navbar.jsx';
 
 // Import Pages
-import Home from './components/Pages/home.js';
+import Page1 from './components/Pages/Page1.js';
+import Login from './components/Pages/Login';
 import Page2 from './components/Pages/Page2';
+import Error from './components/Pages/Error';
+import PageNotFound from './components/Pages/PageNotFound';
 
-function App() {
-  return (
-    <EthProvider>
+class App extends Component {
+  static contextType = EthContext;
+
+  render() {
+    const { loginState } = this.context;
+    return (
       <div id="App" >
-      <Router>
+        <Router>
           <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path='/Page2' element={<Page2 />} />
-          </Routes>
+          {
+            loginState ?
+              <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/Page1" element={<Page1 />} />
+                <Route path='/Page2' element={<Page2 />} />
+                <Route path='*' element={<PageNotFound />} />
+              </Routes>
+              :
+              <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/Page1" element={<Error />} />
+                <Route path='/Page2' element={<Error />} />
+                <Route path='*' element={<PageNotFound />} />
+              </Routes>
+          }
         </Router>
-        {/* <div className="container">
-          <Intro />
-          <hr />
-          <Setup />
-          <hr />
-          <Demo />
-          <hr />
-          <Footer />
-        </div> */}
       </div>
-    </EthProvider>
-  );
+    );
+  };
 }
+
+// function App() {
+//   return (
+//     <EthProvider>
+//       <div id="App" >
+//         <Router>
+//           <Navbar />
+//           <Routes>
+//             <Route path="/" element={<Login />} />
+//             <Route path="/Home" element={<Home />} />
+//             <Route path='/Page2' element={<Page2 />} />
+//           </Routes>
+//         </Router>
+
+//         {/* <div className="container">
+//           <Intro />
+//           <hr />
+//           <Setup />
+//           <hr />
+//           <Demo />
+//           <hr />
+//           <Footer />
+//         </div> */}
+//       </div>
+//     </EthProvider >
+//   );
+// }
 
 export default App;
