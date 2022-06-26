@@ -8,6 +8,9 @@ $ npm start
 ## Troubleshooting
 
 - __Possible additional modules to install (if module not found).__
-  - npm install @truffle/hdwallet-provider
-  - npm install --save-dev @openzeppelin/contracts
-  - npm install react-router-dom@6
+  - Root Directory
+    - npm install @truffle/hdwallet-provider
+    - npm install --save-dev @openzeppelin/contracts
+  - In Client Directory
+    - npm install react-router-dom@6
+    - npm install --save ethers
