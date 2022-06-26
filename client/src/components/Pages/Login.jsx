@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import useEth from "../../contexts/EthContext/useEth";
-import { shortenAddress } from '../../utils/addressShortener';
 
 const Login = () => {
     const { state, init } = useEth();
@@ -11,11 +10,9 @@ const Login = () => {
                 <div>
                     <section className="text-center">
                         <div className="row py-lg-1">
-                            <div className="col-lg-6 col-md-8 mx-auto">
-                                <small className="px-2">
-                                    Account: {state.accounts}
-                                </small>
-                            </div>
+                            <small className="px-2">
+                                Account: {state.accounts}
+                            </small>
                         </div>
                     </section>
                     <div className="mt-5" >

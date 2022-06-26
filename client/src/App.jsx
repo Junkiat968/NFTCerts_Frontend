@@ -4,16 +4,16 @@ import { EthProvider, EthContext } from "./contexts/EthContext";
 import "./App.css";
 
 // Demo/Sample Components
-import Intro from "./components/Intro/";
-import Setup from "./components/Setup";
-import Demo from "./components/Demo";
-import Footer from "./components/Footer";
+// import Intro from "./components/Intro/";
+// import Setup from "./components/Setup";
+// import Demo from "./components/Demo";
+// import Footer from "./components/Footer";
 
 // Import Components
 import Navbar from './components/Navbar.jsx';
 
 // Import Pages
-import Page1 from './components/Pages/Page1.js';
+import SITNFT from './components/Pages/SITNFT.js';
 import Login from './components/Pages/Login';
 import Page2 from './components/Pages/Page2';
 import Error from './components/Pages/Error';
@@ -32,14 +32,14 @@ class App extends Component {
             loginState ?
               <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/Page1" element={<Page1 />} />
+                <Route path="/SITNFT" element={<SITNFT />} />
                 <Route path='/Page2' element={<Page2 />} />
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
               :
               <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/Page1" element={<Error />} />
+                <Route path="/SITNFT" element={<Error />} />
                 <Route path='/Page2' element={<Error />} />
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
