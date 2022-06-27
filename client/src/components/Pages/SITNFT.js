@@ -14,63 +14,112 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 const SITNFT = () => {
   const {
     state,
-    testFunct,
+    functIsAdmin,
+    functIsFaculty,
     makeAdmin,
     removeAdmin,
     handleChange,
     formData,
-    isAdminResult
+    isAdminResult,
+    isFacultyResult
   } = useEth();
   console.log(isAdminResult);
 
-  // const handleCheckAdmin = (e) => {
-  //   const { addressInput } = formData;
-  //   e.preventDefault();
-  //   if (!addressInput) {
-  //     alert('Please enter value!');
-  //     return;
-  //   }
-  //   testFunct();
-  // };
+  const handleCheckAdmin = (e) => {
+    const { addressInput } = formData;
+    e.preventDefault();
+    if (!addressInput) {
+      alert('Please enter valid Admin Address!');
+      return;
+    }
+    functIsAdmin();
+  };
+
+  const handleCheckFaculty = (e) => {
+    const { addressInput } = formData;
+    e.preventDefault();
+    if (!addressInput) {
+      alert('Please enter valid Faculty Address!');
+      return;
+    }
+    functIsFaculty();
+  };
+
+  const renderIsAdmin = (e) => {
+    return (
+      <>
+        <p className="border-bottom mt-3">Check if Admin:</p>
+        <div className="row g-3">
+          <div className="col-sm-6 ">
+            <label htmlFor="lastName" className="form-label text-start">Address</label>
+            <Input placeholder="e.g. 0x........." name="addressInput" type="text" handleChange={handleChange} />
+          </div>
+          <div className="col-sm-6">
+            <div className="row col-sm-12 text-center">
+              <div className="col-sm-6 text-center">
+                <button className="btn btn-block btn-primary mt-3" type="button" onClick={handleCheckAdmin}>Check Admin Status</button>
+              </div>
+              <div className="col-sm-3 text-center">
+                <button className="btn btn-block btn-outline-secondary mt-3" type="button" onClick={makeAdmin}>Make Admin</button>
+              </div>
+              <div className="col-sm-3 text-center">
+                <button className="btn btn-block btn-outline-danger mt-3" type="button" onClick={removeAdmin}>Remove Admin</button>
+              </div>
+            </div>
+            <div className="mt-3">
+              Result:
+              <div className="">
+                <small>
+                  {isAdminResult.toString()}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  };
+
+  const renderIsFaculty = (e) => {
+    return (
+      <>
+        <p className="border-bottom mt-3">Check if Faculty:</p>
+        <div className="row g-3 mt-3">
+          <div className="col-sm-6 ">
+            <label htmlFor="lastName" className="form-label text-start">Address</label>
+            <Input placeholder="e.g. 0x........." name="addressInput" type="text" handleChange={handleChange} />
+          </div>
+          <div className="col-sm-6">
+            <div className="row col-sm-12 text-center">
+              <div className="col-sm-6 text-center">
+                <button className="btn btn-block btn-primary mt-3" type="button" onClick={handleCheckFaculty}>Check Faculty Status</button>
+              </div>
+              <div className="col-sm-3 text-center">
+                <button className="btn btn-block btn-outline-secondary mt-3" type="button" onClick={""}>Make Faculty</button>
+              </div>
+              <div className="col-sm-3 text-center">
+                <button className="btn btn-block btn-outline-danger mt-3" type="button" onClick={""}>Remove Faculty</button>
+              </div>
+            </div>
+            <div className="mt-3">
+              Result:
+              <div className="">
+                <small>
+                  {isFacultyResult.toString()}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  };
 
   return (
     <div className='page-two container'>
-      <h2 className="pb-2 border-bottom text-start mt-5">SITNFT.</h2>
-      <p>Check if admin:</p>
-      <div className="row g-3 mt-3">
-        {/* <div className="col-sm-6">
-          <label htmlFor="firstName" className="form-label"></label>
-          <input type="text" className="form-control" id="firstName" placeholder="" required="" />
-        </div> */}
-        <div className="col-sm-6 ">
-          <label htmlFor="lastName" className="form-label text-start">Address</label>
-          <Input placeholder="e.g. 0x........." name="addressInput" type="text" handleChange={handleChange} />
-          {/* <input type="text" className="form-control" id="lastName" placeholder="0x..........." required="" /> */}
-          <div className="text-end">
-            <button className="btn btn-block btn-primary mt-3" type="button" onClick={testFunct}>Submit</button>
-          </div>
-          {/* <div className="invalid-feedback">
-            0x...........
-          </div> */}
-        </div>
-        <div className="col-sm-6 mt-3">
-          isAdmin() Result:
-          <div className="">
-            <small>
-              {isAdminResult.toString()}
-            </small>
-          </div>
-        </div>
-      </div>
-      <div className="row mt-5 border-top">
-        <p>// Work in progress.. //</p>
-        <div className="col-sm-6 text-center">
-          <button className="btn btn-block btn-primary mt-3" type="button" onClick={makeAdmin}>Make Admin</button>
-        </div>
-        <div className="col-sm-6 text-center">
-          <button className="btn btn-block btn-primary mt-3" type="button" onClick={removeAdmin}>Remove Admin</button>
-        </div>
-      </div>
+      <h2 className="pb-2 border-bottom text-start mt-5">SITNFT. Testing.</h2>
+      {renderIsAdmin()}
+      {renderIsFaculty()}
     </div>
   );
 };

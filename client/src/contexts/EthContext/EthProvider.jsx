@@ -8,9 +8,7 @@ import {
   base64ContractAddress,
   base64ContractABI,
   sitnftContractAddress,
-  sitnftContractABI,
-  simpleContractAddress,
-  simpleContractABI
+  sitnftContractABI
 } from '../../utils/constants';
 const { ethereum } = window;
 
@@ -29,7 +27,8 @@ function EthProvider({ children }) {
   const [currentAccount, setCurrentAccount] = useState('');
   const [loginState, setLoginState] = useState(false);
   const [formData, setFormData] = useState({ addressInput: "" });
-  const [isAdminResult, setisAdminResult] = useState('');
+  const [isAdminResult, setIsAdminResult] = useState('');
+  const [isFacultyResult, setIsFacultyResult] = useState('');
 
   const handleChange = (e, name) => {
     setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
@@ -70,7 +69,6 @@ function EthProvider({ children }) {
         try {
           address = artifact.networks[networkID].address;
           contractSS = new web3.eth.Contract(abi, address);
-          // contractC = new web3.eth.Contract(colorContractABI, colorContractAddress);
           contractBase64 = new web3.eth.Contract(base64ContractABI, base64ContractAddress);
           contractsitnft = new web3.eth.Contract(sitnftContractABI, sitnftContractAddress);
         } catch (err) {
@@ -80,7 +78,7 @@ function EthProvider({ children }) {
         // DISPATCH
         dispatch({
           type: actions.init,
-          data: { artifact, web3, accounts, networkID, contractSS, contractC, contractBase64, contractsitnft }
+          data: { artifact, web3, accounts, networkID, contractSS, contractBase64, contractsitnft }
         });
       }
     }
@@ -103,7 +101,6 @@ function EthProvider({ children }) {
   useEffect(() => {
     const tryInit = async () => {
       try {
-        // const artifactSS = require("../../contracts/SimpleStorage.json");
         const artifact = require("../../contracts/SITNFT.json");
         init(artifact);
       } catch (err) {
@@ -116,34 +113,58 @@ function EthProvider({ children }) {
 
   // ======================================== SITNFT Functions ========================================
 
-  const testFunct = async () => {
-
+  const functIsAdmin = async () => {
     try {
       const { addressInput } = formData;
       const sitnftInstance = getSITNFTContract();
       console.log(addressInput);
       const result = await sitnftInstance.isAdmin((addressInput).toString());
-      setisAdminResult(result);
+      setIsAdminResult(result);
       return result;
     } catch (err) {
-      setisAdminResult(err);
+      setIsAdminResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+  const makeAdmin = async () => {
+    const { addressInput } = formData;
+    const sitnftInstance = getSITNFTContract();
+    try {
+      const result = await sitnftInstance.addAdmin((addressInput).toString());
+      console.log(result);
+      functIsAdmin();
+    } catch (err) {
+      setIsAdminResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+  const removeAdmin = async () => {
+    const { addressInput } = formData;
+    const sitnftInstance = getSITNFTContract();
+    try {
+      const result = await sitnftInstance.removeAdmin((addressInput).toString());
+      console.log(result);
+      functIsAdmin();
+    } catch (err) {
+      setIsAdminResult(err);
       console.error(err);
       return err;
     }
   }
 
-  const makeAdmin = async () => {
-    const sitnftInstance = getSITNFTContract();
-    const result = await sitnftInstance.addAdmin((state.accounts).toString());
-    console.log(result);
-  }
-  const removeAdmin = async () => {
-    const sitnftInstance = getSITNFTContract();
+  const functIsFaculty = async () => {
     try {
-      const result = await sitnftInstance.removeAdmin("0xf9977c8E797b3bD6115e0aF05da1aDAD1953B943");
-      console.log(result);
+      const { addressInput } = formData;
+      const sitnftInstance = getSITNFTContract();
+      const result = await sitnftInstance.isFaculty((addressInput).toString());
+      setIsFacultyResult(result);
+      return result;
     } catch (err) {
+      setIsFacultyResult(err);
       console.error(err);
+      return err;
     }
   }
 
@@ -153,7 +174,7 @@ function EthProvider({ children }) {
     checkIfWalletIsConnected();
     const events = ["chainChanged", "accountsChanged"];
     const handleChange = () => {
-      // init(state.artifact);
+      init(state.artifact);
       window.location.reload();
     };
 
@@ -171,12 +192,14 @@ function EthProvider({ children }) {
       init,
       currentAccount,
       loginState,
-      testFunct,
+      functIsAdmin,
+      functIsFaculty,
       makeAdmin,
       removeAdmin,
       handleChange,
       formData,
-      isAdminResult
+      isAdminResult,
+      isFacultyResult
     }}>
       {children}
     </EthContext.Provider>

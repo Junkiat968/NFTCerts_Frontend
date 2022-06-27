@@ -17,8 +17,6 @@ const initialState = {
   web3: null,
   accounts: null,
   networkID: null,
-  contractSS: null,
-  contractC: null,
   contractBase64: null,
   contractsitnft: null,
 };
