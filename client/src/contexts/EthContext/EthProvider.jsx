@@ -2,38 +2,91 @@ import React, { useReducer, useCallback, useEffect, useState } from "react";
 import Web3 from "web3";
 import EthContext from "./EthContext";
 import { reducer, actions, initialState } from "./state";
+import { ethers } from 'ethers';
+
+import {
+  base64ContractAddress,
+  base64ContractABI,
+  sitnftContractAddress,
+  sitnftContractABI
+} from '../../utils/constants';
+const { ethereum } = window;
+
+const provider = new ethers.providers.Web3Provider(ethereum);
+const signer = provider.getSigner();
+
+/** Get SITNFT Contract Instance*/
+const getSITNFTContract = () => {
+  const sitnftContract = new ethers.Contract(sitnftContractAddress, sitnftContractABI, signer);
+  console.log(provider, signer, sitnftContract);
+  return sitnftContract;
+}
 
 function EthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [currentAccount, setCurrentAccount] = useState('');
   const [loginState, setLoginState] = useState(false);
+  const [formData, setFormData] = useState({ addressInput: "" });
+  const [isAdminResult, setIsAdminResult] = useState('');
+  const [isFacultyResult, setIsFacultyResult] = useState('');
+
+  const handleChange = (e, name) => {
+    setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
+  };
 
   const init = useCallback(
+    // async artifact => {
+    //   if (artifact) {
+    //     const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+    //     const accounts = await web3.eth.requestAccounts();
+    //     setCurrentAccount(accounts);
+    //     const networkID = await web3.eth.net.getId();
+
+
+    //     const { abi } = artifact;
+    //     let address, contract;
+    //     try {
+    //       address = artifact.networks[networkID].address;
+    //       contract = new web3.eth.Contract(abi, address);
+    //     } catch (err) {
+    //       console.error(err);
+    //     }
+    //     dispatch({
+    //       type: actions.init,
+    //       data: { artifact, web3, accounts, networkID, contract }
+    //     });
+    //   }
+    // }
     async artifact => {
       if (artifact) {
         const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
         const accounts = await web3.eth.requestAccounts();
         setCurrentAccount(accounts);
         const networkID = await web3.eth.net.getId();
+
         const { abi } = artifact;
-        let address, contract;
+        let address, contractSS, contractC, contractBase64, contractsitnft;
         try {
           address = artifact.networks[networkID].address;
-          contract = new web3.eth.Contract(abi, address);
+          contractSS = new web3.eth.Contract(abi, address);
+          contractBase64 = new web3.eth.Contract(base64ContractABI, base64ContractAddress);
+          contractsitnft = new web3.eth.Contract(sitnftContractABI, sitnftContractAddress);
         } catch (err) {
           console.error(err);
         }
+
+        // DISPATCH
         dispatch({
           type: actions.init,
-          data: { artifact, web3, accounts, networkID, contract }
+          data: { artifact, web3, accounts, networkID, contractSS, contractBase64, contractsitnft }
         });
       }
-    }, []);
+    }
+    , []);
 
   const checkIfWalletIsConnected = async () => {
     try {
       const accountConnected = state.accounts;
-
       if (accountConnected) {
         setLoginState(true);
       } else {
@@ -48,7 +101,7 @@ function EthProvider({ children }) {
   useEffect(() => {
     const tryInit = async () => {
       try {
-        const artifact = require("../../contracts/SimpleStorage.json");
+        const artifact = require("../../contracts/SITNFT.json");
         init(artifact);
       } catch (err) {
         console.error(err);
@@ -57,6 +110,65 @@ function EthProvider({ children }) {
 
     tryInit();
   }, [init]);
+
+  // ======================================== SITNFT Functions ========================================
+
+  const functIsAdmin = async () => {
+    try {
+      const { addressInput } = formData;
+      const sitnftInstance = getSITNFTContract();
+      console.log(addressInput);
+      const result = await sitnftInstance.isAdmin((addressInput).toString());
+      setIsAdminResult(result);
+      return result;
+    } catch (err) {
+      setIsAdminResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+  const makeAdmin = async () => {
+    const { addressInput } = formData;
+    const sitnftInstance = getSITNFTContract();
+    try {
+      const result = await sitnftInstance.addAdmin((addressInput).toString());
+      console.log(result);
+      functIsAdmin();
+    } catch (err) {
+      setIsAdminResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+  const removeAdmin = async () => {
+    const { addressInput } = formData;
+    const sitnftInstance = getSITNFTContract();
+    try {
+      const result = await sitnftInstance.removeAdmin((addressInput).toString());
+      console.log(result);
+      functIsAdmin();
+    } catch (err) {
+      setIsAdminResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+
+  const functIsFaculty = async () => {
+    try {
+      const { addressInput } = formData;
+      const sitnftInstance = getSITNFTContract();
+      const result = await sitnftInstance.isFaculty((addressInput).toString());
+      setIsFacultyResult(result);
+      return result;
+    } catch (err) {
+      setIsFacultyResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+
+  // ======================================== END SITNFT Functions ========================================
 
   useEffect(() => {
     checkIfWalletIsConnected();
@@ -70,7 +182,8 @@ function EthProvider({ children }) {
     return () => {
       events.forEach(e => window.ethereum.removeListener(e, handleChange));
     };
-  }, [init, state.artifact]);
+  },
+    [init, state.artifact]);
 
   return (
     <EthContext.Provider value={{
@@ -78,7 +191,15 @@ function EthProvider({ children }) {
       dispatch,
       init,
       currentAccount,
-      loginState
+      loginState,
+      functIsAdmin,
+      functIsFaculty,
+      makeAdmin,
+      removeAdmin,
+      handleChange,
+      formData,
+      isAdminResult,
+      isFacultyResult
     }}>
       {children}
     </EthContext.Provider>

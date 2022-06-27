@@ -13,7 +13,7 @@ const Navbar = () => {
                <div className="container d-flex flex-wrap">
                   <ul className="nav me-auto">
                      <li><NavLink className="nav-link px-2 text-white" to="/">Home</NavLink></li>
-                     <li><NavLink className="nav-link px-2 text-white" to="/Page1">Page1</NavLink></li>
+                     <li><NavLink className="nav-link px-2 text-white" to="/SITNFT">SITNFT</NavLink></li>
                      <li><NavLink className="nav-link px-2 text-white" to="/Page2">Page2</NavLink></li>
                   </ul>
                   <ul className="nav">

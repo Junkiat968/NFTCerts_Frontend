@@ -2,12 +2,23 @@ const actions = {
   init: "INIT",
 };
 
+// const initialState = {
+//   artifact: null,
+//   web3: null,
+//   accounts: null,
+//   networkID: null,
+//   contract: null
+// };
+
 const initialState = {
   artifact: null,
+  artifactSS: null,
+  artifactC: null,
   web3: null,
   accounts: null,
   networkID: null,
-  contract: null
+  contractBase64: null,
+  contractsitnft: null,
 };
 
 const reducer = (state, action) => {
