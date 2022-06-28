@@ -27,12 +27,27 @@ function EthProvider({ children }) {
   const [currentAccount, setCurrentAccount] = useState('');
   const [loginState, setLoginState] = useState(false);
   const [formData, setFormData] = useState({ addressInput: "" });
+  const [mintData, setMintData] = useState({
+    moduleCode: "",
+    testType: "",
+    grade: "",
+    trimester: "",
+    recipient: ""
+  });
   const [isAdminResult, setIsAdminResult] = useState('');
   const [isFacultyResult, setIsFacultyResult] = useState('');
 
   const handleChange = (e, name) => {
     setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
   };
+
+  function handleMint(evt) {
+    const value = evt.target.value;
+    setMintData({
+      ...mintData,
+      [evt.target.name]: value
+    });
+  }
 
   const init = useCallback(
     // async artifact => {
@@ -167,6 +182,64 @@ function EthProvider({ children }) {
       return err;
     }
   }
+  const makeFaculty = async () => {
+    const { addressInput } = formData;
+    const sitnftInstance = getSITNFTContract();
+    try {
+      const result = await sitnftInstance.addFaculty((addressInput).toString());
+      console.log(result);
+      functIsFaculty();
+    } catch (err) {
+      setIsFacultyResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+  const removeFaculty = async () => {
+    const { addressInput } = formData;
+    const sitnftInstance = getSITNFTContract();
+    try {
+      const result = await sitnftInstance.removeFaculty((addressInput).toString());
+      console.log(result);
+      functIsFaculty();
+    } catch (err) {
+      setIsFacultyResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+
+  const mint = async () => {
+    const {
+      moduleCode,
+      testType,
+      grade,
+      trimester,
+      recipient
+    } = mintData;
+
+    const sitnftInstance = getSITNFTContract();
+    try {
+      console.log(
+        moduleCode,
+        testType,
+        grade,
+        trimester,
+        recipient
+      );
+      const result = await sitnftInstance.mint(
+        moduleCode,
+        testType,
+        grade,
+        trimester,
+        recipient
+      );
+      console.log(result);
+    } catch (err) {
+      console.error(err);
+      return err;
+    }
+  }
 
   // ======================================== END SITNFT Functions ========================================
 
@@ -199,7 +272,12 @@ function EthProvider({ children }) {
       handleChange,
       formData,
       isAdminResult,
-      isFacultyResult
+      isFacultyResult,
+      makeFaculty,
+      removeFaculty,
+      mint,
+      mintData,
+      handleMint
     }}>
       {children}
     </EthContext.Provider>
