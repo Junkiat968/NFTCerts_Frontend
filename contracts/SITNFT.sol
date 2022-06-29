@@ -13,6 +13,11 @@ contract SITNFT is ERC721, ERC721Enumerable, RoleControl {
     Counters.Counter private _tokenIdCounter;
     using Strings for uint256;
 
+    struct IdAddress {
+        string id;
+        address addr;
+    }
+
     struct Attribute {
         string moduleCode;
         string testType;
@@ -27,14 +32,27 @@ contract SITNFT is ERC721, ERC721Enumerable, RoleControl {
 
     constructor() ERC721("SIT NFT", "SIT") RoleControl(msg.sender) {}
 
-    function addStudentAddress(string memory _id, address _address) private {
+    function addStudentAddress(string memory _id, address _address)
+        public
+        onlyAdmin
+    {
         bytes32 encryptedId = keccak256(abi.encodePacked(_id));
         _studentAddress[encryptedId] = _address;
     }
 
+    function multiAddStudentAddress(IdAddress[] memory _array)
+        public
+        onlyAdmin
+    {
+        for (uint256 i = 0; i < _array.length; i++) {
+            addStudentAddress(_array[i].id, _array[i].addr);
+        }
+    }
+
     function getStudentAddress(string memory _id)
-        private
+        public
         view
+        onlyFaculty
         returns (address)
     {
         bytes32 encryptedId = keccak256(abi.encodePacked(_id));
