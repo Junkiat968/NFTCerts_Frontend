@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import useEth from "../../contexts/EthContext/useEth";
+import { ContractContext } from '../../contexts/ContractProvider';
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -12,26 +13,27 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 );
 
 const SITNFT = () => {
+  const { state } = useEth();
+
   const {
-    state,
     functIsAdmin,
-    functIsFaculty,
     makeAdmin,
     removeAdmin,
     handleChange,
-    formData,
+    formAddressData,
     isAdminResult,
+    functIsFaculty,
     isFacultyResult,
     makeFaculty,
     removeFaculty,
-    mint,
+    functMint,
     mintData,
+    mintResult,
     handleMint
-  } = useEth();
-  console.log(isAdminResult);
+  } = useContext(ContractContext);
 
   const handleCheckAdmin = (e) => {
-    const { addressInput } = formData;
+    const { addressInput } = formAddressData;
     e.preventDefault();
     if (!addressInput) {
       alert('Please enter valid Admin Address!');
@@ -41,7 +43,7 @@ const SITNFT = () => {
   };
 
   const handleCheckFaculty = (e) => {
-    const { addressInput } = formData;
+    const { addressInput } = formAddressData;
     e.preventDefault();
     if (!addressInput) {
       alert('Please enter valid Faculty Address!');
@@ -136,16 +138,16 @@ const SITNFT = () => {
           <div className="col-sm-6">
             <div className="row col-sm-12 text-center">
               <div className="col-sm-6 text-start">
-                <button className="btn btn-block btn-primary mt-3" type="button" onClick={mint}>Mint</button>
+                <button className="btn btn-block btn-primary mt-3" type="button" onClick={functMint}>Mint</button>
               </div>
             </div>
             <div className="mt-3">
               Result:
-              {/* <div className="">
+              <div className="">
                 <small>
-                  {isFacultyResult.toString()}
+                  {mintResult.toString()}
                 </small>
-              </div> */}
+              </div>
             </div>
           </div>
         </div>
