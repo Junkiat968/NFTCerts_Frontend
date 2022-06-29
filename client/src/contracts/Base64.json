@@ -1747,12 +1747,12 @@
     "4": {
       "events": {},
       "links": {},
-      "address": "0x1bf3FcA4f534cD682685768AA633fd621B076072",
-      "transactionHash": "0xf5eae53744dd7bb4ac378a2929921b460a874d7a67e075bec7f5cd4a365b8e02"
+      "address": "0x03101b20aAFc81b35D87aC59D679a8c8810ECedc",
+      "transactionHash": "0x9fcde9244b50d706c767ae31c3d4bd286274b458cd6dd5450f27bbd31583a588"
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-06-26T14:20:57.463Z",
+  "updatedAt": "2022-06-29T08:16:33.930Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Brecht Devos - <brecht@loopring.org>",

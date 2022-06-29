@@ -29,7 +29,12 @@ const SITNFT = () => {
     functMint,
     mintData,
     mintResult,
-    handleMint
+    handleMint,
+    functAddStudent,
+    formAddStudentData,
+    handleStudent,
+    studentResult,
+    getStudentAddress
   } = useContext(ContractContext);
 
   const handleCheckAdmin = (e) => {
@@ -39,7 +44,7 @@ const SITNFT = () => {
       alert('Please enter valid Admin Address!');
       return;
     }
-    functIsAdmin();
+    getStudentAddress();
   };
 
   const handleCheckFaculty = (e) => {
@@ -52,10 +57,10 @@ const SITNFT = () => {
     functIsFaculty();
   };
 
+
   const renderIsAdmin = (e) => {
     return (
       <>
-        <p className="border-bottom mt-3">Check if Admin:</p>
         <div className="row g-3">
           <div className="col-sm-6 ">
             {/* <label htmlFor="lastName" className="form-label text-start">Address</label> */}
@@ -73,7 +78,7 @@ const SITNFT = () => {
                 <button className="btn btn-block btn-outline-danger mt-3" type="button" onClick={removeAdmin}>Remove Admin</button>
               </div>
             </div>
-            <div className="mt-3">
+            <div className="my-3">
               Result:
               <div className="">
                 <small>
@@ -90,11 +95,9 @@ const SITNFT = () => {
   const renderIsFaculty = (e) => {
     return (
       <>
-        <p className="border-bottom mt-3">Check if Faculty:</p>
         <div className="row g-3">
           <div className="col-sm-6 ">
             {/* <label htmlFor="lastName" className="form-label text-start">Address</label> */}
-            <Input placeholder="Address e.g. 0x........." name="addressInput" type="text" handleChange={handleChange} />
           </div>
           <div className="col-sm-6">
             <div className="row col-sm-12 text-center">
@@ -108,7 +111,7 @@ const SITNFT = () => {
                 <button className="btn btn-block btn-outline-danger mt-3" type="button" onClick={removeFaculty}>Remove Faculty</button>
               </div>
             </div>
-            <div className="mt-3">
+            <div className="my-3">
               Result:
               <div className="">
                 <small>
@@ -125,7 +128,7 @@ const SITNFT = () => {
   const renderMint = (e) => {
     return (
       <>
-        <p className="border-bottom mt-3">Mint:</p>
+        <p className="border-bottom mt-3">Mint: (Faculty Only)</p>
         <div className="row g-3">
           <div className="col-sm-6 ">
             {/* <label htmlFor="lastName" className="form-label text-start">Address</label> */}
@@ -155,12 +158,47 @@ const SITNFT = () => {
     )
   };
 
+  const renderStudent = (e) => {
+    return (
+      <>
+        <p className="border-bottom mt-3">Add Student:</p>
+        <div className="row g-3">
+          <div className="col-sm-6 ">
+            {/* <label htmlFor="lastName" className="form-label text-start">Address</label> */}
+            <input placeholder="Student ID" className="form-control mb-1" type="text" name="studentId" value={formAddStudentData.studentId} onChange={handleStudent} />
+            <input placeholder="Student Address" className="form-control mb-1" type="text" name="studentAddress" value={formAddStudentData.studentAddress} onChange={handleStudent} />
+          </div>
+          <div className="col-sm-6">
+            <div className="row col-sm-12 text-center">
+              <div className="col-sm-6 text-start">
+                <button className="btn btn-block btn-primary mt-3" type="button" onClick={functAddStudent}>Add Student</button>
+              </div>
+              <div className="col-sm-6 text-start">
+                <button className="btn btn-block btn-primary mt-3" type="button" onClick={getStudentAddress}>Get Student Address</button>
+              </div>
+            </div>
+            <div className="mt-3">
+              Result:
+              <div className="">
+                <small>
+                  {studentResult.toString()}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  };
+
   return (
     <div className='page-two container mb-5'>
       <h2 className="pb-2 border-bottom text-start mt-5">SITNFT. Testing.</h2>
+      {renderStudent()}
+      {renderMint()}
+      <p className="border-bottom mt-3">Admin/Faculty check:</p>
       {renderIsAdmin()}
       {renderIsFaculty()}
-      {renderMint()}
     </div>
   );
 };

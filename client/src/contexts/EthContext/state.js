@@ -12,8 +12,6 @@ const actions = {
 
 const initialState = {
   artifact: null,
-  artifactSS: null,
-  artifactC: null,
   web3: null,
   accounts: null,
   networkID: null,

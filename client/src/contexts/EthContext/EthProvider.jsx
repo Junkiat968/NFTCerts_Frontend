@@ -24,10 +24,9 @@ function EthProvider({ children }) {
         const networkID = await web3.eth.net.getId();
 
         const { abi } = artifact;
-        let address, contractSS, contractC, contractBase64, contractsitnft;
+        let address, contractBase64, contractsitnft;
         try {
           address = artifact.networks[networkID].address;
-          contractSS = new web3.eth.Contract(abi, address);
           contractBase64 = new web3.eth.Contract(base64ContractABI, base64ContractAddress);
           contractsitnft = new web3.eth.Contract(sitnftContractABI, sitnftContractAddress);
         } catch (err) {
@@ -36,7 +35,7 @@ function EthProvider({ children }) {
         // DISPATCH
         dispatch({
           type: actions.init,
-          data: { artifact, web3, accounts, networkID, contractSS, contractBase64, contractsitnft }
+          data: { artifact, web3, accounts, networkID, contractBase64, contractsitnft }
         });
       }
     }

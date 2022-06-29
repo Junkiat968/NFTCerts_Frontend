@@ -21,6 +21,10 @@ const getSITNFTContract = () => {
 
 export const ContractProvider = ({ children }) => {
     const [formAddressData, setFormAddressData] = useState({ addressInput: "" });
+    // Admin Constants
+    const [isAdminResult, setIsAdminResult] = useState('');
+    // Faculty Constants
+    const [isFacultyResult, setIsFacultyResult] = useState('');
     // Mint Constants 
     const [mintData, setMintData] = useState({
         moduleCode: "",
@@ -30,20 +34,25 @@ export const ContractProvider = ({ children }) => {
         recipient: ""
     });
     const [mintResult, setMintResult] = useState('');
-    // Admin Constants
-    const [isAdminResult, setIsAdminResult] = useState('');
-    // Faculty Constants
-    const [isFacultyResult, setIsFacultyResult] = useState('');
+    // Student Constants
+    const [studentResult, setStudentResult] = useState('');
+    const [formAddStudentData, setFormAddStudentData] = useState({ studentId: "", studentAddress: "" });
 
     /** Form Handling */
     const handleChange = (e, name) => {
         setFormAddressData((prevState) => ({ ...prevState, [name]: e.target.value }));
     };
-
     function handleMint(evt) {
         const value = evt.target.value;
         setMintData({
             ...mintData,
+            [evt.target.name]: value
+        });
+    }
+    function handleStudent(evt) {
+        const value = evt.target.value;
+        setFormAddStudentData({
+            ...formAddStudentData,
             [evt.target.name]: value
         });
     }
@@ -53,7 +62,7 @@ export const ContractProvider = ({ children }) => {
         try {
             const { addressInput } = formAddressData;
             const sitnftInstance = getSITNFTContract();
-            console.log(addressInput);
+            console.log(sitnftInstance);
             const result = await sitnftInstance.isAdmin((addressInput).toString());
             setIsAdminResult(result);
             return result;
@@ -166,6 +175,47 @@ export const ContractProvider = ({ children }) => {
         }
     }
 
+    // Student Functions
+    const functAddStudent = async () => {
+        const {
+            studentId,
+            studentAddress,
+        } = formAddStudentData;
+
+        const sitnftInstance = getSITNFTContract();
+        try {
+            const result = await sitnftInstance.addStudentAddress(
+                studentId,
+                studentAddress,
+            );
+            console.log(result);
+            setStudentResult(result);
+            return result;
+        } catch (err) {
+            console.error(err);
+            setStudentResult(err);
+            return err;
+        }
+    }
+    const getStudentAddress = async () => {
+        const {
+            studentId
+        } = formAddStudentData;
+        const sitnftInstance = getSITNFTContract();
+        try {
+            const result = await sitnftInstance.getStudentAddress(
+                studentId,
+            );
+            console.log(result);
+            setStudentResult(result);
+            return result;
+        } catch (err) {
+            console.error(err);
+            setStudentResult(err);
+            return err;
+        }
+    }
+
     return (
         <ContractContext.Provider
             value={{
@@ -182,7 +232,12 @@ export const ContractProvider = ({ children }) => {
                 functMint,
                 mintData,
                 mintResult,
-                handleMint
+                handleMint,
+                functAddStudent,
+                formAddStudentData,
+                handleStudent,
+                studentResult,
+                getStudentAddress
             }}>
             {children}
         </ContractContext.Provider >
