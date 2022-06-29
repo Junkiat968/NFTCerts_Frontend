@@ -57,7 +57,6 @@ const SITNFT = () => {
     functIsFaculty();
   };
 
-
   const renderIsAdmin = (e) => {
     return (
       <>
@@ -69,7 +68,7 @@ const SITNFT = () => {
           <div className="col-sm-6">
             <div className="row col-sm-12 text-center">
               <div className="col-sm-6 text-center">
-                <button className="btn btn-block btn-primary mt-3" type="button" onClick={handleCheckAdmin}>Check Admin Status</button>
+                <button className="btn btn-block btn-primary mt-3" type="button" onClick={functIsAdmin}>Check Admin Status</button>
               </div>
               <div className="col-sm-3 text-center">
                 <button className="btn btn-block btn-outline-secondary mt-3" type="button" onClick={makeAdmin}>Make Admin</button>
@@ -136,7 +135,7 @@ const SITNFT = () => {
             <input placeholder="Test Type" className="form-control mb-1" type="text" name="testType" value={mintData.testType} onChange={handleMint} />
             <input placeholder="Grade" className="form-control mb-1" type="text" name="grade" value={mintData.grade} onChange={handleMint} />
             <input placeholder="Trimester" className="form-control mb-1" type="text" name="trimester" value={mintData.trimester} onChange={handleMint} />
-            <input placeholder="Recipient Address" className="form-control mb-1" type="text" name="recipient" value={mintData.recipient} onChange={handleMint} />
+            <input placeholder="Recipient ID" className="form-control mb-1" type="text" name="recipient" value={mintData.recipient} onChange={handleMint} />
           </div>
           <div className="col-sm-6">
             <div className="row col-sm-12 text-center">
