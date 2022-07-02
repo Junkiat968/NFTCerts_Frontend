@@ -37,6 +37,10 @@ export const ContractProvider = ({ children }) => {
     // Student Constants
     const [studentResult, setStudentResult] = useState('');
     const [formAddStudentData, setFormAddStudentData] = useState({ studentId: "", studentAddress: "" });
+    // TransactionResult Constants
+    const [transactionsResult, setTransactionsResult] = useState('');
+
+
 
     /** Form Handling */
     const handleChange = (e, name) => {
@@ -216,6 +220,28 @@ export const ContractProvider = ({ children }) => {
         }
     }
 
+    // MyGrade Functions
+    const functGetAllTokens = async () => {
+        const sitnftInstance = getSITNFTContract();
+        try {
+            const tokensNo = await sitnftInstance.totalSupply();
+            // var result;
+            let result = "";
+            for (let i = 0; i < tokensNo; i++) {
+                const tempItem = await sitnftInstance.attributes(i + 1);
+                result = result.concat(" ", tempItem);
+            }
+            console.log(result);
+            // alert(result);
+            setTransactionsResult(result);
+            return result;
+        } catch (err) {
+            console.error(err);
+            setTransactionsResult(err);
+            return err;
+        }
+    }
+
     return (
         <ContractContext.Provider
             value={{
@@ -237,7 +263,9 @@ export const ContractProvider = ({ children }) => {
                 formAddStudentData,
                 handleStudent,
                 studentResult,
-                getStudentAddress
+                getStudentAddress,
+                functGetAllTokens,
+                transactionsResult
             }}>
             {children}
         </ContractContext.Provider >

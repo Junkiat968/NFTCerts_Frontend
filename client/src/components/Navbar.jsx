@@ -14,7 +14,7 @@ const Navbar = () => {
                   <ul className="nav me-auto">
                      <li><NavLink className="nav-link px-2 text-white" to="/">Home</NavLink></li>
                      <li><NavLink className="nav-link px-2 text-white" to="/SITNFT">SITNFT</NavLink></li>
-                     <li><NavLink className="nav-link px-2 text-white" to="/Page2">Page2</NavLink></li>
+                     <li><NavLink className="nav-link px-2 text-white" to="/MyGrades">MyGrades</NavLink></li>
                   </ul>
                   <ul className="nav">
                      <div>

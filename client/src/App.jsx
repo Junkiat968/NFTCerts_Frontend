@@ -15,7 +15,7 @@ import Navbar from './components/Navbar.jsx';
 // Import Pages
 import SITNFT from './components/Pages/SITNFT.js';
 import Login from './components/Pages/Login';
-import Page2 from './components/Pages/Page2';
+import MyGrades from './components/Pages/MyGrades';
 import Error from './components/Pages/Error';
 import PageNotFound from './components/Pages/PageNotFound';
 
@@ -33,14 +33,14 @@ class App extends Component {
               <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/SITNFT" element={<SITNFT />} />
-                <Route path='/Page2' element={<Page2 />} />
+                <Route path='/MyGrades' element={<MyGrades />} />
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
               :
               <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/SITNFT" element={<Error />} />
-                <Route path='/Page2' element={<Error />} />
+                <Route path='/MyGrades' element={<Error />} />
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
           }
