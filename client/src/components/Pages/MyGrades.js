@@ -2,6 +2,9 @@ import React, { useContext } from "react";
 import Card from 'react-bootstrap/Card';
 import Placeholder from 'react-bootstrap/Placeholder';
 import Button from 'react-bootstrap/Button';
+import ListGroup from 'react-bootstrap/ListGroup';
+import ListGroupItem from 'react-bootstrap/ListGroupItem';
+import { Row, Col, Container } from "react-bootstrap";
 import Pagination from 'react-bootstrap/Pagination'
 import { ContractContext } from '../../contexts/ContractProvider';
 
@@ -53,21 +56,38 @@ const MyGrades = () => {
         <div className="col-sm-12 text-center mb-5">
           <button className="btn btn-block btn-outline-primary mt-3" type="button" onClick={getTokens}>Get All Tokens</button>
         </div>
-        <div className="mb-3 text-center ">
-          Result:
-          <div className="">
-            <small>
-              {transactionsResult.toString()}
-            </small>
-          </div>
+        <div className="d-flex justify-content-around my-3">
+          Your Results:
+          <Container>
+            <Row>
+              {Object.values(transactionsResult).map((val, k) =>
+                <Col k={k} xs={4} md={4} lg={3}>
+                  <Card className="m-3" style={{ width: '12rem' }}>
+                    {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
+                    <Card.Body>
+                      <Card.Title>{val[0]} - {val[3]}</Card.Title>
+                      <Card.Text>
+                        Some quick example text to build on the card title and make up the bulk of
+                        the card's content.
+                      </Card.Text>
+                    </Card.Body>
+                    <ListGroup className="list-group-flush">
+                      <ListGroupItem>{val[1]}</ListGroupItem>
+                      <ListGroupItem>Grade: {val[2]}</ListGroupItem>
+                      <ListGroupItem></ListGroupItem>
+                    </ListGroup>
+                    {/* <Card.Body>
+                          <Card.Link href="#">Card Link</Card.Link>
+                          <Card.Link href="#">Another Link</Card.Link>
+                        </Card.Body> */}
+                  </Card>
+                </Col>
+              )}
+            </Row>
+          </Container>
         </div>
-      </div>
-      <div className="d-flex justify-content-around mt-5">
-        {renderGrades()}
-        {renderGrades()}
-      </div>
-      <div className="d-flex justify-content-around mt-3">
-        {renderGrades()}
+      </div >
+      {/* <div className="d-flex justify-content-around mt-3">
         {renderGrades()}
       </div>
       <div className='mt-5 text-center'>
@@ -85,8 +105,8 @@ const MyGrades = () => {
           <Pagination.Next />
           <Pagination.Last />
         </Pagination>
-      </div>
-    </div>
+      </div> */}
+    </div >
   );
 }
 

@@ -224,15 +224,19 @@ export const ContractProvider = ({ children }) => {
     const functGetAllTokens = async () => {
         const sitnftInstance = getSITNFTContract();
         try {
+            // const tokensNo = await sitnftInstance.totalSupply();
+            // let result = "";
+            // for (let i = 1; i < tokensNo; i++) {
+            //     const tempItem = await sitnftInstance.attributes(i);
+            //     result = result.concat(" ", tempItem);
+            // }
+            var result = [];
             const tokensNo = await sitnftInstance.totalSupply();
-            // var result;
-            let result = "";
             for (let i = 0; i < tokensNo; i++) {
                 const tempItem = await sitnftInstance.attributes(i + 1);
-                result = result.concat(" ", tempItem);
+                result.push(tempItem);
             }
             console.log(result);
-            // alert(result);
             setTransactionsResult(result);
             return result;
         } catch (err) {
