@@ -59,11 +59,11 @@ const MyGrades = () => {
           <div className="col-sm-12 text-center my-3">
             <button className="btn btn-block btn-outline-primary" type="button" onClick={getTokens}>Get All Tokens</button>
           </div>
-          {/* <div className="col-sm-12 text-center mb-5">
+          <div className="col-sm-12 text-center mb-5">
             <button className="btn btn-block btn-outline-primary mt-3" type="button"
               onClick={removeLS}>Remove Local Storage
             </button>
-          </div> */}
+          </div>
           <div className="d-flex justify-content-around my-3">
             Your Results:
             <Container>
