@@ -11,6 +11,7 @@ const { ethereum } = window;
 export const ContractContext = React.createContext();
 const provider = new ethers.providers.Web3Provider(ethereum);
 const signer = provider.getSigner();
+var tks = localStorage.getItem("tokens");
 
 /** Get SITNFT Contract Instance*/
 const getSITNFTContract = () => {
@@ -20,6 +21,7 @@ const getSITNFTContract = () => {
 }
 
 export const ContractProvider = ({ children }) => {
+    // Get local storage
     const [formAddressData, setFormAddressData] = useState({ addressInput: "" });
     const [loading, setLoading] = useState(false);
     // Admin Constants
@@ -40,8 +42,6 @@ export const ContractProvider = ({ children }) => {
     const [formAddStudentData, setFormAddStudentData] = useState({ studentId: "", studentAddress: "" });
     // TransactionResult Constants
     const [transactionsResult, setTransactionsResult] = useState('');
-
-
 
     /** Form Handling */
     const handleChange = (e, name) => {
@@ -234,6 +234,8 @@ export const ContractProvider = ({ children }) => {
             console.log(result);
             setTransactionsResult(result);
             setLoading(false);
+
+            localStorage.setItem("tokens", JSON.stringify(result));
             return result;
         } catch (err) {
             console.error(err);
@@ -267,7 +269,8 @@ export const ContractProvider = ({ children }) => {
                 studentResult,
                 getStudentAddress,
                 functGetAllTokens,
-                transactionsResult
+                transactionsResult,
+                tks
             }}>
             {children}
         </ContractContext.Provider >

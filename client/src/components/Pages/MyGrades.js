@@ -17,7 +17,8 @@ const MyGrades = () => {
     loading,
     setLoading,
     functGetAllTokens,
-    transactionsResult
+    transactionsResult,
+    tks
   } = useContext(ContractContext);
 
   const getTokens = (e) => {
@@ -25,29 +26,44 @@ const MyGrades = () => {
     functGetAllTokens();
   };
 
-  const renderGrades = (e) => {
-    // return (
-
-    // );
+  const removeLS = (e) => {
+    var getStr = localStorage.getItem('tokens');
+    alert(getStr);
+    localStorage.removeItem("tokens");
+    var clrStr = localStorage.getItem('tokens');
+    alert(clrStr);
+    window.reload();
   };
 
+  const tkStorage = JSON.parse(tks);
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = transactionsResult.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = tkStorage.slice(indexOfFirstPost, indexOfLastPost);
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <div className='page-two container'>
       <h2 className="pb-2 border-bottom text-start mt-5">MyGrades. Testing.</h2>
-      <div className="d-flex row justify-content-around my-3 text-center">
-        <div className="col-sm-12 text-center mb-5">
-          <button className="btn btn-block btn-outline-primary mt-3" type="button" onClick={getTokens}>Get All Tokens</button>
+      <div className="text-center">
+        <div className="col-sm-12 text-center my-3">
+          <button className="btn btn-block btn-outline-primary" type="button" onClick={getTokens}>Get All Tokens</button>
         </div>
-        <div className="d-flex justify-content-around my-3">
+        {/* <div className="col-sm-12 text-center mb-5">
+          <button className="btn btn-block btn-outline-primary mt-3" type="button"
+            onClick={removeLS}>Remove Local Storage
+          </button>
+        </div> */}
+        <div className="text-end">
+          <Pagination className="mt-3"
+            postsPerPage={postsPerPage}
+            totalPosts={tkStorage.length}
+            paginate={paginate}
+          />
+        </div>
+        <div className="d-flex justify-content-around my-3 ">
           Your Results:
-          {/* {renderGrades} */}
           <Container>
             <Row>
               {
@@ -82,15 +98,6 @@ const MyGrades = () => {
           </Container>
         </div>
       </div >
-      <div className="d-flex row justify-content-around my-3 text-center container">
-        <div className="col-sm-12 text-center mb-5">
-          <Pagination className=""
-            postsPerPage={postsPerPage}
-            totalPosts={transactionsResult.length}
-            paginate={paginate}
-          />
-        </div>
-      </div>
       {/* <div className='mt-5 text-center'>
         <Pagination >
           <Pagination.First />
