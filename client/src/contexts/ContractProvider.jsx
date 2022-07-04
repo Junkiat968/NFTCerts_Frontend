@@ -236,6 +236,7 @@ export const ContractProvider = ({ children }) => {
             setLoading(false);
 
             localStorage.setItem("tokens", JSON.stringify(result));
+            window.location.reload(true);
             return result;
         } catch (err) {
             console.error(err);
