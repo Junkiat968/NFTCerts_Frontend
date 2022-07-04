@@ -1,42 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect,useState } from "react";
 import "./Login.css";
-
+import { connectors } from "./connectors";
+import { useWeb3React } from "@web3-react/core";
 export default function Login() {
-  return (
-<div class="overlay">
-<form>
-   <div class="con">
-   <header class="head-form">
-      <h2>Log In</h2>
-   </header>
-   <br/>
-   <div class="field-set">
-     
-         <span class="input-item">
-           <i class="fa fa-user-circle"></i>
-         </span>
-         <input class="form-input" id="txt-input" type="text" placeholder="Employee/Student ID" required />
-     
-      <br/>
-     
-     
-      <span class="input-item">
-        <i class="fa fa-key"></i>
-       </span>
-      <input class="form-input" type="password" placeholder="Password" id="pwd"  name="password" required />     
-     
-      <br/>
-      <button class="log-in">Sign In</button>
-   </div>
-  
-   <div class="other">
-      <button class="btn submits forget-pass">Forgot Password</button>
-   </div>
-     
-  </div>
-  
-</form>
-</div>
+  const setProvider = (type) => {
+    window.localStorage.setItem("provider", type);
+  };
+  const { library, chainId, account, activate, deactivate, active } =
+    useWeb3React();
+  useEffect(() => {
+    const provider = window.localStorage.getItem("provider");
+    if (provider) activate(connectors[provider]);
+  }, []);
 
-  )
+
+  return (
+    <div class="overlay">
+      <button
+        onClick={() => {
+          activate(connectors.injected);
+          setProvider("injected");
+        }}>Connect</button>
+      {/* <button onClick={() => { activate(Injected) }}>Metamask</button> */}
+
+      <button onClick={deactivate}>Disconnect</button>
+      <div>Connection Status: {active}</div>
+      <div>Account: {account}</div>
+      <div>Network ID: {chainId}</div>
+    </div>
+  );
 }
