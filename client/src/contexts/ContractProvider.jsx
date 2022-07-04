@@ -21,6 +21,7 @@ const getSITNFTContract = () => {
 
 export const ContractProvider = ({ children }) => {
     const [formAddressData, setFormAddressData] = useState({ addressInput: "" });
+    const [loading, setLoading] = useState(false);
     // Admin Constants
     const [isAdminResult, setIsAdminResult] = useState('');
     // Faculty Constants
@@ -224,12 +225,6 @@ export const ContractProvider = ({ children }) => {
     const functGetAllTokens = async () => {
         const sitnftInstance = getSITNFTContract();
         try {
-            // const tokensNo = await sitnftInstance.totalSupply();
-            // let result = "";
-            // for (let i = 1; i < tokensNo; i++) {
-            //     const tempItem = await sitnftInstance.attributes(i);
-            //     result = result.concat(" ", tempItem);
-            // }
             var result = [];
             const tokensNo = await sitnftInstance.totalSupply();
             for (let i = 0; i < tokensNo; i++) {
@@ -238,6 +233,7 @@ export const ContractProvider = ({ children }) => {
             }
             console.log(result);
             setTransactionsResult(result);
+            setLoading(false);
             return result;
         } catch (err) {
             console.error(err);
@@ -249,6 +245,8 @@ export const ContractProvider = ({ children }) => {
     return (
         <ContractContext.Provider
             value={{
+                loading,
+                setLoading,
                 formAddressData,
                 handleChange,
                 functIsAdmin,

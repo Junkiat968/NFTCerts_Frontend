@@ -1,79 +1,74 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Card from 'react-bootstrap/Card';
 import Placeholder from 'react-bootstrap/Placeholder';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import ListGroupItem from 'react-bootstrap/ListGroupItem';
 import { Row, Col, Container } from "react-bootstrap";
-import Pagination from 'react-bootstrap/Pagination'
+// import Pagination from 'react-bootstrap/Pagination'
+
 import { ContractContext } from '../../contexts/ContractProvider';
+import Pagination from "../Pagination";
 
 const MyGrades = () => {
+  const [postsPerPage] = useState(3);
+  const [currentPage, setCurrentPage] = useState(1);
   const {
+    loading,
+    setLoading,
     functGetAllTokens,
     transactionsResult
   } = useContext(ContractContext);
 
-  const renderGrades = (e) => {
-    return (
-      <>
-        <Card style={{ width: '18rem' }}>
-          {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
-          <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>
-              Some quick example text to build on the card title and make up the bulk
-              of the card's content.
-            </Card.Text>
-            <Button variant="primary">Go somewhere</Button>
-          </Card.Body>
-        </Card>
-        <Card style={{ width: '18rem' }}>
-          {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
-          <Card.Body>
-            <Placeholder as={Card.Title} animation="glow">
-              <Placeholder xs={6} />
-            </Placeholder>
-            <Placeholder as={Card.Text} animation="glow">
-              <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{' '}
-              <Placeholder xs={6} /> <Placeholder xs={8} />
-            </Placeholder>
-            <Placeholder.Button variant="primary" xs={6} />
-          </Card.Body>
-        </Card>
-      </>
-    )
-  };
-
   const getTokens = (e) => {
+    setLoading(true);
     functGetAllTokens();
   };
+
+  const renderGrades = (e) => {
+    // return (
+
+    // );
+  };
+
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = transactionsResult.slice(indexOfFirstPost, indexOfLastPost);
+  // Change page
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <div className='page-two container'>
       <h2 className="pb-2 border-bottom text-start mt-5">MyGrades. Testing.</h2>
-      <div className="d-flex row justify-content-around my-3">
+      <div className="d-flex row justify-content-around my-3 text-center">
         <div className="col-sm-12 text-center mb-5">
           <button className="btn btn-block btn-outline-primary mt-3" type="button" onClick={getTokens}>Get All Tokens</button>
         </div>
         <div className="d-flex justify-content-around my-3">
           Your Results:
+          {/* {renderGrades} */}
           <Container>
             <Row>
-              {Object.values(transactionsResult).map((val, k) =>
+              {
+                loading ? <h2 className="text-center">Loading...</h2> :
+                  null
+              }
+              {Object.values(currentPosts).map((val, k) =>
                 <Col k={k} xs={4} md={4} lg={3}>
                   <Card className="m-3" style={{ width: '12rem' }}>
                     {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
                     <Card.Body>
-                      <Card.Title>{val[0]} - {val[3]}</Card.Title>
-                      <Card.Text>
+                      <Card.Title>{val[1]} Certificate</Card.Title>
+                      {/* <Card.Text>
                         Some quick example text to build on the card title and make up the bulk of
                         the card's content.
-                      </Card.Text>
+                      </Card.Text> */}
                     </Card.Body>
                     <ListGroup className="list-group-flush">
-                      <ListGroupItem>{val[1]}</ListGroupItem>
-                      <ListGroupItem>Grade: {val[2]}</ListGroupItem>
+                      <ListGroupItem>Module{'>'} {val[0]}</ListGroupItem>
+                      <ListGroupItem>Trimester{'>'} {val[3]}</ListGroupItem>
+                      <ListGroupItem>Grade:<br />{val[2]}</ListGroupItem>
                       <ListGroupItem></ListGroupItem>
                     </ListGroup>
                     {/* <Card.Body>
@@ -87,10 +82,16 @@ const MyGrades = () => {
           </Container>
         </div>
       </div >
-      {/* <div className="d-flex justify-content-around mt-3">
-        {renderGrades()}
+      <div className="d-flex row justify-content-around my-3 text-center container">
+        <div className="col-sm-12 text-center mb-5">
+          <Pagination className=""
+            postsPerPage={postsPerPage}
+            totalPosts={transactionsResult.length}
+            paginate={paginate}
+          />
+        </div>
       </div>
-      <div className='mt-5 text-center'>
+      {/* <div className='mt-5 text-center'>
         <Pagination >
           <Pagination.First />
           <Pagination.Prev />
