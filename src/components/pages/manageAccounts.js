@@ -3,7 +3,7 @@ import * as XLSX from "xlsx";
 import Sidebar from "./Sidebar";
 import "./uploadBtn.css";
 
-const ManageGrades = () => {
+const ManageAccounts = () => {
   const [items, setItems] = useState([]);
 
   const readExcel = (file) => {
@@ -43,7 +43,7 @@ const ManageGrades = () => {
 
       <div class="div-wrapper"> 
         <input
-          id="uploadGrade"
+          id="uploadAccounts"
           type="file"
           onChange={(e) => {
             const file = e.target.files[0];
@@ -51,8 +51,8 @@ const ManageGrades = () => {
           }}
           hidden
         />
-        <label id="uploadGradeBtn" class="uploadBtn" for="uploadGrade">
-          Upload Grades
+        <label id="uploadAccountBtn" class="uploadBtn" for="uploadAccounts">
+          Upload Accounts
         </label>
       </div>
 
@@ -62,7 +62,6 @@ const ManageGrades = () => {
             <tr>
               <th scope="col">Student</th>
               <th scope="col">Student ID</th>
-              <th scope="col">Grade</th>
             </tr>
           </thead>
 
@@ -71,7 +70,6 @@ const ManageGrades = () => {
               <tr key={d.Id}>
                 <th>{d.Name}</th>
                 <th>{d.Id}</th>
-                <td>{d.Grade}</td>
               </tr>
             ))}
           </tbody>
@@ -81,4 +79,4 @@ const ManageGrades = () => {
   );
 };
 
-export default ManageGrades;
+export default ManageAccounts;

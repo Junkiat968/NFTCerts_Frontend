@@ -6,6 +6,7 @@ import MyAccount from './components/pages/myAccount';
 import ManageGrades from './components/pages/manageGrades';
 import PurchaseTokens from './components/pages/purchaseTokens';
 import TransactionLogs from './components/pages/transactionLogs';
+import ManageAccounts from './components/pages/manageAccounts'
 import ManageApprovals from './components/pages/manageApprovals';
 import Login from './components/pages/Login'
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path='/manageApprovals' element={<ManageApprovals />} />
           <Route exact path='/' element={<ManageGrades />} />
+          <Route path='/manageAccounts' element={<ManageAccounts />} />
           <Route path='/manageGrades' element={<ManageGrades />} />
           <Route path='/transactionLogs' element={<TransactionLogs />} />
           <Route path='/purchaseTokens' element={<PurchaseTokens />} />
