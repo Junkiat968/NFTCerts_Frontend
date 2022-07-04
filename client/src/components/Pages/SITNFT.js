@@ -135,7 +135,7 @@ const SITNFT = () => {
             <input placeholder="Test Type" className="form-control mb-1" type="text" name="testType" value={mintData.testType} onChange={handleMint} />
             <input placeholder="Grade" className="form-control mb-1" type="text" name="grade" value={mintData.grade} onChange={handleMint} />
             <input placeholder="Trimester" className="form-control mb-1" type="text" name="trimester" value={mintData.trimester} onChange={handleMint} />
-            <input placeholder="Recipient ID" className="form-control mb-1" type="text" name="recipient" value={mintData.recipient} onChange={handleMint} />
+            <input placeholder="Recipient ID (200xxxx)" className="form-control mb-1" type="text" name="recipient" value={mintData.recipient} onChange={handleMint} />
           </div>
           <div className="col-sm-6">
             <div className="row col-sm-12 text-center">

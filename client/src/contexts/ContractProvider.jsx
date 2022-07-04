@@ -11,6 +11,7 @@ const { ethereum } = window;
 export const ContractContext = React.createContext();
 const provider = new ethers.providers.Web3Provider(ethereum);
 const signer = provider.getSigner();
+var tks = localStorage.getItem("tokens");
 
 /** Get SITNFT Contract Instance*/
 const getSITNFTContract = () => {
@@ -20,7 +21,9 @@ const getSITNFTContract = () => {
 }
 
 export const ContractProvider = ({ children }) => {
+    // Get local storage
     const [formAddressData, setFormAddressData] = useState({ addressInput: "" });
+    const [loading, setLoading] = useState(false);
     // Admin Constants
     const [isAdminResult, setIsAdminResult] = useState('');
     // Faculty Constants
@@ -37,6 +40,8 @@ export const ContractProvider = ({ children }) => {
     // Student Constants
     const [studentResult, setStudentResult] = useState('');
     const [formAddStudentData, setFormAddStudentData] = useState({ studentId: "", studentAddress: "" });
+    // TransactionResult Constants
+    const [transactionsResult, setTransactionsResult] = useState('');
 
     /** Form Handling */
     const handleChange = (e, name) => {
@@ -216,9 +221,34 @@ export const ContractProvider = ({ children }) => {
         }
     }
 
+    // MyGrade Functions
+    const functGetAllTokens = async () => {
+        const sitnftInstance = getSITNFTContract();
+        try {
+            var result = [];
+            const tokensNo = await sitnftInstance.totalSupply();
+            for (let i = 0; i < tokensNo; i++) {
+                const tempItem = await sitnftInstance.attributes(i + 1);
+                result.push(tempItem);
+            }
+            console.log(result);
+            setTransactionsResult(result);
+            setLoading(false);
+
+            localStorage.setItem("tokens", JSON.stringify(result));
+            return result;
+        } catch (err) {
+            console.error(err);
+            setTransactionsResult(err);
+            return err;
+        }
+    }
+
     return (
         <ContractContext.Provider
             value={{
+                loading,
+                setLoading,
                 formAddressData,
                 handleChange,
                 functIsAdmin,
@@ -237,7 +267,10 @@ export const ContractProvider = ({ children }) => {
                 formAddStudentData,
                 handleStudent,
                 studentResult,
-                getStudentAddress
+                getStudentAddress,
+                functGetAllTokens,
+                transactionsResult,
+                tks
             }}>
             {children}
         </ContractContext.Provider >
