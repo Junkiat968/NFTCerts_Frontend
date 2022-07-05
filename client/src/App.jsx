@@ -10,12 +10,16 @@ import "./App.css";
 // import Footer from "./components/Footer";
 
 // Import Components
-import Navbar from './components/Navbar.jsx';
+import Navigationbar from './components/Navbar.jsx';
 
 // Import Pages
 import SITNFT from './components/Pages/SITNFT.js';
 import Login from './components/Pages/Login';
 import MyGrades from './components/Pages/MyGrades';
+import ManageGrades from "./components/Pages/ManageGrades";
+import TransactionLogs from "./components/Pages/TransactionLogs";
+import PurchaseTokens from "./components/Pages/PurchaseTokens";
+import ManageAccounts from "./components/Pages/ManageAccounts";
 import Error from './components/Pages/Error';
 import PageNotFound from './components/Pages/PageNotFound';
 
@@ -27,13 +31,17 @@ class App extends Component {
     return (
       <div id="App" >
         <Router>
-          <Navbar />
+          <Navigationbar />
           {
             loginState ?
               <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/SITNFT" element={<SITNFT />} />
                 <Route path='/MyGrades' element={<MyGrades />} />
+                <Route path='/ManageGrades' element={<ManageGrades />} />
+                <Route path='/TransactionLogs' element={<TransactionLogs />} />
+                <Route path='/PurchaseTokens' element={<PurchaseTokens />} />
+                <Route path='/ManageAccounts' element={<ManageAccounts />} />
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
               :
