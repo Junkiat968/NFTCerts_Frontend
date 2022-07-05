@@ -1,0 +1,31 @@
+.userInfo {
+    padding: 1rem;
+    display: flex;
+    gap: 100px;
+    font-family: 'Roboto';
+  }
+
+  .profile {
+    width: 20%;
+    padding: 10px;
+    height: 100px;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .details {
+    width: 70%;
+    padding: 10px;
+    height: 100px;
+    border-radius: 5px;
+    text-align: left;
+  }
+
+  h3{
+    color: #23305E;
+    border: 1px solid #CCC;
+    border-radius: 6px;
+    border-spacing: 25px;
+    border-color: white;
+    background-color: #F0F8FF;
+  }

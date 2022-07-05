@@ -19,7 +19,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path='/manageApprovals' element={<ManageApprovals />} />
-          <Route exact path='/' element={<ManageGrades />} />
+          <Route exact path='/' element={<Login />} />
           <Route path='/manageAccounts' element={<ManageAccounts />} />
           <Route path='/manageGrades' element={<ManageGrades />} />
           <Route path='/transactionLogs' element={<TransactionLogs />} />
