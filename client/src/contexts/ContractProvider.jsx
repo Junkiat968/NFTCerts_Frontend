@@ -228,10 +228,12 @@ export const ContractProvider = ({ children }) => {
             var result = [];
             const tokensNo = await sitnftInstance.totalSupply();
             for (let i = 0; i < tokensNo; i++) {
-                const tempItem = await sitnftInstance.attributes(i + 1);
+                // const tempItem = await sitnftInstance.attributes(i + 1);
+                const tempItem = await sitnftInstance.tokenURI(i + 1);
+                // const decodedItem = JSON.parse(tempItem.toString());
+                console.log(tempItem);
                 result.push(tempItem);
             }
-            console.log(result);
             setTransactionsResult(result);
             setLoading(false);
 

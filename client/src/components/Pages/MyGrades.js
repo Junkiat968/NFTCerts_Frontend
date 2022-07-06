@@ -11,7 +11,7 @@ import { ContractContext } from '../../contexts/ContractProvider';
 import Pagination from "../Pagination";
 
 const MyGrades = () => {
-  const [postsPerPage] = useState(3);
+  const [postsPerPage] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const {
     loading,
@@ -26,13 +26,26 @@ const MyGrades = () => {
     functGetAllTokens();
   };
 
-  const removeLS = (e) => {
+  const clearLocalStorage = (e) => {
     var getStr = localStorage.getItem('tokens');
     alert(getStr);
     localStorage.removeItem("tokens");
     var clrStr = localStorage.getItem('tokens');
     alert(clrStr);
     window.location.reload(true);
+  };
+
+  const processData = (e) => {
+    // Data Decode and Processing
+    for (let i = 0; i < tkStorage.length; i++) {
+      const current = tkStorage[i].split(",");
+      // Decode the String
+      var decodedString = atob(current[1]);
+      tkStorage[i] = JSON.parse(decodedString);
+      // Decode Image
+      const currentImg = tkStorage[i].image.split(",");
+      tkStorage[i].image = currentImg[1];
+    }
   };
 
   const tkStorage = JSON.parse(tks);
@@ -45,6 +58,9 @@ const MyGrades = () => {
       </div>
     );
   } else {
+    // Data Decode and Processing
+    { processData() }
+
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -61,10 +77,10 @@ const MyGrades = () => {
           </div>
           <div className="col-sm-12 text-center mb-5">
             <button className="btn btn-block btn-outline-primary mt-3" type="button"
-              onClick={removeLS}>Remove Local Storage
+              onClick={clearLocalStorage}>Remove Local Storage
             </button>
           </div>
-          <div className="d-flex justify-content-around my-3">
+          <div className="d-flex justify-content-around my-3 text-start">
             Your Results:
             <Container>
               <Row>
@@ -73,26 +89,26 @@ const MyGrades = () => {
                     null
                 }
                 {Object.values(currentPosts).map((val, k) =>
-                  <Col k={k} xs={4} md={4} lg={3}>
+                  <Col k={k} xs={6} md={6} lg={4}>
                     <Card className="m-3" style={{ width: '12rem' }}>
-                      {/* <Card.Img variant="top" src="holder.js/100px180?text=Image cap" /> */}
-                      <Card.Body>
-                        <Card.Title>{val[1]} Certificate</Card.Title>
-                        {/* <Card.Text>
-                        Some quick example text to build on the card title and make up the bulk of
-                        the card's content.
-                      </Card.Text> */}
+                      <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.image}`} />
+                      {/* <Card.Body>
+                        <Card.Title style={{ height: '3rem' }}>{val.attributes[1].value} Certificate</Card.Title>
+                        <Card.Text>
+                          Some quick example text to build on the card title and make up the bulk of
+                          the card's content.
+                        </Card.Text>
                       </Card.Body>
                       <ListGroup className="list-group-flush">
-                        <ListGroupItem>Module{'>'} {val[0]}</ListGroupItem>
-                        <ListGroupItem>Trimester{'>'} {val[3]}</ListGroupItem>
+                        <ListGroupItem>Module{'>'} {val.attributes[0].value}</ListGroupItem>
+                        <ListGroupItem>Trimester{'>'} {val.attributes[2].value}</ListGroupItem>
                         <ListGroupItem>Grade:<br />{val[2]}</ListGroupItem>
                         <ListGroupItem></ListGroupItem>
                       </ListGroup>
-                      {/* <Card.Body>
-                          <Card.Link href="#">Card Link</Card.Link>
-                          <Card.Link href="#">Another Link</Card.Link>
-                        </Card.Body> */}
+                      <Card.Body>
+                        <Card.Link href="#">Card Link</Card.Link>
+                        <Card.Link href="#">Another Link</Card.Link>
+                      </Card.Body> */}
                     </Card>
                   </Col>
                 )}
@@ -100,12 +116,13 @@ const MyGrades = () => {
             </Container>
           </div>
           <div className="text-end">
-              <Pagination className="mt-3"
-                postsPerPage={postsPerPage}
-                totalPosts={tkStorage.length}
-                paginate={paginate}
-              />
-            </div>
+            <Pagination className="mt-3"
+              postsPerPage={postsPerPage}
+              totalPosts={tkStorage.length}
+              paginate={paginate}
+            >
+            </Pagination>
+          </div>
         </div >
         {/* <div className='mt-5 text-center'>
         <Pagination >
