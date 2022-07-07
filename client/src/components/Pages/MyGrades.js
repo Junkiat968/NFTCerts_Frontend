@@ -6,14 +6,13 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import ListGroupItem from 'react-bootstrap/ListGroupItem';
 import { Row, Col, Container } from "react-bootstrap";
 import Select from 'react-select';
-// import Pagination from 'react-bootstrap/Pagination';
 
 import { ContractContext } from '../../contexts/ContractProvider';
 import Pagination from "../Pagination";
 
 const MyGrades = () => {
   // Local Constants
-  const [postsPerPage] = useState(3);
+  const [postsPerPage] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const [modules, setModules] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
@@ -95,24 +94,22 @@ const MyGrades = () => {
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
     return (
-      <div className='page-two container'>
+      <div className='container'>
         <div className="mt-3 text-end">
-          <button className="btn btn-block btn-outline-primary" type="button"
+          {/* <button className="btn btn-block btn-outline-primary" type="button"
             onClick={getTokens}>Get All Tokens
-          </button>
+          </button> */}
           <button className="btn btn-block btn-outline-primary" type="button"
-            onClick={clearLocalStorage}>Remove Local Storage
+            onClick={clearLocalStorage}>Refresh
           </button>
         </div>
         <h2 className="pb-2 border-bottom text-start my-3">MyGrades. Testing.</h2>
-        <div className="text-center">
-          <div>
+        <div className="">
+          <div className="mb-3 text-center">
             <Select options={modules} placeholder="Filter" onChange={changeSelected} />
-          </div>
-          <div>
             {selectedModule}
           </div>
-          <div className="d-flex justify-content-around text-start">
+          <div className="d-flex justify-content-around text-start mt-3">
             Your Results:
             <Container>
               <Row>
@@ -130,31 +127,13 @@ const MyGrades = () => {
               </Row>
             </Container>
           </div>
-          <div className="text-end">
-            <Pagination className="mt-3"
-              postsPerPage={postsPerPage}
-              totalPosts={tkStorage.length}
-              paginate={paginate}
-            >
-            </Pagination>
-          </div>
+          <Pagination className="text-end mt-3 ms-auto"
+            postsPerPage={postsPerPage}
+            totalPosts={tkStorage.length}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
         </div >
-        {/* <div className='mt-5 text-center'>
-        <Pagination >
-          <Pagination.First />
-          <Pagination.Prev />
-          <Pagination.Item>{1}</Pagination.Item>
-          <Pagination.Ellipsis />
-          <Pagination.Item>{3}</Pagination.Item>
-          <Pagination.Item>{4}</Pagination.Item>
-          <Pagination.Item active>{5}</Pagination.Item>
-          <Pagination.Item>{4}</Pagination.Item>
-          <Pagination.Ellipsis />
-          <Pagination.Item>{8}</Pagination.Item>
-          <Pagination.Next />
-          <Pagination.Last />
-        </Pagination>
-      </div> */}
       </div >
     );
   }
