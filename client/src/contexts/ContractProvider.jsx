@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from 'ethers';
 import {
-    base64ContractAddress,
-    base64ContractABI,
     sitnftContractAddress,
     sitnftContractABI
 } from '../utils/constants';
@@ -13,7 +11,7 @@ const provider = new ethers.providers.Web3Provider(ethereum);
 const signer = provider.getSigner();
 
 /** Local/Persistent Storage */
-var tks = localStorage.getItem("tokens");
+var grades = localStorage.getItem("grades");
 var mods = localStorage.getItem("modules");
 
 /** Get SITNFT Contract Instance*/
@@ -43,8 +41,6 @@ export const ContractProvider = ({ children }) => {
     // Student Constants
     const [studentResult, setStudentResult] = useState('');
     const [formAddStudentData, setFormAddStudentData] = useState({ studentId: "", studentAddress: "" });
-    // TransactionResult Constants
-    const [transactionsResult, setTransactionsResult] = useState('');
     // Module Constants
     const [modules, setModules] = useState([]);
 
@@ -227,40 +223,38 @@ export const ContractProvider = ({ children }) => {
     }
 
     // MyGrade Functions
-    const functGetAllTokens = async () => {
+    const functGetAllGrades = async () => {
         const sitnftInstance = getSITNFTContract();
         try {
             var result = [];
-            const tokensNo = await sitnftInstance.totalSupply();
-            for (let i = 0; i < tokensNo; i++) {
+            const gradesNo = await sitnftInstance.totalSupply();
+            for (let i = 0; i < gradesNo; i++) {
                 const tempItem = await sitnftInstance.tokenURI(i + 1);
                 result.push(tempItem);
             }
-            setTransactionsResult(result);
             setLoading(false);
-            localStorage.setItem("tokens", JSON.stringify(result));
-            window.location.reload(true);
+            localStorage.setItem("grades", JSON.stringify(result));
             processModules();
+            window.location.reload(true);
             return result;
         } catch (err) {
             console.error(err);
-            setTransactionsResult(err);
             return err;
         }
     }
 
     const processModules = (e) => {
-        const tkStorage = JSON.parse(localStorage.getItem("tokens"));
-        for (let i = 0; i < tkStorage.length; i++) {
-            const current = tkStorage[i].split(",");
+        const gradeStorage = JSON.parse(localStorage.getItem("grades"));
+        for (let i = 0; i < gradeStorage.length; i++) {
+            const current = gradeStorage[i].split(",");
             // Decode the String
             var decodedString = atob(current[1]);
-            tkStorage[i] = JSON.parse(decodedString);
+            gradeStorage[i] = JSON.parse(decodedString);
             if (i === 0) {
-                modules.push(tkStorage[i].attributes[0].value);
+                modules.push(gradeStorage[i].attributes[0].value);
             } else {
-                if (!modules.includes(tkStorage[i].attributes[0].value.trim())) {
-                    modules.push(tkStorage[i].attributes[0].value.trim());
+                if (!modules.includes(gradeStorage[i].attributes[0].value.trim())) {
+                    modules.push(gradeStorage[i].attributes[0].value.trim());
                 }
             }
         }
@@ -291,9 +285,8 @@ export const ContractProvider = ({ children }) => {
                 handleStudent,
                 studentResult,
                 getStudentAddress,
-                functGetAllTokens,
-                transactionsResult,
-                tks,
+                functGetAllGrades,
+                grades,
                 mods
             }}>
             {children}

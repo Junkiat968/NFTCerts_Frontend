@@ -1,10 +1,9 @@
 import React, { useContext, useState } from "react";
-import Card from 'react-bootstrap/Card';
-import Placeholder from 'react-bootstrap/Placeholder';
-import Button from 'react-bootstrap/Button';
-import ListGroup from 'react-bootstrap/ListGroup';
-import ListGroupItem from 'react-bootstrap/ListGroupItem';
-import { Row, Col, Container } from "react-bootstrap";
+// import Placeholder from 'react-bootstrap/Placeholder';
+// import Button from 'react-bootstrap/Button';
+// import ListGroup from 'react-bootstrap/ListGroup';
+// import ListGroupItem from 'react-bootstrap/ListGroupItem';
+import { Row, Col, Card, Container } from "react-bootstrap";
 import Select from 'react-select';
 
 import { ContractContext } from '../../contexts/ContractProvider';
@@ -26,9 +25,8 @@ const MyGrades = () => {
   const {
     loading,
     setLoading,
-    functGetAllTokens,
-    transactionsResult,
-    tks,
+    functGetAllGrades,
+    grades,
     mods
   } = useContext(ContractContext);
 
@@ -42,63 +40,53 @@ const MyGrades = () => {
   };
 
   /** FETCH DATA */
-  const getTokens = (e) => {
+  const getGrades = (e) => {
     setLoading(true);
-    functGetAllTokens();
+    functGetAllGrades();
   };
 
   /** CLEAR LOCAL STORAGE DATA  */
   const clearLocalStorage = (e) => {
-    localStorage.removeItem("tokens");
+    localStorage.removeItem("grades");
     localStorage.removeItem("modules");
-    // var tks = localStorage.getItem("tokens");
+    // var grades = localStorage.getItem("grades");
     // var mods = localStorage.getItem("modules");
-    // alert(tks);
+    // alert(grades);
     // alert(mods);
-    getTokens();
+    getGrades();
   };
 
   /** PROCESSS DATA */
   const processData = (e) => {
     // Data Decode and Processing
-    for (let i = 0; i < tkStorage.length; i++) {
-      const current = tkStorage[i].split(",");
+    for (let i = 0; i < gradeStorage.length; i++) {
+      const current = gradeStorage[i].split(",");
       // Decode the String
       var decodedString = atob(current[1]);
-      tkStorage[i] = JSON.parse(decodedString);
+      gradeStorage[i] = JSON.parse(decodedString);
       // Decode Image
-      const currentImg = tkStorage[i].image.split(",");
-      tkStorage[i].image = currentImg[1];
+      const currentImg = gradeStorage[i].image.split(",");
+      gradeStorage[i].image = currentImg[1];
     }
   };
 
-  const tkStorage = JSON.parse(tks);
-  if (tkStorage == null) {
-    getTokens();
+  const gradeStorage = JSON.parse(grades);
+
+  /** RENDER LOADING */
+  const renderLoading = (e) => {
     return (
       <div className="text-center mt-5">
         <h2>Loading data...</h2>
         <small>Please wait..</small>
       </div>
     );
-  } else {
-    // Data Decode and Processing
-    { processData() }
-    { setModuleArray() }
+  };
 
-    // Get current posts
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = tkStorage.slice(indexOfFirstPost, indexOfLastPost);
-    // Change page
-    const paginate = pageNumber => setCurrentPage(pageNumber);
-
+  /** RENDER PAGE */
+  const renderPage = (currentPosts, paginate) => {
     return (
       <div className='container'>
         <div className="mt-3 text-end">
-          {/* <button className="btn btn-block btn-outline-primary" type="button"
-            onClick={getTokens}>Get All Tokens
-          </button> */}
           <button className="btn btn-block btn-outline-primary" type="button"
             onClick={clearLocalStorage}>Refresh
           </button>
@@ -113,10 +101,6 @@ const MyGrades = () => {
             Your Results:
             <Container>
               <Row>
-                {
-                  loading ? <h2 className="text-center">Loading...</h2> :
-                    null
-                }
                 {Object.values(currentPosts).map((val, k) =>
                   <Col k={k} xs={8} md={4} lg={3}>
                     <Card className="m-3" style={{ width: '12rem' }}>
@@ -129,12 +113,38 @@ const MyGrades = () => {
           </div>
           <Pagination className="text-end mt-3 ms-auto"
             postsPerPage={postsPerPage}
-            totalPosts={tkStorage.length}
+            totalPosts={gradeStorage.length}
             paginate={paginate}
             currentPage={currentPage}
           />
         </div >
       </div >
+    );
+  };
+
+  if (gradeStorage == null) {
+    getGrades();
+    return (
+      renderLoading()
+    );
+  } else {
+    // Data Decode and Processing
+    processData();
+    setModuleArray();
+
+    // Get current posts
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = gradeStorage.slice(indexOfFirstPost, indexOfLastPost);
+    // Change page
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+
+    return (
+      <>
+        {
+          loading ? renderLoading() : renderPage(currentPosts, paginate)
+        }
+      </>
     );
   }
 }
