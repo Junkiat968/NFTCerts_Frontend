@@ -11,7 +11,10 @@ const { ethereum } = window;
 export const ContractContext = React.createContext();
 const provider = new ethers.providers.Web3Provider(ethereum);
 const signer = provider.getSigner();
+
+/** Local/Persistent Storage */
 var tks = localStorage.getItem("tokens");
+var mods = localStorage.getItem("modules");
 
 /** Get SITNFT Contract Instance*/
 const getSITNFTContract = () => {
@@ -42,6 +45,8 @@ export const ContractProvider = ({ children }) => {
     const [formAddStudentData, setFormAddStudentData] = useState({ studentId: "", studentAddress: "" });
     // TransactionResult Constants
     const [transactionsResult, setTransactionsResult] = useState('');
+    // Module Constants
+    const [modules, setModules] = useState([]);
 
     /** Form Handling */
     const handleChange = (e, name) => {
@@ -228,17 +233,14 @@ export const ContractProvider = ({ children }) => {
             var result = [];
             const tokensNo = await sitnftInstance.totalSupply();
             for (let i = 0; i < tokensNo; i++) {
-                // const tempItem = await sitnftInstance.attributes(i + 1);
                 const tempItem = await sitnftInstance.tokenURI(i + 1);
-                // const decodedItem = JSON.parse(tempItem.toString());
-                console.log(tempItem);
                 result.push(tempItem);
             }
             setTransactionsResult(result);
             setLoading(false);
-
             localStorage.setItem("tokens", JSON.stringify(result));
             window.location.reload(true);
+            processModules();
             return result;
         } catch (err) {
             console.error(err);
@@ -246,6 +248,24 @@ export const ContractProvider = ({ children }) => {
             return err;
         }
     }
+
+    const processModules = (e) => {
+        const tkStorage = JSON.parse(localStorage.getItem("tokens"));
+        for (let i = 0; i < tkStorage.length; i++) {
+            const current = tkStorage[i].split(",");
+            // Decode the String
+            var decodedString = atob(current[1]);
+            tkStorage[i] = JSON.parse(decodedString);
+            if (i === 0) {
+                modules.push(tkStorage[i].attributes[0].value);
+            } else {
+                if (!modules.includes(tkStorage[i].attributes[0].value.trim())) {
+                    modules.push(tkStorage[i].attributes[0].value.trim());
+                }
+            }
+        }
+        localStorage.setItem("modules", JSON.stringify(modules));
+    };
 
     return (
         <ContractContext.Provider
@@ -273,7 +293,8 @@ export const ContractProvider = ({ children }) => {
                 getStudentAddress,
                 functGetAllTokens,
                 transactionsResult,
-                tks
+                tks,
+                mods
             }}>
             {children}
         </ContractContext.Provider >
