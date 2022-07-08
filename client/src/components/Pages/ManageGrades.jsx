@@ -46,10 +46,10 @@ const ManageGrades = () => {
   };
 
   return (
-    <div className='container-fluid p-2 flex-xl-nowrap row' >
-    <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+    <div className='container' >
+    <Tab.Container id="left-tabs" defaultActiveKey="first">
   <Row className="p-3">
-    <Col sm={2}>
+    <Col sm={3}>
       <Nav variant="pills" className="flex-column p-3">
         <Nav.Item>
           <Nav.Link eventKey="first">ICT1001 Introuction to Computing</Nav.Link>
@@ -59,7 +59,7 @@ const ManageGrades = () => {
         </Nav.Item>
       </Nav>
     </Col>
-    <Col sm={10}>
+    <Col sm={9}>
       <Tab.Content>
         <Tab.Pane eventKey="first">
           <div>

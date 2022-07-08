@@ -46,7 +46,7 @@ const ManageAccounts = () => {
   };
 
   return (
-    <div className="container-fluid p-2 row">
+    <div className="container">
     {/* <Sidebar pageWrapId={"page-wrap"} outerContainerId={"outer-container"} /> */}
     <div className="p-3 w-100 d-inline-block">
     {/* <label className="mx-3">Choose file: </label> */}

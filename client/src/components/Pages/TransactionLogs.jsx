@@ -3,6 +3,7 @@ import React from 'react';
 
 const TransactionLogs = () => {
     return (
+        <div className="container">
         <div className='container-fluid p-4 row'>
             <h2>
                 Token transaction history
@@ -24,6 +25,7 @@ const TransactionLogs = () => {
                     </tr>
                 </tbody>
             </table>
+        </div>
         </div>
     )
 };
