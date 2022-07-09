@@ -15,6 +15,7 @@ contract RoleControl is AccessControlEnumerable {
      * @dev Add 'root' to admin role.
      */
     constructor(address root) {
+        require(root != address(0));
         owner = root;
         // give msg.sender roles
         _setupRole(DEFAULT_ADMIN_ROLE, root);
@@ -46,22 +47,22 @@ contract RoleControl is AccessControlEnumerable {
     }
 
     // Grant admin privilege to an address.
-    function addAdmin(address account) public virtual onlyAdmin {
+    function addAdmin(address account) external virtual onlyAdmin {
         grantRole(DEFAULT_ADMIN_ROLE, account);
     }
 
     // Grant faculty privilege to an address. Restricted to Admins.
-    function addFaculty(address account) public virtual onlyAdmin {
+    function addFaculty(address account) external virtual onlyAdmin {
         grantRole(FACULTY_ROLE, account);
     }
 
     // Remove admin privilege on an address.
-    function removeAdmin(address account) public virtual onlyAdmin {
+    function removeAdmin(address account) external virtual onlyAdmin {
         revokeRole(DEFAULT_ADMIN_ROLE, account);
     }
 
     // Remove faculty privilege on an address.
-    function removeFaculty(address account) public virtual onlyAdmin {
+    function removeFaculty(address account) external virtual onlyAdmin {
         revokeRole(FACULTY_ROLE, account);
     }
 

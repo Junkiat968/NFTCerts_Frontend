@@ -14,6 +14,7 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 
 const SITNFT = () => {
   const { state } = useEth();
+  console.log(state);
 
   const {
     functIsAdmin,
