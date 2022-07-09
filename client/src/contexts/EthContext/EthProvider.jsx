@@ -1,6 +1,7 @@
 import React, { useReducer, useCallback, useEffect, useState } from "react";
 import Web3 from "web3";
 import EthContext from "./EthContext";
+import { ethers } from 'ethers';
 import { reducer, actions, initialState } from "./state";
 
 import {
@@ -9,6 +10,18 @@ import {
   sitnftContractAddress,
   sitnftContractABI
 } from '../../utils/constants';
+
+const { ethereum } = window;
+
+const provider = new ethers.providers.Web3Provider(ethereum);
+const signer = provider.getSigner();
+
+/** Get SITNFT Contract Instance*/
+const getSITNFTContract = () => {
+  const sitnftContract = new ethers.Contract(sitnftContractAddress, sitnftContractABI, signer);
+  console.log(provider, signer, sitnftContract);
+  return sitnftContract;
+}
 
 function EthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -47,12 +60,43 @@ function EthProvider({ children }) {
       const accountConnected = state.accounts;
       if (accountConnected) {
         setLoginState(true);
+        fetchGrades();
+        // window.location.reload();
       } else {
         // console.log("No accounts found.");
       }
     } catch (error) {
       console.log(error);
       throw new Error("No ethereum object");
+    }
+  }
+
+  // MyGrade Functions
+  const fetchGrades = async () => {
+    const sitnftInstance = getSITNFTContract();
+    console.log(sitnftInstance);
+
+    try {
+      var result = [];
+
+      const noOfTokens = await sitnftInstance.balanceOf(state.accounts[0]);
+      console.log(state.accounts);
+
+      for (let i = 0; i < noOfTokens; i++) {
+        const tokenId = await sitnftInstance.tokenOfOwnerByIndex(state.accounts[0], i);
+        const tempItem = await sitnftInstance.tokenURI(tokenId);
+        result.push(tempItem);
+      }
+
+      // setLoading(false);
+      localStorage.setItem("grades", JSON.stringify(result));
+      // processModules();
+      // window.location.reload();
+      console.log(result);
+      return result;
+    } catch (err) {
+      console.error(err);
+      return err;
     }
   }
 
@@ -74,13 +118,13 @@ function EthProvider({ children }) {
     const events = ["chainChanged", "accountsChanged"];
     const handleChange = () => {
       init(state.artifact);
-      // window.location.reload();
       window.location.assign("/");
+      // window.location.reload();
     };
 
     events.forEach(e => window.ethereum.on(e, handleChange));
     return () => {
-      setAccChanged(true);
+      // setAccChanged(true);
       events.forEach(e => window.ethereum.removeListener(e, handleChange));
     };
   },
@@ -94,7 +138,8 @@ function EthProvider({ children }) {
       currentAccount,
       loginState,
       accChanged,
-      setAccChanged
+      setAccChanged,
+      getSITNFTContract
     }}>
       {children}
     </EthContext.Provider>

@@ -49,9 +49,6 @@ const MyGrades = () => {
   const clearLocalStorage = (e) => {
     localStorage.removeItem("grades");
     localStorage.removeItem("modules");
-    // var grades = localStorage.getItem("grades");
-    // var mods = localStorage.getItem("modules");
-    // alert(grades);
     getGrades();
   };
 
@@ -135,7 +132,7 @@ const MyGrades = () => {
   // } else {
   // Data Decode and Processing
   processData();
-  setModuleArray();
+  // setModuleArray();
 
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;

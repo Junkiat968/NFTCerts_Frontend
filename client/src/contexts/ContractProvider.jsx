@@ -1,29 +1,14 @@
 import React, { useEffect, useState } from "react";
 import useEth from "./EthContext/useEth";
-import { ethers } from 'ethers';
-import {
-    sitnftContractAddress,
-    sitnftContractABI
-} from '../utils/constants';
-const { ethereum } = window;
 
 export const ContractContext = React.createContext();
-const provider = new ethers.providers.Web3Provider(ethereum);
-const signer = provider.getSigner();
 
 /** Local/Persistent Storage */
 var grades = localStorage.getItem("grades");
 var mods = localStorage.getItem("modules");
 
-/** Get SITNFT Contract Instance*/
-const getSITNFTContract = () => {
-    const sitnftContract = new ethers.Contract(sitnftContractAddress, sitnftContractABI, signer);
-    console.log(provider, signer, sitnftContract);
-    return sitnftContract;
-}
-
 export const ContractProvider = ({ children }) => {
-    const { state } = useEth();
+    const { state, getSITNFTContract } = useEth();
     // Get local storage
     const [formAddressData, setFormAddressData] = useState({ addressInput: "" });
     const [loading, setLoading] = useState(false);
@@ -248,7 +233,7 @@ export const ContractProvider = ({ children }) => {
             setLoading(false);
             localStorage.setItem("grades", JSON.stringify(result));
             processModules();
-            window.location.reload(true);
+            // window.location.reload(true);
             return result;
         } catch (err) {
             console.error(err);

@@ -1,23 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import useEth from "../../contexts/EthContext/useEth";
-import { ContractContext } from '../../contexts/ContractProvider';
 
 const Login = () => {
-    const { state,
-        init,
-        accChanged,
-        setAccChanged
+    const {
+        state,
+        init
     } = useEth();
-
-    // Context Constants
-    const { functGetAllGrades } = useContext(ContractContext);
-
-    if (accChanged == true) {
-        localStorage.removeItem("grades");
-        localStorage.removeItem("modules");
-        functGetAllGrades();
-        setAccChanged(false);
-    }
 
     const renderAcc = (e) => {
         if (state.accounts !== null) {
