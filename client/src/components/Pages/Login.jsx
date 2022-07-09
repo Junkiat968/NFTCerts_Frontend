@@ -10,13 +10,9 @@ const Login = () => {
     } = useEth();
 
     // Context Constants
-    const {
-        functGetAllGrades,
-        setLoading
-    } = useContext(ContractContext);
+    const { functGetAllGrades } = useContext(ContractContext);
 
     if (accChanged == true) {
-        setLoading(true);
         localStorage.removeItem("grades");
         localStorage.removeItem("modules");
         functGetAllGrades();
