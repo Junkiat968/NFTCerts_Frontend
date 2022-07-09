@@ -16,11 +16,6 @@ const MyGrades = () => {
   const [modules, setModules] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
 
-  const changeSelected = (e) => {
-    setSelectedModule(e.value);
-    setModuleArray();
-  };
-
   // Context Constants
   const {
     loading,
@@ -30,7 +25,13 @@ const MyGrades = () => {
     mods
   } = useContext(ContractContext);
 
-  /** Set Data for Module Dropdown */
+  const changeSelected = (e) => {
+    setSelectedModule(e.value);
+    setModuleArray();
+    setLoading(false);
+  };
+
+  /** SET MODULE DROPDOWN BAR */
   const setModuleArray = (e) => {
     const modsJson = JSON.parse(mods);
     // modules.length = 0;
@@ -69,18 +70,10 @@ const MyGrades = () => {
     }
   };
 
-  const gradeStorage = JSON.parse(grades);
-  console.log(gradeStorage);
-
   /** RENDER LOADING */
   const renderLoading = (e) => {
     return (
       <div className="text-center mt-5">
-        <div className="mt-3 text-end">
-          <button className="btn btn-block btn-outline-primary" type="button"
-            onClick={clearLocalStorage}>Refresh Data
-          </button>
-        </div>
         <h2>Loading data...</h2>
         <small>Please wait..</small>
       </div>
@@ -127,13 +120,8 @@ const MyGrades = () => {
     );
   };
 
-  // if (gradeStorage == null) {
-  //   getGrades();
-  //   return (
-  //     renderLoading()
-  //   );
-  // } else {
   // Data Decode and Processing
+  const gradeStorage = JSON.parse(grades);
   processData();
   setModuleArray();
 
@@ -151,29 +139,6 @@ const MyGrades = () => {
       }
     </>
   );
-  // }
 }
 
 export default MyGrades;
-
-// Card
-{/* <Card className="m-3" style={{ width: '12rem' }}>
-  <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.image}`} />
-  <Card.Body>
-    <Card.Title style={{ height: '3rem' }}>{val.attributes[1].value} Certificate</Card.Title>
-    <Card.Text>
-      Some quick example text to build on the card title and make up the bulk of
-      the card's content.
-    </Card.Text>
-  </Card.Body>
-  <ListGroup className="list-group-flush">
-    <ListGroupItem>Module{'>'} {val.attributes[0].value}</ListGroupItem>
-    <ListGroupItem>Trimester{'>'} {val.attributes[2].value}</ListGroupItem>
-    <ListGroupItem>Grade:<br />{val[2]}</ListGroupItem>
-    <ListGroupItem></ListGroupItem>
-  </ListGroup>
-  <Card.Body>
-    <Card.Link href="#">Card Link</Card.Link>
-    <Card.Link href="#">Another Link</Card.Link>
-  </Card.Body>
-</Card> */}
