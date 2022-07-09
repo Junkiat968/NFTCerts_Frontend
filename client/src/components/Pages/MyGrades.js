@@ -11,7 +11,7 @@ import Pagination from "../Pagination";
 
 const MyGrades = () => {
   // Local Constants
-  const [postsPerPage] = useState(6);
+  const [postsPerPage] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
   const [modules, setModules] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
@@ -33,7 +33,7 @@ const MyGrades = () => {
   /** Set Data for Module Dropdown */
   const setModuleArray = (e) => {
     const modsJson = JSON.parse(mods);
-    modules.length = 0;
+    // modules.length = 0;
     for (let i = 0; i < modsJson.length; i++) {
       modules.push({ value: modsJson[i], label: modsJson[i] });
     }
@@ -52,7 +52,6 @@ const MyGrades = () => {
     // var grades = localStorage.getItem("grades");
     // var mods = localStorage.getItem("modules");
     // alert(grades);
-    // alert(mods);
     getGrades();
   };
 
@@ -71,11 +70,17 @@ const MyGrades = () => {
   };
 
   const gradeStorage = JSON.parse(grades);
+  console.log(gradeStorage);
 
   /** RENDER LOADING */
   const renderLoading = (e) => {
     return (
       <div className="text-center mt-5">
+        <div className="mt-3 text-end">
+          <button className="btn btn-block btn-outline-primary" type="button"
+            onClick={clearLocalStorage}>Refresh Data
+          </button>
+        </div>
         <h2>Loading data...</h2>
         <small>Please wait..</small>
       </div>
@@ -88,7 +93,7 @@ const MyGrades = () => {
       <div className='container'>
         <div className="mt-3 text-end">
           <button className="btn btn-block btn-outline-primary" type="button"
-            onClick={clearLocalStorage}>Refresh
+            onClick={clearLocalStorage}>Refresh Data
           </button>
         </div>
         <h2 className="pb-2 border-bottom text-start my-3">MyGrades. Testing.</h2>
@@ -117,8 +122,8 @@ const MyGrades = () => {
             paginate={paginate}
             currentPage={currentPage}
           />
-        </div >
-      </div >
+        </div>
+      </div>
     );
   };
 

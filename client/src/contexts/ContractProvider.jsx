@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import useEth from "./EthContext/useEth";
 import { ethers } from 'ethers';
 import {
     sitnftContractAddress,
@@ -22,6 +23,7 @@ const getSITNFTContract = () => {
 }
 
 export const ContractProvider = ({ children }) => {
+    const { state } = useEth();
     // Get local storage
     const [formAddressData, setFormAddressData] = useState({ addressInput: "" });
     const [loading, setLoading] = useState(false);
@@ -194,6 +196,7 @@ export const ContractProvider = ({ children }) => {
                 studentId,
                 studentAddress,
             );
+
             console.log(result);
             setStudentResult(result);
             return result;
@@ -227,11 +230,21 @@ export const ContractProvider = ({ children }) => {
         const sitnftInstance = getSITNFTContract();
         try {
             var result = [];
-            const gradesNo = await sitnftInstance.totalSupply();
-            for (let i = 0; i < gradesNo; i++) {
-                const tempItem = await sitnftInstance.tokenURI(i + 1);
+            // const gradesNo = await sitnftInstance.totalSupply();
+            
+            //---------------------------------------------------------------------------------
+            const noOfTokens = await sitnftInstance.balanceOf(state.accounts[0]);
+            for (let i = 0; i < noOfTokens; i++) {
+                const tokenId = await sitnftInstance.tokenOfOwnerByIndex(state.accounts[0], i);
+                const tempItem = await sitnftInstance.tokenURI(tokenId);
                 result.push(tempItem);
             }
+            //---------------------------------------------------------------------------------
+
+            // for (let i = 0; i < gradesNo; i++) {
+            //     const tempItem = await sitnftInstance.tokenURI(i + 1);
+            //     result.push(tempItem);
+            // }
             setLoading(false);
             localStorage.setItem("grades", JSON.stringify(result));
             processModules();
