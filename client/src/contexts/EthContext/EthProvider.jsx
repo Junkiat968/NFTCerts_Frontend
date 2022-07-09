@@ -14,6 +14,7 @@ function EthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [currentAccount, setCurrentAccount] = useState('');
   const [loginState, setLoginState] = useState(false);
+  const [accChanged, setAccChanged] = useState(false);
 
   const init = useCallback(
     async artifact => {
@@ -73,11 +74,13 @@ function EthProvider({ children }) {
     const events = ["chainChanged", "accountsChanged"];
     const handleChange = () => {
       init(state.artifact);
-      window.location.reload();
+      // window.location.reload();
+      window.location.assign("/");
     };
 
     events.forEach(e => window.ethereum.on(e, handleChange));
     return () => {
+      setAccChanged(true);
       events.forEach(e => window.ethereum.removeListener(e, handleChange));
     };
   },
@@ -89,7 +92,9 @@ function EthProvider({ children }) {
       dispatch,
       init,
       currentAccount,
-      loginState
+      loginState,
+      accChanged,
+      setAccChanged
     }}>
       {children}
     </EthContext.Provider>

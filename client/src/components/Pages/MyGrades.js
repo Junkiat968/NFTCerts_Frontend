@@ -127,31 +127,31 @@ const MyGrades = () => {
     );
   };
 
-  if (gradeStorage == null) {
-    getGrades();
-    return (
-      renderLoading()
-    );
-  } else {
-    // Data Decode and Processing
-    processData();
-    setModuleArray();
+  // if (gradeStorage == null) {
+  //   getGrades();
+  //   return (
+  //     renderLoading()
+  //   );
+  // } else {
+  // Data Decode and Processing
+  processData();
+  setModuleArray();
 
-    // Get current posts
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = gradeStorage.slice(indexOfFirstPost, indexOfLastPost);
-    // Change page
-    const paginate = pageNumber => setCurrentPage(pageNumber);
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = gradeStorage.slice(indexOfFirstPost, indexOfLastPost);
+  // Change page
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
-    return (
-      <>
-        {
-          loading ? renderLoading() : renderPage(currentPosts, paginate)
-        }
-      </>
-    );
-  }
+  return (
+    <>
+      {
+        loading ? renderLoading() : renderPage(currentPosts, paginate)
+      }
+    </>
+  );
+  // }
 }
 
 export default MyGrades;

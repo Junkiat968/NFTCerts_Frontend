@@ -231,7 +231,7 @@ export const ContractProvider = ({ children }) => {
         try {
             var result = [];
             // const gradesNo = await sitnftInstance.totalSupply();
-            
+
             //---------------------------------------------------------------------------------
             const noOfTokens = await sitnftInstance.balanceOf(state.accounts[0]);
             for (let i = 0; i < noOfTokens; i++) {
