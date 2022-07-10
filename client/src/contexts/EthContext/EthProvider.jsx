@@ -19,7 +19,7 @@ const signer = provider.getSigner();
 /** Get SITNFT Contract Instance*/
 const getSITNFTContract = () => {
   const sitnftContract = new ethers.Contract(sitnftContractAddress, sitnftContractABI, signer);
-  console.log(provider, signer, sitnftContract);
+  // console.log(provider, signer, sitnftContract);
   return sitnftContract;
 }
 
@@ -28,6 +28,8 @@ function EthProvider({ children }) {
   const [currentAccount, setCurrentAccount] = useState('');
   const [loginState, setLoginState] = useState(false);
   const [accChanged, setAccChanged] = useState(false);
+
+  const sitnftInstance = getSITNFTContract();
 
   const init = useCallback(
     async artifact => {
@@ -60,43 +62,12 @@ function EthProvider({ children }) {
       const accountConnected = state.accounts;
       if (accountConnected) {
         setLoginState(true);
-        fetchGrades();
-        // window.location.reload();
       } else {
         // console.log("No accounts found.");
       }
     } catch (error) {
       console.log(error);
       throw new Error("No ethereum object");
-    }
-  }
-
-  // MyGrade Functions
-  const fetchGrades = async () => {
-    const sitnftInstance = getSITNFTContract();
-    console.log(sitnftInstance);
-
-    try {
-      var result = [];
-
-      const noOfTokens = await sitnftInstance.balanceOf(state.accounts[0]);
-      console.log(state.accounts);
-
-      for (let i = 0; i < noOfTokens; i++) {
-        const tokenId = await sitnftInstance.tokenOfOwnerByIndex(state.accounts[0], i);
-        const tempItem = await sitnftInstance.tokenURI(tokenId);
-        result.push(tempItem);
-      }
-
-      // setLoading(false);
-      localStorage.setItem("grades", JSON.stringify(result));
-      // processModules();
-      // window.location.reload();
-      console.log(result);
-      return result;
-    } catch (err) {
-      console.error(err);
-      return err;
     }
   }
 
@@ -124,7 +95,6 @@ function EthProvider({ children }) {
 
     events.forEach(e => window.ethereum.on(e, handleChange));
     return () => {
-      // setAccChanged(true);
       events.forEach(e => window.ethereum.removeListener(e, handleChange));
     };
   },
@@ -139,7 +109,8 @@ function EthProvider({ children }) {
       loginState,
       accChanged,
       setAccChanged,
-      getSITNFTContract
+      getSITNFTContract,
+      sitnftInstance
     }}>
       {children}
     </EthContext.Provider>
