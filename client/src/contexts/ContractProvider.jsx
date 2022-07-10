@@ -1,26 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { ethers } from 'ethers';
-import {
-    base64ContractAddress,
-    base64ContractABI,
-    sitnftContractAddress,
-    sitnftContractABI
-} from '../utils/constants';
-const { ethereum } = window;
+import useEth from "./EthContext/useEth";
 
 export const ContractContext = React.createContext();
-const provider = new ethers.providers.Web3Provider(ethereum);
-const signer = provider.getSigner();
-var tks = localStorage.getItem("tokens");
 
-/** Get SITNFT Contract Instance*/
-const getSITNFTContract = () => {
-    const sitnftContract = new ethers.Contract(sitnftContractAddress, sitnftContractABI, signer);
-    console.log(provider, signer, sitnftContract);
-    return sitnftContract;
-}
+/** Local/Persistent Storage */
+var grades = localStorage.getItem("grades");
+var mods = localStorage.getItem("modules");
 
 export const ContractProvider = ({ children }) => {
+    const { state, getSITNFTContract } = useEth();
     // Get local storage
     const [formAddressData, setFormAddressData] = useState({ addressInput: "" });
     const [loading, setLoading] = useState(false);
@@ -40,8 +28,8 @@ export const ContractProvider = ({ children }) => {
     // Student Constants
     const [studentResult, setStudentResult] = useState('');
     const [formAddStudentData, setFormAddStudentData] = useState({ studentId: "", studentAddress: "" });
-    // TransactionResult Constants
-    const [transactionsResult, setTransactionsResult] = useState('');
+    // Module Constants
+    const [modules, setModules] = useState([]);
 
     /** Form Handling */
     const handleChange = (e, name) => {
@@ -193,6 +181,7 @@ export const ContractProvider = ({ children }) => {
                 studentId,
                 studentAddress,
             );
+
             console.log(result);
             setStudentResult(result);
             return result;
@@ -222,28 +211,53 @@ export const ContractProvider = ({ children }) => {
     }
 
     // MyGrade Functions
-    const functGetAllTokens = async () => {
+    const functGetAllGrades = async () => {
         const sitnftInstance = getSITNFTContract();
         try {
             var result = [];
-            const tokensNo = await sitnftInstance.totalSupply();
-            for (let i = 0; i < tokensNo; i++) {
-                const tempItem = await sitnftInstance.attributes(i + 1);
+            // const gradesNo = await sitnftInstance.totalSupply();
+
+            //---------------------------------------------------------------------------------
+            const noOfTokens = await sitnftInstance.balanceOf(state.accounts[0]);
+            for (let i = 0; i < noOfTokens; i++) {
+                const tokenId = await sitnftInstance.tokenOfOwnerByIndex(state.accounts[0], i);
+                const tempItem = await sitnftInstance.tokenURI(tokenId);
                 result.push(tempItem);
             }
-            console.log(result);
-            setTransactionsResult(result);
-            setLoading(false);
+            //---------------------------------------------------------------------------------
 
-            localStorage.setItem("tokens", JSON.stringify(result));
-            window.location.reload(true);
+            // for (let i = 0; i < gradesNo; i++) {
+            //     const tempItem = await sitnftInstance.tokenURI(i + 1);
+            //     result.push(tempItem);
+            // }
+            setLoading(false);
+            localStorage.setItem("grades", JSON.stringify(result));
+            processModules();
+            // window.location.reload(true);
             return result;
         } catch (err) {
             console.error(err);
-            setTransactionsResult(err);
             return err;
         }
     }
+
+    const processModules = (e) => {
+        const gradeStorage = JSON.parse(localStorage.getItem("grades"));
+        for (let i = 0; i < gradeStorage.length; i++) {
+            const current = gradeStorage[i].split(",");
+            // Decode the String
+            var decodedString = atob(current[1]);
+            gradeStorage[i] = JSON.parse(decodedString);
+            if (i === 0) {
+                modules.push(gradeStorage[i].attributes[0].value);
+            } else {
+                if (!modules.includes(gradeStorage[i].attributes[0].value.trim())) {
+                    modules.push(gradeStorage[i].attributes[0].value.trim());
+                }
+            }
+        }
+        localStorage.setItem("modules", JSON.stringify(modules));
+    };
 
     return (
         <ContractContext.Provider
@@ -269,9 +283,9 @@ export const ContractProvider = ({ children }) => {
                 handleStudent,
                 studentResult,
                 getStudentAddress,
-                functGetAllTokens,
-                transactionsResult,
-                tks
+                functGetAllGrades,
+                grades,
+                mods
             }}>
             {children}
         </ContractContext.Provider >
