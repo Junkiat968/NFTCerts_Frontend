@@ -1,12 +1,37 @@
 import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { Col, Row, Nav, Tab, Table } from 'react-bootstrap';
+import useEth from "../../contexts/EthContext/useEth";
 
 // import Sidebar from "./Sidebar";
 import "./table.css";
 
+export const ContractContext = React.createContext();
+
 const ManageAccounts = () => {
+  const { state, getSITNFTContract } = useEth();
+
   const [items, setItems] = useState([]);
+
+    // Student Functions
+    const functAddStudents = async (studentData) => {;
+
+      const sitnftInstance = getSITNFTContract();
+      try {
+        console.log(studentData);
+          const result = await sitnftInstance.multiAddStudentAddress(
+            studentData,
+          );
+
+          console.log(result);
+          // setStudentResult(result);
+          return result;
+      } catch (err) {
+          console.error(err);
+          // setStudentResult(err);
+          return err;
+      }
+  }
 
   const readExcel = (file) => {
     const promise = new Promise((resolve, reject) => {
@@ -20,6 +45,9 @@ const ManageAccounts = () => {
         const ws = wb.Sheets[wsname];
         const data = XLSX.utils.sheet_to_json(ws);
         resolve(data);
+        console.log(data);
+        console.log(JSON.stringify(data));
+        functAddStudents(data);
       };
 
       fileReader.onerror = (error) => {
@@ -70,16 +98,16 @@ const ManageAccounts = () => {
       <Table responsive hover>
         <thead>
           <tr>
-            <th scope="col">Student</th>
             <th scope="col">Student ID</th>
+            <th scope="col">Student Address</th>
           </tr>
         </thead>
 
         <tbody>
           {items.map((d) => (
-            <tr key={d.Id}>
-              <td>{d.Name}</td>
-              <td>{d.Id}</td>
+            <tr key={d.id}>
+              <td>{d.id}</td>
+              <td>{d.addr}</td>
             </tr>
           ))}
         </tbody>
