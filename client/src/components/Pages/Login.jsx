@@ -2,7 +2,10 @@ import React from "react";
 import useEth from "../../contexts/EthContext/useEth";
 
 const Login = () => {
-    const { state, init } = useEth();
+    const {
+        state,
+        init
+    } = useEth();
 
     const renderAcc = (e) => {
         if (state.accounts !== null) {
