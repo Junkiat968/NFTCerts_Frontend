@@ -15,14 +15,20 @@ const MyGrades = () => {
   const [gradeImgArray, setGradeImgArray] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
 
+  const [modulesArray, setModulesArray] = useState([]);
+  const [selectedModule, setSelectedModule] = useState('');
+
+  const changeSelected = (e) => {
+    setSelectedModule(e.value);
+    // setModuleArray();
+  };
+
   // Context Constants
   // const {
   //   loading,
   //   setLoading
   // } = useContext(ContractContext);
   const { state, sitnftInstance } = useEth();
-
-  console.log(sitnftInstance);
 
   useEffect(() => {
     const fetchGrades = async () => {
@@ -40,11 +46,18 @@ const MyGrades = () => {
           const current = gradeArray[i].split(",");
           // Decode the String
           var decodedString = atob(current[1]);
-          gradeArray[i] = JSON.parse(decodedString);
+          const currentJson = JSON.parse(decodedString);
+          // modulesArray.push([
+          //   { value: gradeArray[i].attributes[0].value },
+          //   { label: gradeArray[i].attributes[0].value }
+          // ]);
+
           // Decode Image
-          const currentImg = gradeArray[i].image.split(",");
+          const currentImg = currentJson.image.split(",");
           gradeImgArray.push(currentImg[1]);
+          // gradeImgArray.push([i, currentImg[1]]);
         }
+        // console.log(modulesArray);
 
         setTotalTokens(noOfTokens);
         setPageLoading(false);
@@ -76,18 +89,19 @@ const MyGrades = () => {
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
-    <>
-      <NFTImage
-        currentPosts={currentPosts}
-        postsPerPage={postsPerPage}
-        gradeImgArray={gradeImgArray}
-        paginate={paginate}
-        currentPage={currentPage}
-        totalTokens={totalTokens}
-        pageLoading={pageLoading}
-        renderLoading={renderLoading}
-      />
-    </>
+    <NFTImage
+      currentPosts={currentPosts}
+      postsPerPage={postsPerPage}
+      gradeImgArray={gradeImgArray}
+      paginate={paginate}
+      currentPage={currentPage}
+      totalTokens={totalTokens}
+      pageLoading={pageLoading}
+      renderLoading={renderLoading}
+      changeSelected={changeSelected}
+      selectedModule={selectedModule}
+      modulesArray={modulesArray}
+    />
   );
 }
 
@@ -99,7 +113,10 @@ function NFTImage({
   currentPage,
   totalTokens,
   renderLoading,
-  pageLoading
+  pageLoading,
+  changeSelected,
+  modulesArray,
+  selectedModule
 }) {
 
   // useEffect(() => {
@@ -113,12 +130,17 @@ function NFTImage({
         pageLoading ?
           renderLoading() :
           <div className="">
+            {/* <div className="mb-3 text-center">
+              <Select options={modulesArray} placeholder="Filter" onChange={changeSelected} />
+              {selectedModule}
+            </div> */}
             <div className="d-flex justify-content-around text-start mt-3">
               Your Results:
               <Container>
                 <Row>
                   {Object.values(currentPosts).map((val, k) =>
                     <Col k={k} xs={8} md={4} lg={3}>
+                      {/* {console.log(val)} */}
                       <Card className="m-3" style={{ width: '12rem' }}>
                         <Card.Img variant="top" src={`data:image/svg+xml;base64,${val}`} />
                       </Card>
