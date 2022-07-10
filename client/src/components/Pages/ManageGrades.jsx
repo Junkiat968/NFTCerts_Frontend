@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { Col, Row, Nav, Tab, Table } from 'react-bootstrap';
+import useEth from "../../contexts/EthContext/useEth";
 
 // import Sidebar from "./Sidebar";
 import "./table.css";
 
 const ManageGrades = () => {
+  const { state, sitnftInstance } = useEth();
   const [items, setItems] = useState([]);
 
   const readExcel = (file) => {
@@ -45,74 +47,101 @@ const ManageGrades = () => {
     readExcel(inputFile.files[0])
   };
 
+
+  const functMultiMint = async () => {
+    const rows = 5;
+    var moduleCode = "M1001";
+    var testType = "Quiz 1";
+    var grade = ["A", "B", "C", "D", "F"];
+    var trimester = "2";
+    try {
+      console.log(items);
+      for (let i = 0; i < items.length; i++) {
+        console.log(
+          items[i].Grade.toString(), items[i].Id.toString()
+        );
+        const result = await sitnftInstance.mint(
+          moduleCode,
+          testType,
+          items[i].Grade.toString(),
+          trimester,
+          items[i].Id.toString()
+        );
+        console.log(result);
+      }
+    } catch (err) {
+      console.error(err);
+      return err;
+    }
+  }
+
   return (
     <div className='container' >
-    <Tab.Container id="left-tabs" defaultActiveKey="first">
-  <Row className="p-3">
-    <Col sm={3}>
-      <Nav variant="pills" className="flex-column p-3">
-        <Nav.Item>
-          <Nav.Link eventKey="first">ICT1001 Introuction to Computing</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="second">ICT2102 Introduction to Software Engineering</Nav.Link>
-        </Nav.Item>
-      </Nav>
-    </Col>
-    <Col sm={9}>
-      <Tab.Content>
-        <Tab.Pane eventKey="first">
-          <div>
-      {/* <Sidebar pageWrapId={"page-wrap"} outerContainerId={"outer-container"} /> */}
-      <div className="p-3 w-100 d-inline-block">
-      {/* <label className="mx-3">Choose file: </label> */}
-      <input
-        id="input-file"
-        onChange={handleDisplayFileDetails}
-        className="d-none"
-        type="file"
-      />
-      <button
-        onClick={handleUpload}
-        className={`float-end btn btn-outline-${
-          uploadedFileName ? "success" : "primary"
-        }`}
-      >
-        {uploadedFileName ? uploadedFileName : 'Upload Grades'}
-      </button>
-    </div>
-
-      <div>
-        <Table responsive hover>
-          <thead>
-            <tr>
-              <th scope="col">Student</th>
-              <th scope="col">Student ID</th>
-              <th scope="col">Grade</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {items.map((d) => (
-              <tr key={d.Id}>
-                <td>{d.Name}</td>
-                <td>{d.Id}</td>
-                <td>{d.Grade}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
-    </div>
-        </Tab.Pane>
-        <Tab.Pane eventKey="second">
-          <h2>h2</h2>
-        </Tab.Pane>
-      </Tab.Content>
-    </Col>
-  </Row>
-</Tab.Container>
-
+      <Tab.Container id="left-tabs" defaultActiveKey="first">
+        <Row className="p-3">
+          <Col sm={3}>
+            <Nav variant="pills" className="flex-column p-3">
+              <Nav.Item>
+                <Nav.Link eventKey="first">ICT1001 Introuction to Computing</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="second">ICT2102 Introduction to Software Engineering</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Col>
+          <Col sm={9}>
+            <Tab.Content>
+              <Tab.Pane eventKey="first">
+                <div>
+                  {/* <Sidebar pageWrapId={"page-wrap"} outerContainerId={"outer-container"} /> */}
+                  <div className="p-3 w-100 d-inline-block">
+                    <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
+                      onClick={functMultiMint}>Multi-Mint
+                    </button>
+                    {/* <label className="mx-3">Choose file: </label> */}
+                    <input
+                      id="input-file"
+                      onChange={handleDisplayFileDetails}
+                      className="d-none"
+                      type="file"
+                    />
+                    <button
+                      onClick={handleUpload}
+                      className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
+                        }`}
+                    >
+                      {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+                    </button>
+                  </div>
+                  <div>
+                    <Table responsive hover>
+                      <thead>
+                        <tr>
+                          <th scope="col">Student</th>
+                          <th scope="col">Student ID</th>
+                          <th scope="col">Grade</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {items.map((d) => (
+                          <tr key={d.Id}>
+                            <td>{d.Name}</td>
+                            <td>{d.Id}</td>
+                            <td>{d.Grade}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </div>
+                </div>
+              </Tab.Pane>
+              <Tab.Pane eventKey="second">
+                <h2>h2</h2>
+              </Tab.Pane>
+            </Tab.Content>
+          </Col>
+        </Row>
+      </Tab.Container>
     </div>
   );
 };

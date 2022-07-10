@@ -28,6 +28,7 @@ function EthProvider({ children }) {
   const [currentAccount, setCurrentAccount] = useState('');
   const [loginState, setLoginState] = useState(false);
   const [accChanged, setAccChanged] = useState(false);
+  const sitnftInstance = getSITNFTContract();
 
   const init = useCallback(
     async artifact => {
@@ -139,7 +140,8 @@ function EthProvider({ children }) {
       loginState,
       accChanged,
       setAccChanged,
-      getSITNFTContract
+      getSITNFTContract,
+      sitnftInstance
     }}>
       {children}
     </EthContext.Provider>
