@@ -7,7 +7,7 @@ import useEth from "../../contexts/EthContext/useEth";
 import Pagination from "../Pagination";
 
 const MyGrades = () => {
-  const [postsPerPage] = useState(2);
+  const [postsPerPage] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [totalTokens, setTotalTokens] = useState(0);
