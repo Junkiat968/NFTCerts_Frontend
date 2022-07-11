@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import useEth from "../../contexts/EthContext/useEth";
 import { ContractContext } from '../../contexts/ContractProvider';
 
@@ -13,8 +13,10 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 );
 
 const SITNFT = () => {
-  const { state } = useEth();
-  console.log(state);
+  const { state, sitnftInstance } = useEth();
+  console.log(sitnftInstance);
+
+  const [isStudentResult, setIsStudentResult] = useState('');
 
   const {
     functIsAdmin,
@@ -56,6 +58,59 @@ const SITNFT = () => {
       return;
     }
     functIsFaculty();
+  };
+
+  const handleCheckStudent = (e) => {
+    const { addressInput } = formAddressData;
+    e.preventDefault();
+    if (!addressInput) {
+      alert('Please enter valid Student Address!');
+      return;
+    }
+    functIsStudent();
+  };
+
+  // Faculty Functions
+  const functIsStudent = async () => {
+    try {
+      const { addressInput } = formAddressData;
+      const result = await sitnftInstance.isStudent((addressInput).toString());
+      setIsStudentResult(result);
+      return result;
+    } catch (err) {
+      setIsStudentResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+
+  const renderIsStudent = (e) => {
+    return (
+      <>
+        <div className="row g-3">
+          <p className="border-bottom mt-3">Check Student</p>
+          <div className="col-sm-6 mt-0">
+            {/* <label htmlFor="lastName" className="form-label text-start">Address</label> */}
+            <Input placeholder="Address e.g. 0x........." name="addressInput" type="text" handleChange={handleChange} />
+          </div>
+          <div className="col-sm-6">
+            <div className="row col-sm-12 text-center">
+              <div className="col-sm-6 text-center">
+                <button className="btn btn-block btn-primary mt-3" type="button" onClick={handleCheckStudent}>Check Student</button>
+              </div>
+            </div>
+            <div className="my-3">
+              Result:
+              <div className="">
+                <small>
+                  {isStudentResult.toString()}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )
   };
 
   const renderIsAdmin = (e) => {
@@ -194,6 +249,7 @@ const SITNFT = () => {
   return (
     <div className='page-two container mb-5'>
       <h2 className="pb-2 border-bottom text-start mt-5">SITNFT. Testing.</h2>
+      {renderIsStudent()}
       {renderStudent()}
       {renderMint()}
       <p className="border-bottom mt-3">Admin/Faculty check:</p>
