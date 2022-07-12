@@ -21,7 +21,9 @@ class App extends Component {
   static contextType = EthContext;
 
   render() {
-    const { loginState } = this.context;
+    const { loginState, currentAccount, sitnftInstance, isFacultyLogin } = this.context;
+    console.log(isFacultyLogin);
+
     return (
       <div id="App" >
         <Router>

@@ -28,6 +28,7 @@ function EthProvider({ children }) {
   const [currentAccount, setCurrentAccount] = useState('');
   const [loginState, setLoginState] = useState(false);
   const [accChanged, setAccChanged] = useState(false);
+  const [isFacultyLogin, setIsFacultyLogin] = useState('');
 
   const sitnftInstance = getSITNFTContract();
 
@@ -57,11 +58,21 @@ function EthProvider({ children }) {
     }
     , []);
 
+  const functIsFaculty = async () => {
+    try {
+      const result = await sitnftInstance.isFaculty((currentAccount).toString());
+      setIsFacultyLogin(result);
+    } catch (err) {
+      setIsFacultyLogin(err);
+    }
+  }
+
   const checkIfWalletIsConnected = async () => {
     try {
       const accountConnected = state.accounts;
       if (accountConnected) {
         setLoginState(true);
+        functIsFaculty();
       } else {
         // console.log("No accounts found.");
       }
@@ -110,7 +121,8 @@ function EthProvider({ children }) {
       accChanged,
       setAccChanged,
       getSITNFTContract,
-      sitnftInstance
+      sitnftInstance,
+      isFacultyLogin
     }}>
       {children}
     </EthContext.Provider>
