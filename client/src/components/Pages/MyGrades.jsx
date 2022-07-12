@@ -125,7 +125,7 @@ function NFTImage({
 
   return (
     <div className='container'>
-      <h2 className="pb-2 border-bottom text-start my-3">MyGrades. Testing.</h2>
+      <h2 className="pb-2 border-bottom text-start my-3">MyGrades.</h2>
       {
         pageLoading ?
           renderLoading() :

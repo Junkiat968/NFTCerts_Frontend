@@ -13,24 +13,25 @@ const ManageAccounts = () => {
 
   const [items, setItems] = useState([]);
 
-    // Student Functions
-    const functAddStudents = async () => {;
+  // Student Functions
+  const functAddStudents = async () => {
+    ;
 
-      const sitnftInstance = getSITNFTContract();
-      console.log(items);
-      try {
-          const result = await sitnftInstance.multiAddStudentAddress(
-            items,
-          );
+    const sitnftInstance = getSITNFTContract();
+    console.log(items);
+    try {
+      const result = await sitnftInstance.multiAddStudentAddress(
+        items,
+      );
 
-          console.log(result);
-          // setStudentResult(result);
-          return result;
-      } catch (err) {
-          console.error(err);
-          // setStudentResult(err);
-          return err;
-      }
+      console.log(result);
+      // setStudentResult(result);
+      return result;
+    } catch (err) {
+      console.error(err);
+      // setStudentResult(err);
+      return err;
+    }
   }
 
   const readExcel = (file) => {
@@ -43,7 +44,7 @@ const ManageAccounts = () => {
         const wb = XLSX.read(bufferArray, { type: "buffer" });
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws, {raw: false});
+        const data = XLSX.utils.sheet_to_json(ws, { raw: false });
         resolve(data);
         // console.log(data);
         // console.log(JSON.stringify(data));
@@ -74,49 +75,49 @@ const ManageAccounts = () => {
 
   return (
     <div className="container">
-    {/* <Sidebar pageWrapId={"page-wrap"} outerContainerId={"outer-container"} /> */}
-    <div className="p-3 w-100 d-inline-block">
-    {/* <label className="mx-3">Choose file: </label> */}
-    <input
-      id="input-file"
-      onChange={handleDisplayFileDetails}
-      className="d-none"
-      type="file"
-    />
-    <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
-                      onClick={functAddStudents}>Upload
-    </button>
-    <button
-      onClick={handleUpload}
-      className={`float-end btn btn-outline-${
-        uploadedFileName ? "success" : "primary"
-      }`}
-    >
-      {uploadedFileName ? uploadedFileName : 'Select excel'}
-    </button>
+      <h2 className="border-bottom text-start mt-3">Manage Accounts.</h2>
+      {/* <Sidebar pageWrapId={"page-wrap"} outerContainerId={"outer-container"} /> */}
+      <div className="p-3 w-100 d-inline-block">
+        {/* <label className="mx-3">Choose file: </label> */}
+        <input
+          id="input-file"
+          onChange={handleDisplayFileDetails}
+          className="d-none"
+          type="file"
+        />
+        <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
+          onClick={functAddStudents}>Upload
+        </button>
+        <button
+          onClick={handleUpload}
+          className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
+            }`}
+        >
+          {uploadedFileName ? uploadedFileName : 'Select excel'}
+        </button>
 
-  </div>
+      </div>
 
-    <div>
-      <Table responsive hover>
-        <thead>
-          <tr>
-            <th scope="col">Student ID</th>
-            <th scope="col">Student Address</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {items.map((d) => (
-            <tr key={d.id}>
-              <td>{d.id}</td>
-              <td>{d.addr}</td>
+      <div>
+        <Table responsive hover>
+          <thead>
+            <tr>
+              <th scope="col">Student ID</th>
+              <th scope="col">Student Address</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+
+          <tbody>
+            {items.map((d) => (
+              <tr key={d.id}>
+                <td>{d.id}</td>
+                <td>{d.addr}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     </div>
-  </div>
 
   );
 };

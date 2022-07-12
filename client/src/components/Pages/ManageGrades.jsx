@@ -131,8 +131,9 @@ const ManageGrades = () => {
 
   return (
     <div className='container' >
+      <h2 className="border-bottom text-start mt-3">Manage Grades.</h2>
       <Tab.Container id="left-tabs" defaultActiveKey="ICT1001">
-        <Row className="p-3">
+        <Row className="p-1">
           <Col sm={3}>
             <Nav variant="pills" className="flex-column p-3" onSelect={(selectedKey) => setSelectedModule(selectedKey)}>
               <Nav.Item>

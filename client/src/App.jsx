@@ -7,9 +7,9 @@ import "./App.css";
 import Navigationbar from './components/Navbar.jsx';
 
 // Import Pages
-import SITNFT from './components/Pages/SITNFT.js';
+import SITNFT from './components/Pages/SITNFT.jsx';
 import Login from './components/Pages/Login';
-import MyGrades from './components/Pages/MyGrades';
+import MyGrades from './components/Pages/MyGrades.jsx';
 import ManageGrades from "./components/Pages/ManageGrades";
 import TransactionLogs from "./components/Pages/TransactionLogs";
 import PurchaseTokens from "./components/Pages/PurchaseTokens";
@@ -21,7 +21,7 @@ class App extends Component {
   static contextType = EthContext;
 
   render() {
-    const { loginState, currentAccount, sitnftInstance, isFacultyLogin } = this.context;
+    const { loginState, isFacultyLogin } = this.context;
     console.log(isFacultyLogin);
 
     return (
@@ -36,7 +36,7 @@ class App extends Component {
                 <Route path='/MyGrades' element={<MyGrades />} />
                 <Route path='/ManageGrades' element={<ManageGrades />} />
                 <Route path='/TransactionLogs' element={<TransactionLogs />} />
-                <Route path='/PurchaseTokens' element={<PurchaseTokens />} />
+                {/* <Route path='/PurchaseTokens' element={<PurchaseTokens />} /> */}
                 <Route path='/ManageAccounts' element={<ManageAccounts />} />
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
