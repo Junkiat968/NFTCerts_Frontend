@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { Col, Row, Nav, Tab, Table } from 'react-bootstrap';
+import useEth from "../../contexts/EthContext/useEth";
 
 // import Sidebar from "./Sidebar";
 import "./table.css";
+import { getDropdownMenuPlacement } from "react-bootstrap/esm/DropdownMenu";
 
 const ManageGrades = () => {
+  const { state, sitnftInstance } = useEth();
   const [items, setItems] = useState([]);
+  const [selectedModule, setSelectedModule] = useState('');
+  const [mintData, setMintData] = useState({ moduleCodeInput: "", testTypeInput: "", trimesterInput: "" });
+
+  function handleMint(evt) {
+    const value = evt.target.value;
+    setMintData({
+      ...mintData,
+      [evt.target.name]: value
+    });
+  }
 
   const readExcel = (file) => {
     const promise = new Promise((resolve, reject) => {
@@ -45,44 +58,25 @@ const ManageGrades = () => {
     readExcel(inputFile.files[0])
   };
 
-  return (
-    <div className='container' >
-    <Tab.Container id="left-tabs" defaultActiveKey="first">
-  <Row className="p-3">
-    <Col sm={3}>
-      <Nav variant="pills" className="flex-column p-3">
-        <Nav.Item>
-          <Nav.Link eventKey="first">ICT1001 Introuction to Computing</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="second">ICT2102 Introduction to Software Engineering</Nav.Link>
-        </Nav.Item>
-      </Nav>
-    </Col>
-    <Col sm={9}>
-      <Tab.Content>
-        <Tab.Pane eventKey="first">
-          <div>
-      {/* <Sidebar pageWrapId={"page-wrap"} outerContainerId={"outer-container"} /> */}
-      <div className="p-3 w-100 d-inline-block">
-      {/* <label className="mx-3">Choose file: </label> */}
-      <input
-        id="input-file"
-        onChange={handleDisplayFileDetails}
-        className="d-none"
-        type="file"
-      />
-      <button
-        onClick={handleUpload}
-        className={`float-end btn btn-outline-${
-          uploadedFileName ? "success" : "primary"
-        }`}
-      >
-        {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+  const renderButtons = (e) => {
+    return (
+      <button className="float-end btn btn-block btn-outline-primary ms-3" type="button"
+        onClick={functMultiMint}>Mint
       </button>
-    </div>
+    );
+  };
 
+  const renderTable = (e) => {
+    return (
       <div>
+        <div className="mb-3">
+          <input placeholder="Test Type" className="form-control mb-1" type="text" name="testTypeInput"
+            value={mintData.testTypeInput} onChange={handleMint}
+          />
+          <input placeholder="Trimester" className="form-control mb-1" type="text" name="trimesterInput"
+            value={mintData.trimesterInput} onChange={handleMint}
+          />
+        </div>
         <Table responsive hover>
           <thead>
             <tr>
@@ -91,7 +85,6 @@ const ManageGrades = () => {
               <th scope="col">Grade</th>
             </tr>
           </thead>
-
           <tbody>
             {items.map((d) => (
               <tr key={d.Id}>
@@ -103,16 +96,101 @@ const ManageGrades = () => {
           </tbody>
         </Table>
       </div>
-    </div>
-        </Tab.Pane>
-        <Tab.Pane eventKey="second">
-          <h2>h2</h2>
-        </Tab.Pane>
-      </Tab.Content>
-    </Col>
-  </Row>
-</Tab.Container>
+    );
+  };
 
+  const functMultiMint = async () => {
+    const gradeItems = [];
+    const { moduleCodeInput, testTypeInput, trimesterInput } = mintData;
+
+    if (items.length <= 10) {
+      for (let i = 0; i < items.length; i++) {
+        gradeItems.push({
+          moduleCode: selectedModule,
+          testType: testTypeInput,
+          grade: items[i].Grade.toString(),
+          trimester: trimesterInput,
+          recipient: items[i].Id.toString()
+        });
+      }
+
+      try {
+        console.log(gradeItems.toString());
+        const result = await sitnftInstance.batchMint(
+          gradeItems
+        );
+        console.log(result.events);
+      } catch (err) {
+        console.error(err);
+        return err;
+      }
+    } else {
+      alert("File too big. Please limit file to 10 rows.");
+    }
+  }
+
+  return (
+    <div className='container' >
+      <Tab.Container id="left-tabs" defaultActiveKey="ICT1001">
+        <Row className="p-3">
+          <Col sm={3}>
+            <Nav variant="pills" className="flex-column p-3" onSelect={(selectedKey) => setSelectedModule(selectedKey)}>
+              <Nav.Item>
+                <Nav.Link eventKey="ICT1001">ICT1001 Introduction to Computing</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="ICT2102">ICT2102 Introduction to Software Engineering</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Col>
+          <Col sm={9}>
+            <Tab.Content>
+              <Tab.Pane eventKey="ICT1001">
+                <div>
+                  <div className="p-3 w-100 d-inline-block">
+                    {uploadedFileName ? renderButtons() : null}
+                    <input
+                      id="input-file"
+                      onChange={handleDisplayFileDetails}
+                      className="d-none"
+                      type="file"
+                    />
+                    <button
+                      onClick={handleUpload}
+                      className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
+                        }`}
+                    >
+                      {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+                    </button>
+                  </div>
+                  {renderTable()}
+                </div>
+              </Tab.Pane>
+              <Tab.Pane eventKey="ICT2102">
+                <div>
+                  <div className="p-3 w-100 d-inline-block">
+                    {uploadedFileName ? renderButtons() : null}
+                    <input
+                      id="input-file"
+                      onChange={handleDisplayFileDetails}
+                      className="d-none"
+                      type="file"
+                    />
+                    <button
+                      onClick={handleUpload}
+                      className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
+                        }`}
+                    >
+                      {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+                    </button>
+                  </div>
+                  {renderTable()}
+                </div>
+              </Tab.Pane>
+            </Tab.Content>
+          </Col>
+        </Row>
+      </Tab.Container>
     </div>
   );
 };
