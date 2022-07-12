@@ -18,7 +18,6 @@ const ManageAccounts = () => {
 
       const sitnftInstance = getSITNFTContract();
       try {
-        console.log(studentData);
           const result = await sitnftInstance.multiAddStudentAddress(
             studentData,
           );
@@ -43,10 +42,10 @@ const ManageAccounts = () => {
         const wb = XLSX.read(bufferArray, { type: "buffer" });
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws);
+        const data = XLSX.utils.sheet_to_json(ws, {raw: false});
         resolve(data);
-        console.log(data);
-        console.log(JSON.stringify(data));
+        // console.log(data);
+        // console.log(JSON.stringify(data));
         functAddStudents(data);
       };
 
