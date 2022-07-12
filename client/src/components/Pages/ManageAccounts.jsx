@@ -14,12 +14,13 @@ const ManageAccounts = () => {
   const [items, setItems] = useState([]);
 
     // Student Functions
-    const functAddStudents = async (studentData) => {;
+    const functAddStudents = async () => {;
 
       const sitnftInstance = getSITNFTContract();
+      console.log(items);
       try {
           const result = await sitnftInstance.multiAddStudentAddress(
-            studentData,
+            items,
           );
 
           console.log(result);
@@ -46,7 +47,6 @@ const ManageAccounts = () => {
         resolve(data);
         // console.log(data);
         // console.log(JSON.stringify(data));
-        functAddStudents(data);
       };
 
       fileReader.onerror = (error) => {
@@ -83,14 +83,18 @@ const ManageAccounts = () => {
       className="d-none"
       type="file"
     />
+    <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
+                      onClick={functAddStudents}>Upload
+    </button>
     <button
       onClick={handleUpload}
       className={`float-end btn btn-outline-${
         uploadedFileName ? "success" : "primary"
       }`}
     >
-      {uploadedFileName ? uploadedFileName : 'Upload Accounts'}
+      {uploadedFileName ? uploadedFileName : 'Select excel'}
     </button>
+
   </div>
 
     <div>
