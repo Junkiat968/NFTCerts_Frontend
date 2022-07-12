@@ -58,23 +58,51 @@ const ManageGrades = () => {
     readExcel(inputFile.files[0])
   };
 
-  const renderInputs = (e) => {
+  const renderButtons = (e) => {
     return (
-      <div className="mb-3">
-        <input placeholder="Test Type" className="form-control mb-1" type="text" name="testTypeInput"
-          value={mintData.testTypeInput} onChange={handleMint}
-        />
-        <input placeholder="Trimester" className="form-control mb-1" type="text" name="trimesterInput"
-          value={mintData.trimesterInput} onChange={handleMint}
-        />
+      <button className="float-end btn btn-block btn-outline-primary ms-3" type="button"
+        onClick={functMultiMint}>Mint
+      </button>
+    );
+  };
+
+  const renderTable = (e) => {
+    return (
+      <div>
+        <div className="mb-3">
+          <input placeholder="Test Type" className="form-control mb-1" type="text" name="testTypeInput"
+            value={mintData.testTypeInput} onChange={handleMint}
+          />
+          <input placeholder="Trimester" className="form-control mb-1" type="text" name="trimesterInput"
+            value={mintData.trimesterInput} onChange={handleMint}
+          />
+        </div>
+        <Table responsive hover>
+          <thead>
+            <tr>
+              <th scope="col">Student</th>
+              <th scope="col">Student ID</th>
+              <th scope="col">Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((d) => (
+              <tr key={d.Id}>
+                <td>{d.Name}</td>
+                <td>{d.Id}</td>
+                <td>{d.Grade}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </div>
-    )
+    );
   };
 
   const functMultiMint = async () => {
     const gradeItems = [];
     const { moduleCodeInput, testTypeInput, trimesterInput } = mintData;
-    alert(selectedModule);
+
     if (items.length <= 10) {
       for (let i = 0; i < items.length; i++) {
         gradeItems.push({
@@ -85,25 +113,20 @@ const ManageGrades = () => {
           recipient: items[i].Id.toString()
         });
       }
+
+      try {
+        console.log(gradeItems.toString());
+        const result = await sitnftInstance.batchMint(
+          gradeItems
+        );
+        console.log(result.events);
+      } catch (err) {
+        console.error(err);
+        return err;
+      }
     } else {
       alert("File too big. Please limit file to 10 rows.");
     }
-    console.log(gradeItems);
-    // try {
-    //   console.log(gradeItems.toString());
-    //   const result = await sitnftInstance.batchMint(
-    //     gradeItems
-    //   );
-    //   for (let i = 0; i < items.length; i++) {
-    //     console.log(
-    //       gradeItems[i]
-    //     );
-    //   }
-    //   console.log(result.events);
-    // } catch (err) {
-    //   console.error(err);
-    //   return err;
-    // }
   }
 
   return (
@@ -124,12 +147,8 @@ const ManageGrades = () => {
             <Tab.Content>
               <Tab.Pane eventKey="ICT1001">
                 <div>
-                  {/* <Sidebar pageWrapId={"page-wrap"} outerContainerId={"outer-container"} /> */}
                   <div className="p-3 w-100 d-inline-block">
-                    <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
-                      onClick={functMultiMint}>Multi-Mint
-                    </button>
-                    {/* <label className="mx-3">Choose file: </label> */}
+                    {uploadedFileName ? renderButtons() : null}
                     <input
                       id="input-file"
                       onChange={handleDisplayFileDetails}
@@ -144,33 +163,29 @@ const ManageGrades = () => {
                       {uploadedFileName ? uploadedFileName : 'Upload Grades'}
                     </button>
                   </div>
-                  {renderInputs()}
-                  <div>
-                    <Table responsive hover>
-                      <thead>
-                        <tr>
-                          <th scope="col">Student</th>
-                          <th scope="col">Student ID</th>
-                          <th scope="col">Grade</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {items.map((d) => (
-                          <tr key={d.Id}>
-                            <td>{d.Name}</td>
-                            <td>{d.Id}</td>
-                            <td>{d.Grade}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </div>
+                  {renderTable()}
                 </div>
               </Tab.Pane>
               <Tab.Pane eventKey="ICT2102">
-                <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
-                  onClick={functMultiMint}>Multi-Mint
-                </button>
+                <div>
+                  <div className="p-3 w-100 d-inline-block">
+                    {uploadedFileName ? renderButtons() : null}
+                    <input
+                      id="input-file"
+                      onChange={handleDisplayFileDetails}
+                      className="d-none"
+                      type="file"
+                    />
+                    <button
+                      onClick={handleUpload}
+                      className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
+                        }`}
+                    >
+                      {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+                    </button>
+                  </div>
+                  {renderTable()}
+                </div>
               </Tab.Pane>
             </Tab.Content>
           </Col>
