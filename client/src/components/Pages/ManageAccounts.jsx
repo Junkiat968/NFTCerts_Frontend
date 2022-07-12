@@ -1,12 +1,37 @@
 import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { Col, Row, Nav, Tab, Table } from 'react-bootstrap';
+import useEth from "../../contexts/EthContext/useEth";
 
 // import Sidebar from "./Sidebar";
 import "./table.css";
 
+export const ContractContext = React.createContext();
+
 const ManageAccounts = () => {
+  const { state, getSITNFTContract } = useEth();
+
   const [items, setItems] = useState([]);
+
+    // Student Functions
+    const functAddStudents = async () => {;
+
+      const sitnftInstance = getSITNFTContract();
+      console.log(items);
+      try {
+          const result = await sitnftInstance.multiAddStudentAddress(
+            items,
+          );
+
+          console.log(result);
+          // setStudentResult(result);
+          return result;
+      } catch (err) {
+          console.error(err);
+          // setStudentResult(err);
+          return err;
+      }
+  }
 
   const readExcel = (file) => {
     const promise = new Promise((resolve, reject) => {
@@ -18,8 +43,10 @@ const ManageAccounts = () => {
         const wb = XLSX.read(bufferArray, { type: "buffer" });
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws);
+        const data = XLSX.utils.sheet_to_json(ws, {raw: false});
         resolve(data);
+        // console.log(data);
+        // console.log(JSON.stringify(data));
       };
 
       fileReader.onerror = (error) => {
@@ -56,30 +83,34 @@ const ManageAccounts = () => {
       className="d-none"
       type="file"
     />
+    <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
+                      onClick={functAddStudents}>Upload
+    </button>
     <button
       onClick={handleUpload}
       className={`float-end btn btn-outline-${
         uploadedFileName ? "success" : "primary"
       }`}
     >
-      {uploadedFileName ? uploadedFileName : 'Upload Accounts'}
+      {uploadedFileName ? uploadedFileName : 'Select excel'}
     </button>
+
   </div>
 
     <div>
       <Table responsive hover>
         <thead>
           <tr>
-            <th scope="col">Student</th>
             <th scope="col">Student ID</th>
+            <th scope="col">Student Address</th>
           </tr>
         </thead>
 
         <tbody>
           {items.map((d) => (
-            <tr key={d.Id}>
-              <td>{d.Name}</td>
-              <td>{d.Id}</td>
+            <tr key={d.id}>
+              <td>{d.id}</td>
+              <td>{d.addr}</td>
             </tr>
           ))}
         </tbody>
