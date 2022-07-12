@@ -5,6 +5,7 @@ import useEth from "../../contexts/EthContext/useEth";
 
 // import Sidebar from "./Sidebar";
 import "./table.css";
+import { getDropdownMenuPlacement } from "react-bootstrap/esm/DropdownMenu";
 
 const ManageGrades = () => {
   const { state, sitnftInstance } = useEth();
@@ -47,27 +48,39 @@ const ManageGrades = () => {
     readExcel(inputFile.files[0])
   };
 
-
   const functMultiMint = async () => {
-    const rows = 5;
-    var moduleCode = "M1001";
-    var testType = "Quiz 1";
-    var grade = ["A", "B", "C", "D", "F"];
-    var trimester = "2";
+    // const rows = 5;
+    // var moduleCode = "M1001";
+    // var testType = "Quiz 1";
+    // var grade = ["A", "B", "C", "D", "F"];
+    // var trimester = "2";
+
+    const gradeItems = [];
+
+    if (items.length <= 10) {
+      for (let i = 0; i < items.length; i++) {
+        gradeItems.push({
+          moduleCode: "M1002",
+          testType: "Quiz 1",
+          grade: items[i].Grade.toString(),
+          trimester: "3",
+          recipient: items[i].Id.toString()
+        });
+      }
+    } else {
+      alert("file too big");
+    }
+
     try {
-      console.log(items);
+      console.log(gradeItems.toString());
+      const result = await sitnftInstance.batchMint(
+        gradeItems
+      );
       for (let i = 0; i < items.length; i++) {
         console.log(
-          items[i].Grade.toString(), items[i].Id.toString()
+          gradeItems[i]
         );
-        const result = await sitnftInstance.mint(
-          moduleCode,
-          testType,
-          items[i].Grade.toString(),
-          trimester,
-          items[i].Id.toString()
-        );
-        console.log(result);
+        // console.log(result);
       }
     } catch (err) {
       console.error(err);
