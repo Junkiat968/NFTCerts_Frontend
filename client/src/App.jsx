@@ -21,8 +21,7 @@ class App extends Component {
   static contextType = EthContext;
 
   render() {
-    const { loginState, isFacultyLogin } = this.context;
-    console.log(isFacultyLogin);
+    const { loginState } = this.context;
 
     return (
       <div id="App" >
