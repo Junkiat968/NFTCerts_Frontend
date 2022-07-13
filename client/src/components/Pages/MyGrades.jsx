@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Row, Col, Card, Container } from "react-bootstrap";
+import { Row, Col, Card, Container, Button } from "react-bootstrap";
 import Select from 'react-select';
 
 import useEth from "../../contexts/EthContext/useEth";
@@ -11,12 +11,15 @@ const MyGrades = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [totalTokens, setTotalTokens] = useState(0);
+  const [temptArray, setTemptArray] = useState([]);
   const [gradeArray, setGradeArray] = useState([]);
-  const [gradeImgArray, setGradeImgArray] = useState([]);
+
+  // const [gradeImgArray, setGradeImgArray] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
 
   const [modulesArray, setModulesArray] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
+  const [emptyGrades, setEmptyGrades] = useState(false);
 
   const changeSelected = (e) => {
     setSelectedModule(e.value);
@@ -35,33 +38,43 @@ const MyGrades = () => {
       setPageLoading(true);
       try {
         const noOfTokens = await sitnftInstance.balanceOf(state.accounts[0]);
+        if (noOfTokens == 0) {
+          setEmptyGrades(true);
+        }
         for (let i = 0; i < noOfTokens; i++) {
           const tokenId = await sitnftInstance.tokenOfOwnerByIndex(state.accounts[0], i);
           const tempItem = await sitnftInstance.tokenURI(tokenId);
-          gradeArray.push(tempItem);
+          temptArray.push(tempItem);
         }
 
-        console.log(gradeArray.length);
-        for (let i = 0; i < gradeArray.length; i++) {
-          const current = gradeArray[i].split(",");
+        for (let i = 0; i < temptArray.length; i++) {
+          const current = temptArray[i].split(",");
           // Decode the String
           var decodedString = atob(current[1]);
           const currentJson = JSON.parse(decodedString);
-          // modulesArray.push([
-          //   { value: gradeArray[i].attributes[0].value },
-          //   { label: gradeArray[i].attributes[0].value }
-          // ]);
+
+          // console.log(currentJson.attributes[0].value);
+          console.log(modulesArray.length);
+          if (modulesArray.length == 0) {
+            modulesArray.push({ value: currentJson.attributes[0].value, label: currentJson.attributes[0].value });
+            console.log(modulesArray);
+          } else {
+            for (let i = 0; i < modulesArray.length; i++) {
+              if (modulesArray[i].value !== currentJson.attributes[0].value) {
+                modulesArray.push({ value: currentJson.attributes[0].value, label: currentJson.attributes[0].value });
+              }
+            }
+          }
 
           // Decode Image
           const currentImg = currentJson.image.split(",");
-          gradeImgArray.push(currentImg[1]);
-          // gradeImgArray.push([i, currentImg[1]]);
+          gradeArray.push({ module: currentJson.attributes[0].value, img: currentImg[1] });
         }
-        // console.log(modulesArray);
+        console.log(modulesArray.length);
 
         setTotalTokens(noOfTokens);
         setPageLoading(false);
-        return gradeArray;
+        return temptArray;
       } catch (err) {
         console.error(err);
         return err;
@@ -84,7 +97,7 @@ const MyGrades = () => {
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = gradeImgArray.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = gradeArray.slice(indexOfFirstPost, indexOfLastPost);
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
@@ -92,7 +105,6 @@ const MyGrades = () => {
     <NFTImage
       currentPosts={currentPosts}
       postsPerPage={postsPerPage}
-      gradeImgArray={gradeImgArray}
       paginate={paginate}
       currentPage={currentPage}
       totalTokens={totalTokens}
@@ -101,6 +113,8 @@ const MyGrades = () => {
       changeSelected={changeSelected}
       selectedModule={selectedModule}
       modulesArray={modulesArray}
+      emptyGrades={emptyGrades}
+      gradeArray={gradeArray}
     />
   );
 }
@@ -108,7 +122,6 @@ const MyGrades = () => {
 function NFTImage({
   currentPosts,
   postsPerPage,
-  gradeImgArray,
   paginate,
   currentPage,
   totalTokens,
@@ -116,11 +129,13 @@ function NFTImage({
   pageLoading,
   changeSelected,
   modulesArray,
-  selectedModule
+  selectedModule,
+  emptyGrades,
+  gradeArray
 }) {
 
   // useEffect(() => {
-  //   // console.log(gradeImgArray);
+  //   // console.log(gradeArray);
   // }, [totalTokens]);
 
   return (
@@ -130,31 +145,49 @@ function NFTImage({
         pageLoading ?
           renderLoading() :
           <div className="">
-            {/* <div className="mb-3 text-center">
-              <Select options={modulesArray} placeholder="Filter" onChange={changeSelected} />
-              {selectedModule}
-            </div> */}
-            <div className="d-flex justify-content-around text-start mt-3">
-              Your Results:
-              <Container>
-                <Row>
-                  {Object.values(currentPosts).map((val, k) =>
-                    <Col k={k} xs={8} md={4} lg={3}>
-                      {/* {console.log(val)} */}
-                      <Card className="m-3" style={{ width: '12rem' }}>
-                        <Card.Img variant="top" src={`data:image/svg+xml;base64,${val}`} />
-                      </Card>
-                    </Col>
-                  )}
-                </Row>
-              </Container>
-            </div>
-            <Pagination className="text-end mt-3 ms-auto"
-              postsPerPage={postsPerPage}
-              totalPosts={gradeImgArray.length}
-              paginate={paginate}
-              currentPage={currentPage}
-            />
+            {
+              emptyGrades ?
+                <div className="text-center mt-5">
+                  <h2>There are no grades awarded to you right now.</h2>
+                  <small>Please check back again later..</small>
+                </div>
+                :
+                <>
+                  {/* <div className="mb-3 text-center">
+                    <Select options={modulesArray} placeholder="Filter" onChange={changeSelected} />
+                    {selectedModule}
+                  </div> */}
+                  <div className="d-flex justify-content-around text-start mt-3">
+                    Your Results:
+                    <Container>
+                      <div className="mb-2 text-center">
+                        <Select options={modulesArray} placeholder="Filter" onChange={changeSelected} />
+                        {selectedModule}
+                      </div>
+                      <Row>
+                        {Object.values(currentPosts).map((val, k) =>
+                          <Col k={k} xs={8} md={4} lg={3}>
+                            {/* {console.log(val.img)} */}
+                            <Card className="m-3" style={{ width: '12rem' }}>
+                              <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.img}`} />
+                              <Card.Body>
+                                <Card.Title>{val.module}</Card.Title>
+                                <Button variant="outline-danger w-100 mt-2">Re-evaluate</Button>
+                              </Card.Body>
+                            </Card>
+                          </Col>
+                        )}
+                      </Row>
+                    </Container>
+                  </div>
+                  <Pagination className="text-end mt-3 ms-auto"
+                    postsPerPage={postsPerPage}
+                    totalPosts={gradeArray.length}
+                    paginate={paginate}
+                    currentPage={currentPage}
+                  />
+                </>
+            }
           </div>
       }
     </div>
