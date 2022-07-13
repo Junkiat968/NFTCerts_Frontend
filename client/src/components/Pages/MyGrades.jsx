@@ -21,6 +21,28 @@ const MyGrades = () => {
   const [selectedModule, setSelectedModule] = useState('');
   const [emptyGrades, setEmptyGrades] = useState(false);
 
+  const people = [
+    {
+      name: 'James',
+      age: 31,
+    },
+    {
+      name: 'John',
+      age: 45,
+    },
+    {
+      name: 'Paul',
+      age: 65,
+    },
+    {
+      name: 'Ringo',
+      age: 49,
+    },
+    {
+      name: 'George',
+      age: 34,
+    }
+  ];
   const changeSelected = (e) => {
     setSelectedModule(e.value);
     // setModuleArray();
@@ -115,6 +137,7 @@ const MyGrades = () => {
       modulesArray={modulesArray}
       emptyGrades={emptyGrades}
       gradeArray={gradeArray}
+      people={people}
     />
   );
 }
@@ -131,7 +154,8 @@ function NFTImage({
   modulesArray,
   selectedModule,
   emptyGrades,
-  gradeArray
+  gradeArray,
+  people
 }) {
 
   // useEffect(() => {
@@ -153,10 +177,13 @@ function NFTImage({
                 </div>
                 :
                 <>
-                  {/* <div className="mb-3 text-center">
-                    <Select options={modulesArray} placeholder="Filter" onChange={changeSelected} />
-                    {selectedModule}
-                  </div> */}
+                  <div>
+                    {modulesArray.filter(modulesArray => modulesArray.value.includes('M')).map(filteredPerson => (
+                      <li>
+                        {filteredPerson.value}
+                      </li>
+                    ))}
+                  </div>
                   <div className="d-flex justify-content-around text-start mt-3">
                     Your Results:
                     <Container>
@@ -165,9 +192,13 @@ function NFTImage({
                         {selectedModule}
                       </div>
                       <Row>
+                        {modulesArray.filter(modulesArray => modulesArray.value.includes('M')).map(filteredModule => (
+                          <li>
+                            {filteredModule.value}
+                          </li>
+                        ))}
                         {Object.values(currentPosts).map((val, k) =>
                           <Col k={k} xs={8} md={4} lg={3}>
-                            {/* {console.log(val.img)} */}
                             <Card className="m-3" style={{ width: '12rem' }}>
                               <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.img}`} />
                               <Card.Body>
