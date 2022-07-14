@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { Row, Col, Card, Container, Button } from "react-bootstrap";
 import Select from 'react-select';
 
@@ -7,45 +7,21 @@ import useEth from "../../contexts/EthContext/useEth";
 import Pagination from "../Pagination";
 
 const MyGrades = () => {
-  const [postsPerPage] = useState(3);
+  const [postsPerPage] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [totalTokens, setTotalTokens] = useState(0);
   const [temptArray, setTemptArray] = useState([]);
   const [gradeArray, setGradeArray] = useState([]);
-
-  // const [gradeImgArray, setGradeImgArray] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
-
   const [modulesArray, setModulesArray] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
+  // const [selectedModule, setSelectedModule] = useState({ select1: "", select2: "" });
   const [emptyGrades, setEmptyGrades] = useState(false);
+  const selectInputRef = useRef();
 
-  const people = [
-    {
-      name: 'James',
-      age: 31,
-    },
-    {
-      name: 'John',
-      age: 45,
-    },
-    {
-      name: 'Paul',
-      age: 65,
-    },
-    {
-      name: 'Ringo',
-      age: 49,
-    },
-    {
-      name: 'George',
-      age: 34,
-    }
-  ];
   const changeSelected = (e) => {
     setSelectedModule(e.value);
-    // setModuleArray();
   };
 
   // Context Constants
@@ -116,29 +92,51 @@ const MyGrades = () => {
     );
   };
 
+  /** RESET FILTER */
+  const resetFilter = (e) => {
+    setSelectedModule('');
+    selectInputRef.current.select.clearValue();
+  };
+
+  const filteredGrades = gradeArray.filter(gradeArray => {
+    return gradeArray.module.includes(selectedModule);
+  });
+
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = gradeArray.slice(indexOfFirstPost, indexOfLastPost);
+  // const currentPosts = gradeArray.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = filteredGrades.slice(indexOfFirstPost, indexOfLastPost);
+
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
-    <NFTImage
-      currentPosts={currentPosts}
-      postsPerPage={postsPerPage}
-      paginate={paginate}
-      currentPage={currentPage}
-      totalTokens={totalTokens}
-      pageLoading={pageLoading}
-      renderLoading={renderLoading}
-      changeSelected={changeSelected}
-      selectedModule={selectedModule}
-      modulesArray={modulesArray}
-      emptyGrades={emptyGrades}
-      gradeArray={gradeArray}
-      people={people}
-    />
+    <div className='container'>
+      <h2 className="pb-2 border-bottom text-start my-3">MyGrades.</h2>
+      <div className="p-3 w-100 d-inline-block">
+        <button className="float-end btn btn-block btn-outline-secondary mx-3" type="button" onClick={resetFilter}>Reset </button>
+        <Select ref={selectInputRef} className="float-end w-25" options={modulesArray} placeholder="Filter" onChange={changeSelected} />
+      </div>
+      {/* {
+        gradeArray.filter(gradeArray => gradeArray.module.includes(selectedModule)).map(filteredData => (
+          <li>
+            {filteredData.module}
+          </li>
+        ))
+      } */}
+      <NFTImage
+        currentPosts={currentPosts}
+        postsPerPage={postsPerPage}
+        paginate={paginate}
+        currentPage={currentPage}
+        totalTokens={totalTokens}
+        pageLoading={pageLoading}
+        renderLoading={renderLoading}
+        emptyGrades={emptyGrades}
+        gradeArray={gradeArray}
+      />
+    </div>
   );
 }
 
@@ -150,12 +148,8 @@ function NFTImage({
   totalTokens,
   renderLoading,
   pageLoading,
-  changeSelected,
-  modulesArray,
-  selectedModule,
   emptyGrades,
-  gradeArray,
-  people
+  gradeArray
 }) {
 
   // useEffect(() => {
@@ -164,7 +158,6 @@ function NFTImage({
 
   return (
     <div className='container'>
-      <h2 className="pb-2 border-bottom text-start my-3">MyGrades.</h2>
       {
         pageLoading ?
           renderLoading() :
@@ -177,26 +170,10 @@ function NFTImage({
                 </div>
                 :
                 <>
-                  <div>
-                    {modulesArray.filter(modulesArray => modulesArray.value.includes('M')).map(filteredPerson => (
-                      <li>
-                        {filteredPerson.value}
-                      </li>
-                    ))}
-                  </div>
                   <div className="d-flex justify-content-around text-start mt-3">
                     Your Results:
                     <Container>
-                      <div className="mb-2 text-center">
-                        <Select options={modulesArray} placeholder="Filter" onChange={changeSelected} />
-                        {selectedModule}
-                      </div>
                       <Row>
-                        {modulesArray.filter(modulesArray => modulesArray.value.includes('M')).map(filteredModule => (
-                          <li>
-                            {filteredModule.value}
-                          </li>
-                        ))}
                         {Object.values(currentPosts).map((val, k) =>
                           <Col k={k} xs={8} md={4} lg={3}>
                             <Card className="m-3" style={{ width: '12rem' }}>
