@@ -7,23 +7,24 @@ import useEth from "../../contexts/EthContext/useEth";
 import Pagination from "../Pagination";
 
 const MyGrades = () => {
-  const [postsPerPage] = useState(3);
+  const [postsPerPage] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [totalTokens, setTotalTokens] = useState(0);
   const [temptArray, setTemptArray] = useState([]);
   const [gradeArray, setGradeArray] = useState([]);
-
-  // const [gradeImgArray, setGradeImgArray] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
-
   const [modulesArray, setModulesArray] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
   const [emptyGrades, setEmptyGrades] = useState(false);
 
   const changeSelected = (e) => {
-    setSelectedModule(e.value);
-    // setModuleArray();
+    try {
+      setSelectedModule(e.value);
+    } catch (error) {
+      setSelectedModule("");
+    }
+    // setSelectedModule({ selectedLabel: e ? e.value : "" });
   };
 
   // Context Constants
@@ -38,7 +39,7 @@ const MyGrades = () => {
       setPageLoading(true);
       try {
         const noOfTokens = await sitnftInstance.balanceOf(state.accounts[0]);
-        if (noOfTokens == 0) {
+        if (noOfTokens === 0) {
           setEmptyGrades(true);
         }
         for (let i = 0; i < noOfTokens; i++) {
@@ -53,11 +54,8 @@ const MyGrades = () => {
           var decodedString = atob(current[1]);
           const currentJson = JSON.parse(decodedString);
 
-          // console.log(currentJson.attributes[0].value);
-          console.log(modulesArray.length);
-          if (modulesArray.length == 0) {
+          if (modulesArray.length === 0) {
             modulesArray.push({ value: currentJson.attributes[0].value, label: currentJson.attributes[0].value });
-            console.log(modulesArray);
           } else {
             for (let i = 0; i < modulesArray.length; i++) {
               if (modulesArray[i].value !== currentJson.attributes[0].value) {
@@ -94,28 +92,42 @@ const MyGrades = () => {
     );
   };
 
+  const filteredGrades = gradeArray.filter(gradeArray => {
+    return gradeArray.module.includes(selectedModule);
+  });
+
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = gradeArray.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = filteredGrades.slice(indexOfFirstPost, indexOfLastPost);
+
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
-    <NFTImage
-      currentPosts={currentPosts}
-      postsPerPage={postsPerPage}
-      paginate={paginate}
-      currentPage={currentPage}
-      totalTokens={totalTokens}
-      pageLoading={pageLoading}
-      renderLoading={renderLoading}
-      changeSelected={changeSelected}
-      selectedModule={selectedModule}
-      modulesArray={modulesArray}
-      emptyGrades={emptyGrades}
-      gradeArray={gradeArray}
-    />
+    <div className='container'>
+      <h2 className="pb-2 border-bottom text-start my-1 mt-3">MyGrades.</h2>
+      <div className="p-1 w-100 d-inline-block">
+        <Select className="float-end w-25" isClearable={true} options={modulesArray} placeholder="Filter" onChange={changeSelected} />
+      </div>
+      {/* {
+        gradeArray.filter(gradeArray => gradeArray.module.includes(selectedModule)).map(filteredData => (
+          <li>
+            {filteredData.module}
+          </li>
+        ))
+      } */}
+      <NFTImage
+        currentPosts={currentPosts}
+        postsPerPage={postsPerPage}
+        paginate={paginate}
+        currentPage={currentPage}
+        pageLoading={pageLoading}
+        renderLoading={renderLoading}
+        emptyGrades={emptyGrades}
+        gradeArray={gradeArray}
+      />
+    </div>
   );
 }
 
@@ -124,12 +136,8 @@ function NFTImage({
   postsPerPage,
   paginate,
   currentPage,
-  totalTokens,
   renderLoading,
   pageLoading,
-  changeSelected,
-  modulesArray,
-  selectedModule,
   emptyGrades,
   gradeArray
 }) {
@@ -140,7 +148,6 @@ function NFTImage({
 
   return (
     <div className='container'>
-      <h2 className="pb-2 border-bottom text-start my-3">MyGrades.</h2>
       {
         pageLoading ?
           renderLoading() :
@@ -153,21 +160,12 @@ function NFTImage({
                 </div>
                 :
                 <>
-                  {/* <div className="mb-3 text-center">
-                    <Select options={modulesArray} placeholder="Filter" onChange={changeSelected} />
-                    {selectedModule}
-                  </div> */}
                   <div className="d-flex justify-content-around text-start mt-3">
                     Your Results:
                     <Container>
-                      <div className="mb-2 text-center">
-                        <Select options={modulesArray} placeholder="Filter" onChange={changeSelected} />
-                        {selectedModule}
-                      </div>
                       <Row>
                         {Object.values(currentPosts).map((val, k) =>
                           <Col k={k} xs={8} md={4} lg={3}>
-                            {/* {console.log(val.img)} */}
                             <Card className="m-3" style={{ width: '12rem' }}>
                               <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.img}`} />
                               <Card.Body>
