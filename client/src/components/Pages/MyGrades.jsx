@@ -7,7 +7,7 @@ import useEth from "../../contexts/EthContext/useEth";
 import Pagination from "../Pagination";
 
 const MyGrades = () => {
-  const [postsPerPage] = useState(20);
+  const [postsPerPage] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [totalTokens, setTotalTokens] = useState(0);
@@ -17,8 +17,6 @@ const MyGrades = () => {
   const [modulesArray, setModulesArray] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
   const [emptyGrades, setEmptyGrades] = useState(false);
-
-
 
   const changeSelected = (e) => {
     try {
