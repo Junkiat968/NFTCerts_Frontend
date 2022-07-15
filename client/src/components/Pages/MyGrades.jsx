@@ -7,7 +7,7 @@ import useEth from "../../contexts/EthContext/useEth";
 import Pagination from "../Pagination";
 
 const MyGrades = () => {
-  const [postsPerPage] = useState(6);
+  const [postsPerPage] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [totalTokens, setTotalTokens] = useState(0);
@@ -17,6 +17,8 @@ const MyGrades = () => {
   const [modulesArray, setModulesArray] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
   const [emptyGrades, setEmptyGrades] = useState(false);
+
+
 
   const changeSelected = (e) => {
     try {
@@ -56,11 +58,10 @@ const MyGrades = () => {
 
           if (modulesArray.length === 0) {
             modulesArray.push({ value: currentJson.attributes[0].value, label: currentJson.attributes[0].value });
-          } else {
-            for (let i = 0; i < modulesArray.length; i++) {
-              if (modulesArray[i].value !== currentJson.attributes[0].value) {
-                modulesArray.push({ value: currentJson.attributes[0].value, label: currentJson.attributes[0].value });
-              }
+          }
+          else {
+            if (!modulesArray.some(modulesArray => modulesArray.value === currentJson.attributes[0].value)) {
+              modulesArray.push({ value: currentJson.attributes[0].value, label: currentJson.attributes[0].value });
             }
           }
 
