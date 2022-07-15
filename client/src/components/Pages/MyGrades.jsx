@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Row, Col, Card, Container, Button } from "react-bootstrap";
 import Select from 'react-select';
 
@@ -18,10 +18,14 @@ const MyGrades = () => {
   const [selectedModule, setSelectedModule] = useState('');
   // const [selectedModule, setSelectedModule] = useState({ select1: "", select2: "" });
   const [emptyGrades, setEmptyGrades] = useState(false);
-  const selectInputRef = useRef();
 
   const changeSelected = (e) => {
-    setSelectedModule(e.value);
+    try {
+      setSelectedModule(e.value);
+    } catch (error) {
+      setSelectedModule("");
+    }
+    // setSelectedModule({ selectedLabel: e ? e.value : "" });
   };
 
   // Context Constants
@@ -92,12 +96,6 @@ const MyGrades = () => {
     );
   };
 
-  /** RESET FILTER */
-  const resetFilter = (e) => {
-    setSelectedModule('');
-    selectInputRef.current.select.clearValue();
-  };
-
   const filteredGrades = gradeArray.filter(gradeArray => {
     return gradeArray.module.includes(selectedModule);
   });
@@ -115,8 +113,7 @@ const MyGrades = () => {
     <div className='container'>
       <h2 className="pb-2 border-bottom text-start my-3">MyGrades.</h2>
       <div className="p-3 w-100 d-inline-block">
-        <button className="float-end btn btn-block btn-outline-secondary mx-3" type="button" onClick={resetFilter}>Reset </button>
-        <Select ref={selectInputRef} className="float-end w-25" options={modulesArray} placeholder="Filter" onChange={changeSelected} />
+        <Select className="float-end w-25" isClearable={true} options={modulesArray} placeholder="Filter" onChange={changeSelected} />
       </div>
       {/* {
         gradeArray.filter(gradeArray => gradeArray.module.includes(selectedModule)).map(filteredData => (
