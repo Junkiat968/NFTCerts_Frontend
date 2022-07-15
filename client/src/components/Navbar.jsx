@@ -1,17 +1,20 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Nav, Navbar, Container } from 'react-bootstrap';
+import { Nav, Navbar, Modal, Button } from 'react-bootstrap';
 import useEth from "../contexts/EthContext/useEth";
 import { shortenAddress } from '../utils/addressShortener';
 
 const Navigationbar = () => {
    const { state } = useEth();
 
+   const [show, setShow] = useState(false);
+   const handleClose = () => setShow(false);
+   const handleShow = () => setShow(true);
+
    const renderNav = (e) => {
       if (state.accounts !== null) {
          return (
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-               {/* <Container> */}
                <Navbar.Brand as={NavLink} to="/">GradeGo</Navbar.Brand>
                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                <Navbar.Collapse id="responsive-navbar-nav">
@@ -26,13 +29,31 @@ const Navigationbar = () => {
                   </Nav>
                   <Nav>
                      <li className="nav-item text-white">
-                        <small className="nav-link link-white px-2 text-white">
-                           Account: {shortenAddress(String(state.accounts))}
-                        </small>
+                        <Button className='btn btn-sm btn-outline-dark' type="button" onClick={handleShow}>
+                           <small className="nav-link link-white px-2 text-white">
+                              Account: {shortenAddress(String(state.accounts))}
+                           </small>
+                        </Button>
                      </li>
                   </Nav>
                </Navbar.Collapse>
-               {/* </Container> */}
+               <Modal
+                  show={show}
+                  onHide={handleClose}
+                  backdrop="static"
+                  keyboard={false}
+               >
+                  <Modal.Header closeButton>
+                     <Modal.Title>Note.</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body className='text-center m-3 mx-auto'>
+                     <h6 className="card-subtitle mb-1 text-muted">To disconnect wallet:</h6>
+                     <p className="card-text">Use the MetaMask extension on your browser.</p>
+                  </Modal.Body>
+                  <Modal.Footer>
+                     <Button variant="primary" onClick={handleClose}>Understood</Button>
+                  </Modal.Footer>
+               </Modal>
             </Navbar>
          )
       }

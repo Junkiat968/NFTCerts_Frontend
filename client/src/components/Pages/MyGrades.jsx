@@ -16,7 +16,6 @@ const MyGrades = () => {
   const [pageLoading, setPageLoading] = useState(false);
   const [modulesArray, setModulesArray] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
-  // const [selectedModule, setSelectedModule] = useState({ select1: "", select2: "" });
   const [emptyGrades, setEmptyGrades] = useState(false);
 
   const changeSelected = (e) => {
@@ -40,7 +39,7 @@ const MyGrades = () => {
       setPageLoading(true);
       try {
         const noOfTokens = await sitnftInstance.balanceOf(state.accounts[0]);
-        if (noOfTokens == 0) {
+        if (noOfTokens === 0) {
           setEmptyGrades(true);
         }
         for (let i = 0; i < noOfTokens; i++) {
@@ -55,11 +54,8 @@ const MyGrades = () => {
           var decodedString = atob(current[1]);
           const currentJson = JSON.parse(decodedString);
 
-          // console.log(currentJson.attributes[0].value);
-          console.log(modulesArray.length);
-          if (modulesArray.length == 0) {
+          if (modulesArray.length === 0) {
             modulesArray.push({ value: currentJson.attributes[0].value, label: currentJson.attributes[0].value });
-            console.log(modulesArray);
           } else {
             for (let i = 0; i < modulesArray.length; i++) {
               if (modulesArray[i].value !== currentJson.attributes[0].value) {
@@ -103,7 +99,6 @@ const MyGrades = () => {
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  // const currentPosts = gradeArray.slice(indexOfFirstPost, indexOfLastPost);
   const currentPosts = filteredGrades.slice(indexOfFirstPost, indexOfLastPost);
 
   // Change page
@@ -111,8 +106,8 @@ const MyGrades = () => {
 
   return (
     <div className='container'>
-      <h2 className="pb-2 border-bottom text-start my-3">MyGrades.</h2>
-      <div className="p-3 w-100 d-inline-block">
+      <h2 className="pb-2 border-bottom text-start my-1 mt-3">MyGrades.</h2>
+      <div className="p-1 w-100 d-inline-block">
         <Select className="float-end w-25" isClearable={true} options={modulesArray} placeholder="Filter" onChange={changeSelected} />
       </div>
       {/* {
@@ -127,7 +122,6 @@ const MyGrades = () => {
         postsPerPage={postsPerPage}
         paginate={paginate}
         currentPage={currentPage}
-        totalTokens={totalTokens}
         pageLoading={pageLoading}
         renderLoading={renderLoading}
         emptyGrades={emptyGrades}
@@ -142,7 +136,6 @@ function NFTImage({
   postsPerPage,
   paginate,
   currentPage,
-  totalTokens,
   renderLoading,
   pageLoading,
   emptyGrades,

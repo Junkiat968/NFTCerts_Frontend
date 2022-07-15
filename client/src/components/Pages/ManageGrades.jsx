@@ -11,7 +11,7 @@ const ManageGrades = () => {
   const { state, sitnftInstance } = useEth();
   const [items, setItems] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
-  const [mintData, setMintData] = useState({ moduleCodeInput: "", testTypeInput: "", trimesterInput: "" });
+  const [mintData, setMintData] = useState({ testTypeInput: "", trimesterInput: "" });
 
   function handleMint(evt) {
     const value = evt.target.value;
