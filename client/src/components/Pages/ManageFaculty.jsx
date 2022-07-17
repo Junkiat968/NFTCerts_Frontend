@@ -1,37 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import * as XLSX from "xlsx";
 import { Col, Row, Nav, Tab, Table } from 'react-bootstrap';
 import useEth from "../../contexts/EthContext/useEth";
+import { ContractContext } from '../../contexts/ContractProvider';
+
 
 // import Sidebar from "./Sidebar";
 import "./table.css";
 
-export const ContractContext = React.createContext();
-
 const ManageAccounts = () => {
-  const { state, getSITNFTContract } = useEth();
 
   const [items, setItems] = useState([]);
 
-  // Student Functions
-  const functAddStudents = async () => {
+  const {
+    makeMultiFaculty
+  } = useContext(ContractContext);
 
-    const sitnftInstance = getSITNFTContract();
-    console.log(items);
-    try {
-      const result = await sitnftInstance.multiAddStudentAddress(
-        items,
-      );
-
-      console.log(result);
-      // setStudentResult(result);
-      return result;
-    } catch (err) {
-      console.error(err);
-      // setStudentResult(err);
-      return err;
-    }
-  }
 
   const readExcel = (file) => {
     const promise = new Promise((resolve, reject) => {
@@ -85,7 +69,7 @@ const ManageAccounts = () => {
           type="file"
         />
         <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
-          onClick={functAddStudents}>Upload
+          onClick={() => makeMultiFaculty(items)}>Upload
         </button>
         <button
           onClick={handleUpload}
@@ -101,15 +85,13 @@ const ManageAccounts = () => {
         <Table responsive hover>
           <thead>
             <tr>
-              <th scope="col">Student ID</th>
-              <th scope="col">Student Address</th>
+              <th scope="col">Faculty Address</th>
             </tr>
           </thead>
 
           <tbody>
             {items.map((d) => (
-              <tr key={d.id}>
-                <td>{d.id}</td>
+              <tr key={d.addr}>
                 <td>{d.addr}</td>
               </tr>
             ))}

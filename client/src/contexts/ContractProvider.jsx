@@ -133,6 +133,11 @@ export const ContractProvider = ({ children }) => {
             return err;
         }
     }
+    const makeMultiFaculty = async (facultyArr) => {
+        facultyArr.map((addr) => {
+            formAddressData.addressInput = addr.addr;
+            makeFaculty()})
+    }
     const removeFaculty = async () => {
         const { addressInput } = formAddressData;
         const sitnftInstance = getSITNFTContract();
@@ -374,6 +379,7 @@ export const ContractProvider = ({ children }) => {
                 functIsFaculty,
                 isFacultyResult,
                 makeFaculty,
+                makeMultiFaculty,
                 removeFaculty,
                 functMint,
                 mintData,
