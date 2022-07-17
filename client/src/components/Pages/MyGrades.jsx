@@ -65,7 +65,7 @@ const MyGrades = () => {
 
           // Decode Image
           const currentImg = currentJson.image.split(",");
-          gradeArray.push({ module: currentJson.attributes[0].value, img: currentImg[1] });
+          gradeArray.push({ module: currentJson.attributes[0].value, img: currentImg[1], name: currentJson.name });
         }
         console.log(modulesArray.length);
 
@@ -168,7 +168,7 @@ function NFTImage({
                             <Card className="m-3" style={{ width: '12rem' }}>
                               <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.img}`} />
                               <Card.Body>
-                                <Card.Title>{val.module}</Card.Title>
+                                <Card.Title>{val.name}</Card.Title>
                                 <Button variant="outline-danger w-100 mt-2">Re-evaluate</Button>
                               </Card.Body>
                             </Card>

@@ -379,7 +379,7 @@ const GradeAppeals = () => {
 
   return (
     <div className='page-two container mb-5'>
-      <h2 className="pb-2 border-bottom text-start mt-3">SITNFT. Functions Testing.</h2>
+      <h2 className="pb-2 border-bottom text-start mt-3">Manage Appeals.</h2>
       {renderIsStudent()}
       {renderStudent()}
       {renderMint()}
