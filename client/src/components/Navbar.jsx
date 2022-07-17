@@ -26,6 +26,7 @@ const Navigationbar = () => {
                      <Nav.Link as={NavLink} to="/TransactionLogs">Transaction Logs</Nav.Link>
                      {/* <Nav.Link as={NavLink} to="/PurchaseTokens">Purchase Tokens</Nav.Link> */}
                      <Nav.Link as={NavLink} to="/ManageAccounts">Manage Accounts</Nav.Link>
+                     <Nav.Link as={NavLink} to="/GradeAppeals">Manage Appeals</Nav.Link>
                   </Nav>
                   <Nav>
                      <li className="nav-item text-white">

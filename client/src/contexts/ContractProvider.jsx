@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import useEth from "./EthContext/useEth";
-
+import { ethers } from "ethers";
 export const ContractContext = React.createContext();
-
+const { ethereum } = window;
 /** Local/Persistent Storage */
 var grades = localStorage.getItem("grades");
 var mods = localStorage.getItem("modules");
@@ -30,11 +30,25 @@ export const ContractProvider = ({ children }) => {
     const [formAddStudentData, setFormAddStudentData] = useState({ studentId: "", studentAddress: "" });
     // Module Constants
     const [modules, setModules] = useState([]);
+    // Alert Constants
+    const [formData, setAlertformData] = useState({  message: "" });
+    const [currentAccount, setCurrentAccount] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [transactionCount, setTransactionCount] = useState(localStorage.getItem("transactionCount"));
+    const [transactions, setTransactions] = useState([]);
+    // Reevaluation Constants
+    const [evalData, setEvalformData] = useState({  targetTokenId: "" , newGrade: ""});
 
     /** Form Handling */
     const handleChange = (e, name) => {
         setFormAddressData((prevState) => ({ ...prevState, [name]: e.target.value }));
     };
+    const handleAlertFormChange = (e, name) => {
+        setAlertformData((prevState) => ({ ...prevState, [name]: e.target.value }));
+      };
+      const handleEvalFormChange = (e, name) => {
+        setEvalformData((prevState) => ({ ...prevState, [name]: e.target.value }));
+      };
     function handleMint(evt) {
         const value = evt.target.value;
         setMintData({
@@ -259,6 +273,93 @@ export const ContractProvider = ({ children }) => {
         localStorage.setItem("modules", JSON.stringify(modules));
     };
 
+    // Alert functions
+    const getAllTransactions = async () => {
+        try {
+            const sitnftInstance = getSITNFTContract();
+            const availableTransactions = await sitnftInstance.getAllTransactions();
+            const structuredTransactions = availableTransactions.map((transaction) => ({
+            //   addressTo: transaction.receiver,
+              addressFrom: transaction.sender,
+              timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
+              message: transaction.message,
+            //   keyword: transaction.keyword,
+            //   amount: parseInt(transaction.amount._hex) / (10 ** 18)
+            }));
+    
+            console.log(structuredTransactions);
+    
+            setTransactions(structuredTransactions);
+
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      const checkIfWalletIsConnect = async () => {
+        try {
+          if (!ethereum) return alert("Please install MetaMask.");
+    
+          const accounts = await ethereum.request({ method: "eth_accounts" });
+    
+          if (accounts.length) {
+            setCurrentAccount(accounts[0]);
+            getAllTransactions();
+          } else {
+            console.log("No accounts found");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+//     const checkIfTransactionsExists = async () => {
+//     try {
+
+//         const sitnftInstance = getSITNFTContract();
+//         // const currentTransactionCount = await sitnftInstance.getTransactionCount();
+
+//         // window.localStorage.setItem("transactionCount", currentTransactionCount);
+      
+//     } catch (error) {
+//       console.log(error);
+//       throw new Error("No ethereum object");
+//     }
+//   };
+  const sendTransaction = async () => {
+    try {
+        const { message } = formData;
+        const sitnftInstance = getSITNFTContract();
+        const transactionHash = await sitnftInstance.addToBlockchain(message);
+        setIsLoading(true);
+        console.log(`Loading - ${transactionHash.hash}`);
+        await transactionHash.wait();
+        console.log(`Success - ${transactionHash.hash}`);
+        setIsLoading(false);
+        window.location.reload();
+      
+    } catch (error) {
+      console.log(error);
+
+      throw new Error("No ethereum object");
+    }
+  };
+  // Reevaluate NFT Grade
+  const setNFTGrade = async () => {
+    try {
+        const {targetTokenId,newGrade} = evalData
+        // console.log("tid,ngrade",targetTokenId,newGrade);
+        // console.log("evaldata",evalData);
+        const sitnftInstance = getSITNFTContract();
+        // const id = ethers.utils.parseEther(1);
+        const setNFTGradeRes = await sitnftInstance.setMetadata(targetTokenId, newGrade);
+        console.log("setNFTGrade()Result",setNFTGradeRes);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    checkIfWalletIsConnect();
+    // checkIfTransactionsExists();
+  }, [transactionCount]);
     return (
         <ContractContext.Provider
             value={{
@@ -285,7 +386,18 @@ export const ContractProvider = ({ children }) => {
                 getStudentAddress,
                 functGetAllGrades,
                 grades,
-                mods
+                mods,
+                transactionCount,
+                transactions,
+                isLoading,
+                sendTransaction,
+                formData,
+                getAllTransactions,
+                handleAlertFormChange,
+                handleEvalFormChange,
+                setNFTGrade,
+                evalData
+
             }}>
             {children}
         </ContractContext.Provider >

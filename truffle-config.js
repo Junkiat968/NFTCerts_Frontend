@@ -63,14 +63,14 @@ module.exports = {
     // Note: It's important to wrap the provider as a function to ensure truffle uses a new provider every time.
     ropsten: {
       provider: function () {
-        return new HDWalletProvider('vague hope hedgehog scout trick truck animal crucial offer keen knock once', // Project secret key
+        return new HDWalletProvider('satoshi barrel primary hood oven economy elbow alter catch cable arena number', // Project secret key
           'https://ropsten.infura.io/v3/30beb588d9814d0490d2247c62063adb')
       },
       network_id: 3
     },
     rinkeby: {
       provider: function () {
-        return new HDWalletProvider('vague hope hedgehog scout trick truck animal crucial offer keen knock once', // Project secret key
+        return new HDWalletProvider('satoshi barrel primary hood oven economy elbow alter catch cable arena number', // Project secret key
           'https://rinkeby.infura.io/v3/30beb588d9814d0490d2247c62063adb')
       },
       network_id: 4
