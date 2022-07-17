@@ -13,6 +13,7 @@ import MyGrades from './components/Pages/MyGrades.jsx';
 import ManageGrades from "./components/Pages/ManageGrades";
 import TransactionLogs from "./components/Pages/TransactionLogs";
 import PurchaseTokens from "./components/Pages/PurchaseTokens";
+import ManageFaculty from "./components/Pages/ManageFaculty";
 import ManageAccounts from "./components/Pages/ManageAccounts";
 import Error from './components/Pages/Error';
 import PageNotFound from './components/Pages/PageNotFound';
@@ -37,6 +38,7 @@ class App extends Component {
                 <Route path='/TransactionLogs' element={<TransactionLogs />} />
                 {/* <Route path='/PurchaseTokens' element={<PurchaseTokens />} /> */}
                 <Route path='/ManageAccounts' element={<ManageAccounts />} />
+                <Route path='/ManageFaculty' element={<ManageFaculty />} />
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
               :
