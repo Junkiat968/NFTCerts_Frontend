@@ -15,7 +15,6 @@ const ManageAccounts = () => {
 
   // Student Functions
   const functAddStudents = async () => {
-    ;
 
     const sitnftInstance = getSITNFTContract();
     console.log(items);
