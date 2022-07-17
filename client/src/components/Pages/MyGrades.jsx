@@ -56,11 +56,10 @@ const MyGrades = () => {
 
           if (modulesArray.length === 0) {
             modulesArray.push({ value: currentJson.attributes[0].value, label: currentJson.attributes[0].value });
-          } else {
-            for (let i = 0; i < modulesArray.length; i++) {
-              if (modulesArray[i].value !== currentJson.attributes[0].value) {
-                modulesArray.push({ value: currentJson.attributes[0].value, label: currentJson.attributes[0].value });
-              }
+          }
+          else {
+            if (!modulesArray.some(modulesArray => modulesArray.value === currentJson.attributes[0].value)) {
+              modulesArray.push({ value: currentJson.attributes[0].value, label: currentJson.attributes[0].value });
             }
           }
 
