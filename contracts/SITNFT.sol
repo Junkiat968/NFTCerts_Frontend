@@ -86,7 +86,7 @@ contract SITNFT is ERC721, ERC721Enumerable,RoleControl {
     bytes32 encryptedId = keccak256(abi.encodePacked(_id));
     _studentAddress[encryptedId] = _address;
     _getStudentFromAddress[_address] = encryptedId;
-    // emit IndexedLog(msg.sender,"addStudentSucceed");
+    emit IndexedLog(msg.sender,"addStudentSucceed");
   }
 
     /**
@@ -100,7 +100,7 @@ contract SITNFT is ERC721, ERC721Enumerable,RoleControl {
     for(uint i=0; i <_array.length; i++) {
       addStudentAddress(_array[i].id, _array[i].addr);
     }
-    // emit IndexedLog(msg.sender,"multiAddStudentSucceed");
+    emit IndexedLog(msg.sender,"multiAddStudentSucceed");
   }
 
 
@@ -167,7 +167,7 @@ contract SITNFT is ERC721, ERC721Enumerable,RoleControl {
             _safeMint(newAttribute.recipient,tokenId);
             emit Mint(msg.sender, tokenId, newAttribute.moduleCode);
         }
-        // emit IndexedLog(msg.sender,"BatchMintComplete");
+        emit IndexedLog(msg.sender,"BatchMintComplete");
     }
 
   function addToBlockchain( string memory message) public {
