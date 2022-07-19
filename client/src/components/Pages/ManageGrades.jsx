@@ -12,6 +12,8 @@ const ManageGrades = () => {
   const [items, setItems] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
   const [mintData, setMintData] = useState({ testTypeInput: "", trimesterInput: "" });
+  const [receipt, setReceipt] = useState([]);
+  const [receiptLoading, setReceiptLoading] = useState(false);
 
   function handleMint(evt) {
     const value = evt.target.value;
@@ -115,17 +117,35 @@ const ManageGrades = () => {
       }
 
       try {
-        console.log(gradeItems.toString());
         const result = await sitnftInstance.batchMint(
           gradeItems
         );
-        console.log(result.events);
+
+        const interval = setInterval(function () {
+          console.log("awaiting transaction confirmation...");
+          setReceipt("Awaiting transaction confirmation...");
+          setReceiptLoading(true);
+          state.web3.eth.getTransactionReceipt(result.hash, function (err, rec) {
+            if (rec) {
+              console.log(rec);
+              if (rec.status) {
+                setReceipt("Transaction Complete.");
+                setReceiptLoading(false);
+              }
+              if (rec.status !== true) {
+                setReceiptLoading(false);
+                setReceipt("Error occured.");
+              }
+              clearInterval(interval);
+            }
+          });
+        }, 2000);
       } catch (err) {
         console.error(err);
         return err;
       }
     } else {
-      alert("File too big. Please limit file to 10 rows.");
+      alert("Please limit file to 10 rows.");
     }
   }
 
@@ -149,6 +169,16 @@ const ManageGrades = () => {
               <Tab.Pane eventKey="ICT1001">
                 <div>
                   <div className="p-3 w-100 d-inline-block">
+                    <div className="float-start align-middle">
+                      {receiptLoading ?
+                        <div className="spinner-border text-secondary align-middle me-2" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        :
+                        null
+                      }
+                      {receipt}
+                    </div>
                     {uploadedFileName ? renderButtons() : null}
                     <input
                       id="input-file"
@@ -170,6 +200,16 @@ const ManageGrades = () => {
               <Tab.Pane eventKey="ICT2102">
                 <div>
                   <div className="p-3 w-100 d-inline-block">
+                    <div className="float-start align-middle">
+                      {receiptLoading ?
+                        <div className="spinner-border text-secondary align-middle me-2" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        :
+                        null
+                      }
+                      {receipt}
+                    </div>
                     {uploadedFileName ? renderButtons() : null}
                     <input
                       id="input-file"

@@ -39,7 +39,7 @@ const MyGrades = () => {
       setPageLoading(true);
       try {
         const noOfTokens = await sitnftInstance.balanceOf(state.accounts[0]);
-        if (noOfTokens === 0) {
+        if (noOfTokens.toNumber() === 0) {
           setEmptyGrades(true);
         }
         for (let i = 0; i < noOfTokens; i++) {
@@ -155,7 +155,7 @@ function NFTImage({
               emptyGrades ?
                 <div className="text-center mt-5">
                   <h2>There are no grades awarded to you right now.</h2>
-                  <small>Please check back again later..</small>
+                  <small>Please check back again later.</small>
                 </div>
                 :
                 <>
