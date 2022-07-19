@@ -20,6 +20,8 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 const ManageAccounts = () => {
   const { state, getSITNFTContract, sitnftInstance } = useEth();
   const [items, setItems] = useState([]);
+  const [facultyItems, setFacultyItems] = useState([]);
+
   const [isStudentResult, setIsStudentResult] = useState('');
 
   const {
@@ -121,6 +123,28 @@ const ManageAccounts = () => {
     }
   }
 
+  const readFacultyExcel = (file) => {
+    const promise = new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsArrayBuffer(file);
+      fileReader.onload = (e) => {
+        const bufferArray = e.target.result;
+        const wb = XLSX.read(bufferArray, { type: "buffer" });
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json(ws, { raw: false });
+        resolve(data);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+
+    promise.then((d) => {
+      setFacultyItems(d);
+    });
+  };
+
   const readExcel = (file) => {
     const promise = new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -147,10 +171,21 @@ const ManageAccounts = () => {
     });
   };
 
+  const [uploadedFileFaculty, setUploadedFileFaculty] = useState('');
+  const [inputFacultyFile, setInputFacultyFile] = useState('');
+  const handleFacultyUpload = () => {
+    inputFacultyFile?.click();
+  };
+  const handleDisplayFacultyFileDetails = () => {
+    inputFacultyFile?.files && setUploadedFileFaculty(inputFacultyFile.files[0].name);
+    readFacultyExcel(inputFacultyFile.files[0])
+  };
+
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [inputFile, setInputFile] = useState('');
   useEffect(() => {
     setInputFile(document.getElementById("input-file"));
+    setInputFacultyFile(document.getElementById("input-file-Faculty"));
   }, []);
   const handleUpload = () => {
     inputFile?.click();
@@ -282,19 +317,19 @@ const ManageAccounts = () => {
                 <hr />
                 <div className="p-3 w-100 d-inline-block">
                   <input
-                    id="input-file"
-                    onChange={handleDisplayFileDetails}
+                    id="input-file-Faculty"
+                    onChange={handleDisplayFacultyFileDetails}
                     className="d-none"
                     type="file"
                   />
                   <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
                     onClick={functAddFaculty}>Upload
                   </button>
-                  <button onClick={handleUpload}
-                    className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
+                  <button onClick={handleFacultyUpload}
+                    className={`float-end btn btn-outline-${uploadedFileFaculty ? "success" : "primary"
                       }`}
                   >
-                    {uploadedFileName ? uploadedFileName : 'Select excel'}
+                    {uploadedFileFaculty ? uploadedFileFaculty : 'Select excel'}
                   </button>
                 </div>
                 <div>
@@ -306,7 +341,7 @@ const ManageAccounts = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {items.map((d) => (
+                      {facultyItems.map((d) => (
                         <tr key={d.id}>
                           <td>{d.id}</td>
                           <td>{d.addr}</td>
