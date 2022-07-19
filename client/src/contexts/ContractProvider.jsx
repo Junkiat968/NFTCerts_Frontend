@@ -31,7 +31,7 @@ export const ContractProvider = ({ children }) => {
     // Module Constants
     const [modules, setModules] = useState([]);
     // Alert Constants
-    const [formData, setAlertformData] = useState({  message: "" });
+    const [formData, setAlertformData] = useState({  message: "" , tokenName:""});
     const [currentAccount, setCurrentAccount] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [transactionCount, setTransactionCount] = useState(localStorage.getItem("transactionCount"));
@@ -44,7 +44,10 @@ export const ContractProvider = ({ children }) => {
         setFormAddressData((prevState) => ({ ...prevState, [name]: e.target.value }));
     };
     const handleAlertFormChange = (e, name) => {
-        setAlertformData((prevState) => ({ ...prevState, [name]: e.target.value }));
+        // console.log("handlealertformchange e.target.value = ",e.target.value)
+        // console.log("handlealertformchange e.target.value = ",e.target.id)
+        setAlertformData((prevState) => ({ ...prevState, message: e.target.value, tokenName:e.target.id}));
+        // console.log("handlealertformchange formData = ",formData)
       };
       const handleEvalFormChange = (e, name) => {
         setEvalformData((prevState) => ({ ...prevState, [name]: e.target.value }));
@@ -331,8 +334,9 @@ export const ContractProvider = ({ children }) => {
 //   };
   const sendTransaction = async () => {
     try {
-        const { message } = formData;
+        const { message,tokenName } = formData;
         const sitnftInstance = getSITNFTContract();
+        console.log("SendTransaction() message&tokenName",message,tokenName)
         const transactionHash = await sitnftInstance.addToBlockchain(message);
         setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
