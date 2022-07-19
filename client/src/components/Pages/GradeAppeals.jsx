@@ -1,4 +1,8 @@
 import React, { useContext, useState } from "react";
+import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import useEth from "../../contexts/EthContext/useEth";
 import { ContractContext } from '../../contexts/ContractProvider';
 import { Modal, Button, Form } from "react-bootstrap";
@@ -81,63 +85,67 @@ const GradeAppeals = () => {
     setNFTGrade();
   };
 
-  const renderAlerts = (e) => {
-    // const { transactions, currentAccount } = useContext(ContractContext);
+  // const renderAlerts = (e) => {
+  //   // const { transactions, currentAccount } = useContext(ContractContext);
   
-    return (
-      <div class="col-sm-4">
-      {/* <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleAlertFormChange} />
-      <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleAlertFormChange} />
-      <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleAlertFormChange} /> */}
-      <Input placeholder="Enter reason for Grade Appeal and Certificate id" name="message" type="text" handleChange={handleAlertFormChange} />
-      <div class="col-sm-3" />
-          <button
-            type="button"
-            onClick={handleAlertSubmit}
-            className=""
-          >
-            Submit Appeal
-          </button>
+  //   return (
+  //     <div class="col-sm-4">
+  //     {/* <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleAlertFormChange} />
+  //     <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleAlertFormChange} />
+  //     <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleAlertFormChange} /> */}
+  //     <Input placeholder="Enter reason for Grade Appeal and Certificate id" name="message" type="text" handleChange={handleAlertFormChange} />
+  //     <div class="col-sm-3" />
+  //         <button
+  //           type="button"
+  //           onClick={handleAlertSubmit}
+  //           className=""
+  //         >
+  //           Submit Appeal
+  //         </button>
       
-     </div>
-    );
-  };
-  const TransactionsCard = ({ addressFrom, timestamp, message}) => {
+  //    </div>
+  //   );
+  // };
+  const TransactionsCard = ({ addressFrom, timestamp, message,tokenName}) => {
     return (
-      <div className="bg-[#181918] m-4 flex flex-1
-        2xl:min-w-[450px]
-        2xl:max-w-[500px]
-        sm:min-w-[270px]
-        sm:max-w-[300px]
-        min-w-full
-        flex-col p-3 rounded-md hover:shadow-2xl"
-      >
-        <div className="flex flex-col items-center w-full mt-3">
-          <div className="display-flex justify-start w-full mb-6 p-2">
-            <a href={`https://ropsten.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
-              <p className="text-black text-base">From: {addressFrom}</p>
-            </a>
-            {message && (
-              <>
-                <p className="text-black text-base">Message from Student: <br></br> {message} {message.tokenName} {console.log("MESSAGE",message)}</p>
-              </>
-            )}
-            <p className="text-black font-bold">{timestamp}</p>
-          </div>
-         
-            
+      <Card style={{ width: '20rem' }}>
+      <Card.Body>
+        <Card.Title>{message} </Card.Title>
+        <Card.Subtitle className="mb-2 text-muted">{tokenName} </Card.Subtitle>
+        <Card.Text>
+            Applied on: {timestamp}
+            <br></br>
+            Certificate Id: {tokenName.slice(-1)}
+        </Card.Text>
+        <Card.Link href={`https://ropsten.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
+        <p className="">From: {addressFrom}</p>
+        </Card.Link>
+      </Card.Body>
+    </Card>
 
-        </div>
-      </div>
+      // <div className="">
+            // <a href={`https://ropsten.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
+      //         <p className="">From: {addressFrom}</p>
+      //       </a>
+      //       {message && (
+      //         <>
+      //           <p className="text-black text-base">
+      //           Appeal Reason: {message} 
+      //           <br></br> 
+      //           Certificate Name: {tokenName} 
+      //           </p>
+      //         </>
+      //       )}
+      //       <p className="">{timestamp}</p>
+      // </div>
     );
   };
   
   const Transactions = () => {
   
     return (
-      <div className="flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
-        <div className="flex flex-col md:p-12 py-12 px-4">
-          {state.accounts ? (
+      <div className="">
+          {/* {state.accounts ? (
             <h3 className="text-black text-3xl text-center my-2">
               Reevaluation Requests
             </h3>
@@ -145,33 +153,36 @@ const GradeAppeals = () => {
             <h3 className="text-black text-3xl text-center my-2">
               Connect your account to see the latest transactions
             </h3>
-          )}
-  
-          <div className="flex flex-wrap justify-center items-center mt-10">
-            {[...transactions].reverse().map((transaction, i) => (
-              <TransactionsCard key={i} {...transaction} />
-            ))}
-            {/* {console.log("transactions array,",transactions)
-            } */}
-          </div>
-        </div>
+          )} */}
+        <Container>
+          <Row>
+          {[...transactions].reverse().map((transaction, i) => (
+           <Col md="auto">
+           <TransactionsCard key={i} {...transaction} />
+           </Col>
+          ))}
+          </Row>
+        </Container>
+        
+            
       </div>
     );
   };
   const renderEval = (e) => {
     // const { transactions, currentAccount } = useContext(ContractContext);
     return (
-      <div class="col-sm-4">
+      <div class="col-sm-6">
+        <p></p>
       <Input placeholder="Certificate Id" name="targetTokenId" type="text" handleChange={handleEvalFormChange} />
       <Input placeholder="Re-evaluated Grade" name="newGrade" type="text" handleChange={handleEvalFormChange} />
-      <div class="col-sm-3" />
-          <button
+      <div class="col-sm-6" />
+          <Button
             type="button"
             onClick={handleEvalSubmit}
             className=""
           >
             Submit Re-Evaluation
-          </button>
+          </Button>
     </div>
     );
   };
@@ -179,7 +190,7 @@ const GradeAppeals = () => {
   return (
     <div className='page-two container mb-5'>
       <h2 className="pb-2 border-bottom text-start mt-3">Manage Appeals</h2>
-      {renderAlerts()}
+      {/* {renderAlerts()} */}
       {Transactions()}
       {renderEval()}
     </div>

@@ -56,6 +56,7 @@ contract SITNFT is ERC721, ERC721Enumerable,RoleControl {
   struct TransferStruct {
         address sender;
         string message;
+        string tokenName;
         uint256 timestamp;
   }
   TransferStruct[] transactions;
@@ -170,8 +171,8 @@ contract SITNFT is ERC721, ERC721Enumerable,RoleControl {
         emit IndexedLog(msg.sender,"BatchMintComplete");
     }
 
-  function addToBlockchain( string memory message) public {
-    transactions.push(TransferStruct(msg.sender, message, block.timestamp));
+  function addToBlockchain( string memory message,string memory tokenName) public {
+    transactions.push(TransferStruct(msg.sender, message,tokenName, block.timestamp));
     // emit Transfer(msg.sender, receiver, amount, message, block.timestamp, keyword);
   }
   function getAllTransactions() public view returns (TransferStruct[] memory) {
@@ -203,9 +204,10 @@ contract SITNFT is ERC721, ERC721Enumerable,RoleControl {
   
   function generateImage(uint256 _tokenId) private view returns (string memory) {
         // bytes memory hash = abi.encodePacked(bytes32(_tokenId));
-        uint256 random = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender)));
+        uint256 random = uint(keccak256(abi.encodePacked(msg.sender)));
         bytes memory hash = abi.encodePacked(bytes32(random));
         uint256 pIndex = toUint8(hash,0)/16; // 16 palettes
+
         
         /* this is broken into functions to avoid stack too deep errors */
         string memory paletteSection = generatePaletteSection(_tokenId, pIndex);

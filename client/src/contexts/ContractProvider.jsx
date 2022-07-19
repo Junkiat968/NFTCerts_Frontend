@@ -291,6 +291,7 @@ export const ContractProvider = ({ children }) => {
               addressFrom: transaction.sender,
               timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
               message: transaction.message,
+              tokenName: transaction.tokenName
             //   keyword: transaction.keyword,
             //   amount: parseInt(transaction.amount._hex) / (10 ** 18)
             }));
@@ -337,7 +338,7 @@ export const ContractProvider = ({ children }) => {
         const { message,tokenName } = formData;
         const sitnftInstance = getSITNFTContract();
         console.log("SendTransaction() message&tokenName",message,tokenName)
-        const transactionHash = await sitnftInstance.addToBlockchain(message);
+        const transactionHash = await sitnftInstance.addToBlockchain(message,tokenName);
         setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
         await transactionHash.wait();
