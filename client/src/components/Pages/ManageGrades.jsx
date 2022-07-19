@@ -12,6 +12,7 @@ const ManageGrades = () => {
   const [items, setItems] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
   const [mintData, setMintData] = useState({ testTypeInput: "", trimesterInput: "" });
+  const [receipt, setReceipt] = useState([]);
 
   function handleMint(evt) {
     const value = evt.target.value;
@@ -119,13 +120,30 @@ const ManageGrades = () => {
         const result = await sitnftInstance.batchMint(
           gradeItems
         );
-        console.log(result.events);
+
+        const interval = setInterval(function () {
+          console.log("awaiting transaction confirmation...");
+          setReceipt("awaiting transaction confirmation...");
+          state.web3.eth.getTransactionReceipt(result.hash, function (err, rec) {
+            if (rec) {
+              console.log(rec);
+              if (rec.status) {
+                setReceipt("Complete");
+              }
+              if (rec == null) {
+                setReceipt("Error occured.");
+              }
+              clearInterval(interval);
+            }
+          });
+        }, 2000);
+
       } catch (err) {
         console.error(err);
         return err;
       }
     } else {
-      alert("File too big. Please limit file to 10 rows.");
+      alert("Please limit file to 10 rows.");
     }
   }
 
@@ -149,6 +167,7 @@ const ManageGrades = () => {
               <Tab.Pane eventKey="ICT1001">
                 <div>
                   <div className="p-3 w-100 d-inline-block">
+                    {receipt}
                     {uploadedFileName ? renderButtons() : null}
                     <input
                       id="input-file"
@@ -170,6 +189,7 @@ const ManageGrades = () => {
               <Tab.Pane eventKey="ICT2102">
                 <div>
                   <div className="p-3 w-100 d-inline-block">
+                    {receipt}
                     {uploadedFileName ? renderButtons() : null}
                     <input
                       id="input-file"
