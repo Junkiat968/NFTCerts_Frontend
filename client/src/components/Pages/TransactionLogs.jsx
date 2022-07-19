@@ -20,7 +20,7 @@ const TransactionLogs = () => {
         const events = await sitnftInstance.queryFilter(eventFilter);
 
         setItems(events);
-        console.log(events);
+        // console.log(events);
     }
     // call the function
     fetchData()
@@ -45,7 +45,7 @@ const TransactionLogs = () => {
             <tr>
               <th> Transaction </th>
               <th> Details </th>
-              {/* <th> Tokens transacted </th> */}
+              <th> Etherscan </th>
             </tr>
           </thead>
 
@@ -54,6 +54,7 @@ const TransactionLogs = () => {
               <tr key={index}>
                 <td>{d.transactionHash}</td>
                 <td>{d.args.message}</td>
+                <td><a href={`https://rinkeby.etherscan.io/tx/${d.transactionHash}`} target="_blank" rel="noreferrer">View in Etherscan</a></td>
               </tr>
             ))}
           </tbody>
