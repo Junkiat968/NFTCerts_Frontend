@@ -20,8 +20,8 @@ const MyGrades = () => {
   const [modulesArray, setModulesArray] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
   const [emptyGrades, setEmptyGrades] = useState(false);
-  const [appealStruct, setappealStruct] = useState({ reason: "" , tokenId: ""});
-  
+  const [appealStruct, setappealStruct] = useState({ reason: "", tokenId: "" });
+
   const changeSelected = (e) => {
     try {
       setSelectedModule(e.value);
@@ -76,14 +76,14 @@ const MyGrades = () => {
     // console.log("handlealertsubmit message :",message)
     // console.log("handlealertsubmit formdata :",formData)
 
-  
+
     e.preventDefault();
-  
-    if ( !message){
+
+    if (!message) {
       alert("Please select reason for grade appeal.")
       return;
-    } 
-  
+    }
+
     sendTransaction();
   };
 
@@ -140,6 +140,9 @@ const MyGrades = () => {
     return (
       <div className="text-center mt-5">
         <h2>Loading data...</h2>
+        <div className="spinner-border text-secondary align-middle mx-2" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
         <small>Please wait..</small>
       </div>
     );
@@ -184,9 +187,9 @@ const MyGrades = () => {
         handleAlertFormChange={handleAlertFormChange}
         handleAlertSubmit={handleAlertSubmit}
         Input={Input}
-        // handleOpen = {handleOpen}
-        // handleClose = {handleClose}
-        // open = {open}
+      // handleOpen = {handleOpen}
+      // handleClose = {handleClose}
+      // open = {open}
       />
     </div>
   );
@@ -242,32 +245,32 @@ function NFTImage({
                               <Card.Body>
                                 <Card.Title>{val.name}</Card.Title>
                                 <div class="col-sm-12">
-                              {/* <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleAlertFormChange} />
+                                  {/* <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleAlertFormChange} />
                               <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleAlertFormChange} />
                               <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleAlertFormChange} /> */}
-                              {/* <Input placeholder="Enter reason for Grade Appeal and Certificate id" name="message" type="text" handleChange={handleAlertFormChange} /> */}
-                              <Form.Group controlId={val.name}>
-                                <Form.Label>Select Norm Type</Form.Label>
-                                <Form.Control
-                                  as="select"
-                                  
-                                  // value={type}
-                                  // onChange={e => {
-                                  //   console.log("e.target.value", e.target.value);
-                                  //   // console.log("e.target.id:",e.target.id);
-                                  //   console.log("val.name",val.name)
-                                  //   setappealStruct({reason:e.target.value,tokenId:val.name})
-                                  //   console.log(appealStruct)
-                                  // }}
-                                  onChange={handleAlertFormChange}
-                                >
-                                  <option value="">Select Reason</option>
-                                  <option value="Re-Grade">Re-Grade</option>
-                                  <option value="Incorrect Certificate">Incorrect Certificate</option>
-                                  {/* <option value="3val">3</option> */}
-                                </Form.Control>
-                                </Form.Group>
-                              
+                                  {/* <Input placeholder="Enter reason for Grade Appeal and Certificate id" name="message" type="text" handleChange={handleAlertFormChange} /> */}
+                                  <Form.Group controlId={val.name}>
+                                    <Form.Label>Select Norm Type</Form.Label>
+                                    <Form.Control
+                                      as="select"
+
+                                      // value={type}
+                                      // onChange={e => {
+                                      //   console.log("e.target.value", e.target.value);
+                                      //   // console.log("e.target.id:",e.target.id);
+                                      //   console.log("val.name",val.name)
+                                      //   setappealStruct({reason:e.target.value,tokenId:val.name})
+                                      //   console.log(appealStruct)
+                                      // }}
+                                      onChange={handleAlertFormChange}
+                                    >
+                                      <option value="">Select Reason</option>
+                                      <option value="Re-Grade">Re-Grade</option>
+                                      <option value="Incorrect Certificate">Incorrect Certificate</option>
+                                      {/* <option value="3val">3</option> */}
+                                    </Form.Control>
+                                  </Form.Group>
+
                                   <Button variant="outline-danger w-100 mt-2"
                                     type="button"
                                     onClick={handleAlertSubmit}
@@ -275,8 +278,8 @@ function NFTImage({
                                   >
                                     Submit Appeal
                                   </Button>
-                              
-                            </div>
+
+                                </div>
                                 {/* controlid = formBasicSelect0...many  */}
 
                                 {/* <Button variant="outline-danger w-100 mt-2">Submit Appeal</Button> */}
@@ -296,10 +299,10 @@ function NFTImage({
                 </>
             }
 
-            
+
 
           </div>
-          
+
       }
     </div>
   );

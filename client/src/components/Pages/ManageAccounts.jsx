@@ -19,24 +19,38 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 
 const ManageAccounts = () => {
   const { state, getSITNFTContract, sitnftInstance } = useEth();
-  const [items, setItems] = useState([]);
+
+  const [studentItems, setStudentItems] = useState([]);
   const [facultyItems, setFacultyItems] = useState([]);
 
+  const [uploadedFileFaculty, setUploadedFileFaculty] = useState('');
+  const [inputFacultyFile, setInputFacultyFile] = useState('');
+  const [uploadedFileStudent, setUploadedFileStudent] = useState('');
+  const [inputStudentFile, setInputStudentFile] = useState('');
+
+  const [isAdminResult, setIsAdminResult] = useState('');
+  const [adminResultLoading, setAdminResultLoading] = useState(false);
+
+  const [isFacultyResult, setIsFacultyResult] = useState('');
+  const [facultyResultLoading, setFacultyResultLoading] = useState(false);
+  const [facultyUploadLoading, setFacultyUploadLoading] = useState(false);
+  const [facultyReceipt, setFacultyReceipt] = useState([])
+
   const [isStudentResult, setIsStudentResult] = useState('');
+  const [studentResultLoading, setStudentResultLoading] = useState(false);
+  const [studentUploadLoading, setStudentUploadLoading] = useState(false);
+  const [studentReceipt, setStudentReceipt] = useState([]);
 
   const {
-    functIsAdmin,
     makeAdmin,
     removeAdmin,
     handleChange,
-    isAdminResult,
-    functIsFaculty,
-    isFacultyResult,
     makeFaculty,
     removeFaculty,
     formAddressData
   } = useContext(ContractContext);
 
+  /** Form Handlers */
   const handleCheckAdmin = (e) => {
     const { addressInput } = formAddressData;
     e.preventDefault();
@@ -46,7 +60,6 @@ const ManageAccounts = () => {
     }
     functIsAdmin();
   };
-
   const handleCheckFaculty = (e) => {
     const { addressInput } = formAddressData;
     e.preventDefault();
@@ -56,7 +69,6 @@ const ManageAccounts = () => {
     }
     functIsFaculty();
   };
-
   const handleCheckStudent = (e) => {
     const { addressInput } = formAddressData;
     e.preventDefault();
@@ -67,40 +79,74 @@ const ManageAccounts = () => {
     functIsStudent();
   };
 
-  // Student Functions
+  /** ADD STUDENT*/
   const functAddStudents = async () => {
     const sitnftInstance = getSITNFTContract();
-    console.log(items);
     try {
       const result = await sitnftInstance.multiAddStudentAddress(
-        items,
+        studentItems,
       );
 
-      console.log(result);
-      // setStudentResult(result);
+      const interval = setInterval(function () {
+        console.log("awaiting transaction confirmation...");
+        setStudentReceipt("Awaiting transaction confirmation...");
+        setStudentUploadLoading(true);
+        state.web3.eth.getTransactionReceipt(result.hash, function (err, rec) {
+          if (rec) {
+            console.log(rec);
+            if (rec.status) {
+              setStudentReceipt("Transaction Complete.");
+              setStudentUploadLoading(false);
+            }
+            if (rec.status !== true) {
+              setStudentUploadLoading(false);
+              setStudentReceipt("Error occured.");
+            }
+            clearInterval(interval);
+          }
+        });
+      }, 2000);
+
       return result;
     } catch (err) {
       console.error(err);
-      // setStudentResult(err);
       return err;
     }
   }
 
-  // Faculty Functions
+  /** ADD FACULTY */
   const functAddFaculty = async () => {
     const sitnftInstance = getSITNFTContract();
-    console.log(items);
     var facultyArr = [];
-    for (let i = 0; i < items.length; i++) {
-      facultyArr.push(items[i].addr.toString());
+    for (let i = 0; i < facultyItems.length; i++) {
+      facultyArr.push(facultyItems[i].addr.toString());
     }
-    console.log(facultyArr);
-    console.log(typeof facultyArr[0])
 
     try {
       const result = await sitnftInstance.multiAddFaculty(
         facultyArr
       );
+
+      const interval = setInterval(function () {
+        console.log("awaiting transaction confirmation...");
+        setFacultyReceipt("Awaiting transaction confirmation...");
+        setFacultyUploadLoading(true);
+        state.web3.eth.getTransactionReceipt(result.hash, function (err, rec) {
+          if (rec) {
+            console.log(rec);
+            if (rec.status) {
+              setFacultyReceipt("Transaction Complete.");
+              setFacultyUploadLoading(false);
+            }
+            if (rec.status !== true) {
+              setFacultyUploadLoading(false);
+              setFacultyReceipt("Error occured.");
+            }
+            clearInterval(interval);
+          }
+        });
+      }, 2000);
+
       console.log(result);
       return result;
     } catch (err) {
@@ -109,12 +155,49 @@ const ManageAccounts = () => {
     }
   }
 
-  // Faculty Functions
+  /** FUNCTION CHECK ADMIN */
+  const functIsAdmin = async () => {
+    try {
+      setAdminResultLoading(true);
+      const { addressInput } = formAddressData;
+      const sitnftInstance = getSITNFTContract();
+      console.log(sitnftInstance);
+      const result = await sitnftInstance.isAdmin((addressInput).toString());
+      setIsAdminResult(result);
+      setAdminResultLoading(false);
+      return result;
+    } catch (err) {
+      setIsAdminResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+
+  /** FUNCTION CHECK FACULTY */
+  const functIsFaculty = async () => {
+    try {
+      setFacultyResultLoading(true);
+      const { addressInput } = formAddressData;
+      const sitnftInstance = getSITNFTContract();
+      const result = await sitnftInstance.isFaculty((addressInput).toString());
+      setIsFacultyResult(result);
+      setFacultyResultLoading(false);
+      return result;
+    } catch (err) {
+      setIsFacultyResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+
+  /** FUNCTION CHECK STUDENT */
   const functIsStudent = async () => {
     try {
+      setStudentResultLoading(true);
       const { addressInput } = formAddressData;
       const result = await sitnftInstance.isStudent((addressInput).toString());
       setIsStudentResult(result);
+      setStudentResultLoading(false);
       return result;
     } catch (err) {
       setIsStudentResult(err);
@@ -123,6 +206,14 @@ const ManageAccounts = () => {
     }
   }
 
+  /** FACULTY UPLOAD */
+  const handleFacultyUpload = () => {
+    inputFacultyFile?.click();
+  };
+  const handleDisplayFacultyFileDetails = () => {
+    inputFacultyFile?.files && setUploadedFileFaculty(inputFacultyFile.files[0].name);
+    readFacultyExcel(inputFacultyFile.files[0])
+  };
   const readFacultyExcel = (file) => {
     const promise = new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -145,7 +236,15 @@ const ManageAccounts = () => {
     });
   };
 
-  const readExcel = (file) => {
+  /** STUDENT UPLOAD */
+  const handleStudentUpload = () => {
+    inputStudentFile?.click();
+  };
+  const handleDisplayStudentFileDetails = () => {
+    inputStudentFile?.files && setUploadedFileStudent(inputStudentFile.files[0].name);
+    readStudentExcel(inputStudentFile.files[0])
+  };
+  const readStudentExcel = (file) => {
     const promise = new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.readAsArrayBuffer(file);
@@ -167,60 +266,35 @@ const ManageAccounts = () => {
     });
 
     promise.then((d) => {
-      setItems(d);
+      setStudentItems(d);
     });
   };
 
-  const [uploadedFileFaculty, setUploadedFileFaculty] = useState('');
-  const [inputFacultyFile, setInputFacultyFile] = useState('');
-  const handleFacultyUpload = () => {
-    inputFacultyFile?.click();
-  };
-  const handleDisplayFacultyFileDetails = () => {
-    inputFacultyFile?.files && setUploadedFileFaculty(inputFacultyFile.files[0].name);
-    readFacultyExcel(inputFacultyFile.files[0])
-  };
-
-  const [uploadedFileName, setUploadedFileName] = useState('');
-  const [inputFile, setInputFile] = useState('');
-  useEffect(() => {
-    setInputFile(document.getElementById("input-file"));
-    setInputFacultyFile(document.getElementById("input-file-Faculty"));
-  }, []);
-  const handleUpload = () => {
-    inputFile?.click();
-  };
-  const handleDisplayFileDetails = () => {
-    inputFile?.files && setUploadedFileName(inputFile.files[0].name);
-    readExcel(inputFile.files[0])
-  };
-
+  /** CHECK ADMIN */
   const renderIsAdmin = (e) => {
     return (
       <>
-        <div className="row g-3">
-          <div className="col-sm-6 ">
-            <Input placeholder="Address e.g. 0x........." name="addressInput" type="text" handleChange={handleChange} />
+        <div className="row g-3 mt-1">
+          <div className="col-sm-6 w-100 d-inline-block">
+            <Input className="m-2" placeholder="Address e.g. 0x........." name="addressInput" type="text" handleChange={handleChange} />
           </div>
-          <div className="col-sm-6">
-            <div className="row col-sm-12 text-center">
-              <div className="col-sm-6 text-center">
-                <button className="btn btn-block btn-primary mt-3" type="button" onClick={handleCheckAdmin}>Check Admin Status</button>
-              </div>
-              <div className="col-sm-3 text-center">
-                <button className="btn btn-block btn-outline-secondary mt-3" type="button" onClick={makeAdmin}>Make Admin</button>
-              </div>
-              <div className="col-sm-3 text-center">
-                <button className="btn btn-block btn-outline-danger mt-3" type="button" onClick={removeAdmin}>Remove Admin</button>
-              </div>
-            </div>
-            <div className="my-3">
+          <div className="col-sm-6 w-100 d-inline-block mt-1 text-center">
+            <button className="btn btn-block btn-primary m-2" type="button" onClick={handleCheckAdmin}>Check Admin Status</button>
+            <button className="btn btn-block btn-outline-secondary m-2" type="button" onClick={makeAdmin}>Make Admin</button>
+            <button className="btn btn-block btn-outline-danger m-2" type="button" onClick={removeAdmin}>Remove Admin</button>
+            <div className="my-2 text-start">
               Result:
-              <div className="">
-                <small>
-                  {isAdminResult.toString()}
-                </small>
-              </div>
+              {adminResultLoading ?
+                <>
+                  <div className="spinner-border text-secondary align-middle mx-2" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </>
+                : null
+              }
+              <small className="ms-2">
+                {isAdminResult.toString()}
+              </small>
             </div>
           </div>
         </div>
@@ -228,32 +302,31 @@ const ManageAccounts = () => {
     )
   };
 
+  /** CHECK FACULTY */
   const renderIsFaculty = (e) => {
     return (
       <>
-        <div className="row g-3">
-          <div className="col-sm-6 ">
+        <div className="row g-3 mt-1">
+          <div className="col-sm-6 w-100 d-inline-block">
             <Input placeholder="Address e.g. 0x........." name="addressInput" type="text" handleChange={handleChange} />
           </div>
-          <div className="col-sm-6">
-            <div className="row col-sm-12 text-center">
-              <div className="col-sm-6 text-center">
-                <button className="btn btn-block btn-primary mt-3" type="button" onClick={handleCheckFaculty}>Check Faculty Status</button>
-              </div>
-              <div className="col-sm-3 text-center">
-                <button className="btn btn-block btn-outline-secondary mt-3" type="button" onClick={makeFaculty}>Make Faculty</button>
-              </div>
-              <div className="col-sm-3 text-center">
-                <button className="btn btn-block btn-outline-danger mt-3" type="button" onClick={removeFaculty}>Remove Faculty</button>
-              </div>
-            </div>
-            <div className="my-3">
+          <div className="col-sm-6 w-100 d-inline-block mt-1 text-center">
+            <button className="btn btn-block btn-primary m-2" type="button" onClick={handleCheckFaculty}>Check Faculty Status</button>
+            <button className="btn btn-block btn-outline-secondary m-2" type="button" onClick={makeFaculty}>Make Faculty</button>
+            <button className="btn btn-block btn-outline-danger m-2" type="button" onClick={removeFaculty}>Remove Faculty</button>
+            <div className="my-2 text-start">
               Result:
-              <div className="">
-                <small>
-                  {isFacultyResult.toString()}
-                </small>
-              </div>
+              {facultyResultLoading ?
+                <>
+                  <div className="spinner-border text-secondary align-middle mx-2" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </>
+                : null
+              }
+              <small className="ms-2">
+                {isFacultyResult.toString()}
+              </small>
             </div>
           </div>
         </div>
@@ -261,33 +334,37 @@ const ManageAccounts = () => {
     )
   };
 
+  /** CHECK STUDENT */
   const renderIsStudent = (e) => {
     return (
       <>
-        <div className="row g-3">
-          <p className="border-bottom mt-3">Check Student</p>
-          <div className="col-sm-6 mt-0">
+        <div className="row g-3 mt-1">
+          <div className="col-sm-6 w-100 d-inline-block">
             <Input placeholder="Address e.g. 0x........." name="addressInput" type="text" handleChange={handleChange} />
           </div>
-          <div className="col-sm-6">
-            <div className="row col-sm-12 text-center">
-              <div className="col-sm-6 text-center">
-                <button className="btn btn-block btn-primary mt-3" type="button" onClick={handleCheckStudent}>Check Student</button>
-              </div>
-            </div>
-            <div className="my-3">
+          <div className="col-sm-6 w-100 d-inline-block mt-1 text-center">
+            <button className="btn btn-block btn-primary m-2" type="button" onClick={handleCheckStudent}>Check Student</button>
+            <div className="my-2 text-start">
               Result:
-              <div className="">
-                <small>
-                  {isStudentResult.toString()}
-                </small>
-              </div>
+              {studentResultLoading ?
+                <div className="spinner-border text-secondary align-middle mx-2" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div> : null
+              }
+              <small className="ms-2">
+                {isStudentResult.toString()}
+              </small>
             </div>
           </div>
         </div>
       </>
     )
   };
+
+  useEffect(() => {
+    setInputStudentFile(document.getElementById("input-file-Student"));
+    setInputFacultyFile(document.getElementById("input-file-Faculty"));
+  }, []);
 
   return (
     <div className='container' >
@@ -314,8 +391,18 @@ const ManageAccounts = () => {
               </Tab.Pane>
               <Tab.Pane eventKey="Faculty">
                 {renderIsFaculty()}
-                <hr />
-                <div className="p-3 w-100 d-inline-block">
+                <p className="border-bottom mt-3 fw-bold">Upload Faculty:</p>
+                <div className=" w-100 d-inline-block">
+                  <div className="float-start align-middle">
+                    {facultyUploadLoading ?
+                      <div className="spinner-border text-secondary align-middle me-2" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      :
+                      null
+                    }
+                    {facultyReceipt}
+                  </div>
                   <input
                     id="input-file-Faculty"
                     onChange={handleDisplayFacultyFileDetails}
@@ -353,22 +440,32 @@ const ManageAccounts = () => {
               </Tab.Pane>
               <Tab.Pane eventKey="Students">
                 {renderIsStudent()}
-                <hr />
-                <div className="p-3 w-100 d-inline-block">
+                <p className="border-bottom mt-3 fw-bold">Upload Students:</p>
+                <div className="w-100 d-inline-block">
+                  <div className="float-start align-middle">
+                    {studentUploadLoading ?
+                      <div className="spinner-border text-secondary align-middle me-2" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      :
+                      null
+                    }
+                    {studentReceipt}
+                  </div>
                   <input
-                    id="input-file"
-                    onChange={handleDisplayFileDetails}
+                    id="input-file-Student"
+                    onChange={handleDisplayStudentFileDetails}
                     className="d-none"
                     type="file"
                   />
                   <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
                     onClick={functAddStudents}>Upload
                   </button>
-                  <button onClick={handleUpload}
-                    className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
+                  <button onClick={handleStudentUpload}
+                    className={`float-end btn btn-outline-${uploadedFileStudent ? "success" : "primary"
                       }`}
                   >
-                    {uploadedFileName ? uploadedFileName : 'Select excel'}
+                    {uploadedFileStudent ? uploadedFileStudent : 'Select excel'}
                   </button>
                 </div>
                 <div>
@@ -380,7 +477,7 @@ const ManageAccounts = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {items.map((d) => (
+                      {studentItems.map((d) => (
                         <tr key={d.id}>
                           <td>{d.id}</td>
                           <td>{d.addr}</td>
