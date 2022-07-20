@@ -47,6 +47,12 @@ module.exports = {
       host: "127.0.0.1",     // Localhost (default: none)
       port: 8545,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
+      // gas: 2000000,   // <--- Twice as much
+      // gasPrice: 10000000000,
+      // from: 
+          //   gas: 8500000,           // Gas sent with each transaction (default: ~6700000)
+    //   gasPrice: 20000000000,  // 20 gwei (in wei) (default: 100 gwei)
+    //   from: <address>,        // Account to send transactions from (default: accounts[0])
     },
     //
     // An additional network, but with some advanced options…
@@ -98,7 +104,7 @@ module.exports = {
         // evmVersion: 'byzantium', // Default: "petersburg"
         optimizer: {
           enabled: true,
-          runs: 1500
+          runs: 1400
         }
       }
     }
