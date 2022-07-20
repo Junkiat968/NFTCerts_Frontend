@@ -14,6 +14,8 @@ const MyGrades = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [totalTokens, setTotalTokens] = useState(0);
+  const [myNoOfTokens, setMyNoOfTokens] = useState(0);
+
   const [temptArray, setTemptArray] = useState([]);
   const [gradeArray, setGradeArray] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
@@ -76,7 +78,6 @@ const MyGrades = () => {
     // console.log("handlealertsubmit message :",message)
     // console.log("handlealertsubmit formdata :",formData)
 
-
     e.preventDefault();
 
     if (!message) {
@@ -93,6 +94,7 @@ const MyGrades = () => {
       setPageLoading(true);
       try {
         const noOfTokens = await sitnftInstance.balanceOf(state.accounts[0]);
+        setMyNoOfTokens(noOfTokens.toNumber());
         if (noOfTokens.toNumber() === 0) {
           setEmptyGrades(true);
         }
@@ -136,14 +138,16 @@ const MyGrades = () => {
   }, [state.accounts[0]]);
 
   /** RENDER LOADING */
-  const renderLoading = (e) => {
+  const renderLoading = (myNoOfTokens) => {
     return (
       <div className="text-center mt-5">
         <h2>Loading data...</h2>
-        <div className="spinner-border text-secondary align-middle mx-2" role="status">
+        <div>Loading {myNoOfTokens} tokens..
+          <small className="mx-1">Please wait...</small>
+        </div>
+        <div className="spinner-border text-secondary align-middle mt-3" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
-        <small>Please wait..</small>
       </div>
     );
   };
@@ -187,6 +191,7 @@ const MyGrades = () => {
         handleAlertFormChange={handleAlertFormChange}
         handleAlertSubmit={handleAlertSubmit}
         Input={Input}
+        myNoOfTokens={myNoOfTokens}
       // handleOpen = {handleOpen}
       // handleClose = {handleClose}
       // open = {open}
@@ -208,7 +213,8 @@ function NFTImage({
   setappealStruct,
   handleAlertFormChange,
   handleAlertSubmit,
-  Input
+  Input,
+  myNoOfTokens
   // type,
   // setType
   // handleOpen,
@@ -224,7 +230,7 @@ function NFTImage({
     <div className='container'>
       {
         pageLoading ?
-          renderLoading() :
+          renderLoading(myNoOfTokens) :
           <div className="">
             {
               emptyGrades ?
@@ -244,7 +250,7 @@ function NFTImage({
                               <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.img}`} />
                               <Card.Body>
                                 <Card.Title>{val.name}</Card.Title>
-                                <div class="col-sm-12">
+                                <div className="col-sm-12">
                                   {/* <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleAlertFormChange} />
                               <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleAlertFormChange} />
                               <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleAlertFormChange} /> */}

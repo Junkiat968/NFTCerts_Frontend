@@ -51,11 +51,6 @@ const ManageAccounts = () => {
   const [studentUploadLoading, setStudentUploadLoading] = useState(false);
   const [studentReceipt, setStudentReceipt] = useState([]);
 
-  const {
-    // makeFaculty,
-    // removeFaculty,
-  } = useContext(ContractContext);
-
   /** Form Handlers */
   const handleChange = (e, name) => {
     setFormAddressData((prevState) => ({ ...prevState, [name]: e.target.value }));
