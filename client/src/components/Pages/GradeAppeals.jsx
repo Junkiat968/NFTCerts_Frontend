@@ -16,12 +16,15 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
     className="form-control mb-1"
   />
 );
+// const EvalMapping =  {
+
+// }
 
 
 
 const GradeAppeals = () => {
   const { state, sitnftInstance } = useEth();
-  console.log(sitnftInstance);
+  // console.log(sitnftInstance);
 
   const [isStudentResult, setIsStudentResult] = useState('');
 
@@ -54,7 +57,8 @@ const GradeAppeals = () => {
     handleAlertFormChange,
     handleEvalFormChange,
     setNFTGrade,
-    evalData
+    evalData,
+    EvalMapping
   } = useContext(ContractContext);
   const AlertInput = ({ placeholder, name, type, value, handleAlertFormChange }) => (
     <input
@@ -66,15 +70,7 @@ const GradeAppeals = () => {
       className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
     />
   );
-  const handleAlertSubmit = (e) => {
-    const { message } = formData;
-  
-    e.preventDefault();
-  
-    if ( !message) return;
-  
-    sendTransaction();
-  };
+
   const handleEvalSubmit = (e) => {
     const { targetTokenId,newGrade } = evalData;
   
@@ -106,7 +102,8 @@ const GradeAppeals = () => {
   //    </div>
   //   );
   // };
-  const TransactionsCard = ({ addressFrom, timestamp, message,tokenName}) => {
+  const TransactionsCard = ({ addressFrom, timestamp, message,tokenName,reviewed}) => {
+    
     return (
       <Card style={{ width: '20rem' }}>
       <Card.Body>
@@ -156,9 +153,19 @@ const GradeAppeals = () => {
           )} */}
         <Container>
           <Row>
-          {[...transactions].reverse().map((transaction, i) => (
+          {[...transactions].map((transaction, i) => (
+            
            <Col md="auto">
-           <TransactionsCard key={i} {...transaction} />
+
+          {transaction.reviewed ? (<div></div>) : (<TransactionsCard key={i} {...transaction} />)}
+          {/* <TransactionsCard key={i} {...transaction} /> */}
+ 
+
+           <div hidden>
+           {EvalMapping[transaction.tokenName.slice(-1)] = i}
+           </div>
+           {console.log("EvalMap = ",EvalMapping)}
+           
            </Col>
           ))}
           </Row>

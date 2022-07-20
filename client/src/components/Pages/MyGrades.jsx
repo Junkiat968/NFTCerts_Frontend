@@ -58,19 +58,20 @@ const MyGrades = () => {
     handleAlertFormChange,
     handleEvalFormChange,
     setNFTGrade,
-    evalData
+    evalData,
+    EvalMapping
   } = useContext(ContractContext);
   const { state, sitnftInstance } = useEth();
-  const AlertInput = ({ placeholder, name, type, value, handleAlertFormChange }) => (
-    <input
-      placeholder={placeholder}
-      type={type}
-      step="0.0001"
-      value={value}
-      onChange={(e) => handleAlertFormChange(e, name)}
-      className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
-    />
-  );
+  // const AlertInput = ({ placeholder, name, type, value, handleAlertFormChange }) => (
+  //   <input
+  //     placeholder={placeholder}
+  //     type={type}
+  //     step="0.0001"
+  //     value={value}
+  //     onChange={(e) => handleAlertFormChange(e, name)}
+  //     className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+  //   />
+  // );
   const handleAlertSubmit = (e) => {
     const { message } = formData;
     // console.log("handlealertsubmit message :",message)
@@ -119,7 +120,8 @@ const MyGrades = () => {
 
           // Decode Image
           const currentImg = currentJson.image.split(",");
-          gradeArray.push({ module: currentJson.attributes[0].value, img: currentImg[1], name: currentJson.name });
+          gradeArray.push({ module: currentJson.attributes[0].value, img: currentImg[1], name: currentJson.name, faculty:currentJson.attributes[2].value });
+          // console.log("CurrentJSON:",currentJson);
         }
         console.log(modulesArray.length);
 
@@ -242,12 +244,13 @@ function NFTImage({
                               <Card.Body>
                                 <Card.Title>{val.name}</Card.Title>
                                 <div class="col-sm-12">
+                                  
                               {/* <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleAlertFormChange} />
                               <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleAlertFormChange} />
                               <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleAlertFormChange} /> */}
                               {/* <Input placeholder="Enter reason for Grade Appeal and Certificate id" name="message" type="text" handleChange={handleAlertFormChange} /> */}
                               <Form.Group controlId={val.name}>
-                                <Form.Label>Select Norm Type</Form.Label>
+                                {/* <Form.Label>Select Norm Type</Form.Label> */}
                                 <Form.Control
                                   as="select"
                                   
@@ -259,7 +262,7 @@ function NFTImage({
                                   //   setappealStruct({reason:e.target.value,tokenId:val.name})
                                   //   console.log(appealStruct)
                                   // }}
-                                  onChange={handleAlertFormChange}
+                                  onChange={(e) => handleAlertFormChange(e, val.faculty)}
                                 >
                                   <option value="">Select Reason</option>
                                   <option value="Re-Grade">Re-Grade</option>
