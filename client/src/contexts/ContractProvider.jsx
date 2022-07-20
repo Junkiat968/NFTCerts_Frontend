@@ -31,14 +31,18 @@ export const ContractProvider = ({ children }) => {
     // Module Constants
     const [modules, setModules] = useState([]);
     // Alert Constants
+
     const [formData, setAlertformData] = useState({  message: "" , tokenName:"", faculty:""});
+
     const [currentAccount, setCurrentAccount] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [transactionCount, setTransactionCount] = useState(localStorage.getItem("transactionCount"));
     const [transactions, setTransactions] = useState([]);
     // Reevaluation Constants
+
     const [evalData, setEvalformData] = useState({  targetTokenId: "" , newGrade: ""});
     const EvalMapping =  useState({});
+
     /** Form Handling */
     const handleChange = (e, name) => {
         setFormAddressData((prevState) => ({ ...prevState, [name]: e.target.value }));
@@ -54,6 +58,7 @@ export const ContractProvider = ({ children }) => {
         setEvalformData((prevState) => ({ ...prevState, [name]: e.target.value,position:position }));
         
       };
+
     function handleMint(evt) {
         const value = evt.target.value;
         setMintData({
@@ -141,7 +146,8 @@ export const ContractProvider = ({ children }) => {
     const makeMultiFaculty = async (facultyArr) => {
         facultyArr.map((addr) => {
             formAddressData.addressInput = addr.addr;
-            makeFaculty()})
+            makeFaculty()
+        })
     }
     const removeFaculty = async () => {
         const { addressInput } = formAddressData;
@@ -306,6 +312,7 @@ export const ContractProvider = ({ children }) => {
             //     }
             // })
             const structuredTransactions = availableTransactions.map((transaction) => ({
+
             //   addressTo: transaction.receiver,
               addressFrom: transaction.sender,
               timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
@@ -316,16 +323,16 @@ export const ContractProvider = ({ children }) => {
             //   amount: parseInt(transaction.amount._hex) / (10 ** 18)
             }));
 
-    
             console.log("All Appeal TX:",structuredTransactions);
             setTransactions(structuredTransactions);
 
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
-      const checkIfWalletIsConnect = async () => {
+    };
+    const checkIfWalletIsConnect = async () => {
         try {
+
           if (!ethereum) return alert("Please install MetaMask.");
     
           const accounts = await ethereum.request({ method: "eth_accounts" });
@@ -336,16 +343,16 @@ export const ContractProvider = ({ children }) => {
           } else {
             console.log("No accounts found");
           }
+
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
-//     const checkIfTransactionsExists = async () => {
-//     try {
+    };
+    //     const checkIfTransactionsExists = async () => {
+    //     try {
 
-//         const sitnftInstance = getSITNFTContract();
-//         // const currentTransactionCount = await sitnftInstance.getTransactionCount();
-
+    //         const sitnftInstance = getSITNFTContract();
+    //         // const currentTransactionCount = await sitnftInstance.getTransactionCount();
 //         // window.localStorage.setItem("transactionCount", currentTransactionCount);
       
 //     } catch (error) {
