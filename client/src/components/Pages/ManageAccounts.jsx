@@ -19,38 +19,47 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 
 const ManageAccounts = () => {
   const { state, getSITNFTContract, sitnftInstance } = useEth();
+  const [formAddressData, setFormAddressData] = useState({ addressInput: "" });
 
-  const [studentItems, setStudentItems] = useState([]);
-  const [facultyItems, setFacultyItems] = useState([]);
-
-  const [uploadedFileFaculty, setUploadedFileFaculty] = useState('');
-  const [inputFacultyFile, setInputFacultyFile] = useState('');
-  const [uploadedFileStudent, setUploadedFileStudent] = useState('');
-  const [inputStudentFile, setInputStudentFile] = useState('');
-
+  /** ROLE CHECKING VARIABLES */
   const [isAdminResult, setIsAdminResult] = useState('');
   const [adminResultLoading, setAdminResultLoading] = useState(false);
-
   const [isFacultyResult, setIsFacultyResult] = useState('');
   const [facultyResultLoading, setFacultyResultLoading] = useState(false);
-  const [facultyUploadLoading, setFacultyUploadLoading] = useState(false);
-  const [facultyReceipt, setFacultyReceipt] = useState([])
-
   const [isStudentResult, setIsStudentResult] = useState('');
   const [studentResultLoading, setStudentResultLoading] = useState(false);
+
+  /** MAKE & REMOVE ADMIN */
+  const [makeRemoveAdminLoading, setMakeRemoveAdminLoading] = useState(false);
+  const [makeRemoveAdminReceipt, setMakeRemoveAdminReceipt] = useState([]);
+
+  /** MAKE & REMOVE FACULTY */
+  const [makeRemoveFacultyLoading, setMakeRemoveFacultyLoading] = useState(false);
+  const [makeRemoveFacultyReceipt, setMakeRemoveFacultyReceipt] = useState([]);
+
+  /** FACULTY UPLOAD VARIABLES */
+  const [facultyItems, setFacultyItems] = useState([]);
+  const [uploadedFileFaculty, setUploadedFileFaculty] = useState('');
+  const [inputFacultyFile, setInputFacultyFile] = useState('');
+  const [facultyUploadLoading, setFacultyUploadLoading] = useState(false);
+  const [facultyReceipt, setFacultyReceipt] = useState([]);
+
+  /** STUDENT CHECKING VARIABLES */
+  const [studentItems, setStudentItems] = useState([]);
+  const [uploadedFileStudent, setUploadedFileStudent] = useState('');
+  const [inputStudentFile, setInputStudentFile] = useState('');
   const [studentUploadLoading, setStudentUploadLoading] = useState(false);
   const [studentReceipt, setStudentReceipt] = useState([]);
 
   const {
-    makeAdmin,
-    removeAdmin,
-    handleChange,
-    makeFaculty,
-    removeFaculty,
-    formAddressData
+    // makeFaculty,
+    // removeFaculty,
   } = useContext(ContractContext);
 
   /** Form Handlers */
+  const handleChange = (e, name) => {
+    setFormAddressData((prevState) => ({ ...prevState, [name]: e.target.value }));
+  };
   const handleCheckAdmin = (e) => {
     const { addressInput } = formAddressData;
     e.preventDefault();
@@ -78,6 +87,134 @@ const ManageAccounts = () => {
     }
     functIsStudent();
   };
+
+  /** MAKE & REMOVE ADMIN */
+  const makeAdmin = async () => {
+    const { addressInput } = formAddressData;
+    try {
+      const result = await sitnftInstance.addAdmin((addressInput).toString());
+
+      const interval = setInterval(function () {
+        console.log("awaiting transaction confirmation...");
+        setMakeRemoveAdminReceipt("Awaiting transaction confirmation...");
+        setMakeRemoveAdminLoading(true);
+        state.web3.eth.getTransactionReceipt(result.hash, function (err, rec) {
+          if (rec) {
+            console.log(rec);
+            if (rec.status) {
+              functIsAdmin();
+              setMakeRemoveAdminReceipt("Transaction Complete.");
+              setMakeRemoveAdminLoading(false);
+            }
+            if (rec.status !== true) {
+              setMakeRemoveAdminLoading(false);
+              setMakeRemoveAdminReceipt("Error occured.");
+            }
+            clearInterval(interval);
+          }
+        });
+      }, 2000);
+    } catch (err) {
+      setIsAdminResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+  const removeAdmin = async () => {
+    const { addressInput } = formAddressData;
+    try {
+      const result = await sitnftInstance.removeAdmin((addressInput).toString());
+
+      const interval = setInterval(function () {
+        console.log("awaiting transaction confirmation...");
+        setMakeRemoveAdminReceipt("Awaiting transaction confirmation...");
+        setMakeRemoveAdminLoading(true);
+        state.web3.eth.getTransactionReceipt(result.hash, function (err, rec) {
+          if (rec) {
+            console.log(rec);
+            if (rec.status) {
+              functIsAdmin();
+              setMakeRemoveAdminReceipt("Transaction Complete.");
+              setMakeRemoveAdminLoading(false);
+            }
+            if (rec.status !== true) {
+              setMakeRemoveAdminLoading(false);
+              setMakeRemoveAdminReceipt("Error occured.");
+            }
+            clearInterval(interval);
+          }
+        });
+      }, 2000);
+    } catch (err) {
+      setIsAdminResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+
+  /** MAKE & REMOVE FACULTY */
+  const makeFaculty = async () => {
+    const { addressInput } = formAddressData;
+    try {
+      const result = await sitnftInstance.addFaculty((addressInput).toString());
+
+      const interval = setInterval(function () {
+        console.log("awaiting transaction confirmation...");
+        setMakeRemoveFacultyReceipt("Awaiting transaction confirmation...");
+        setMakeRemoveFacultyLoading(true);
+        state.web3.eth.getTransactionReceipt(result.hash, function (err, rec) {
+          if (rec) {
+            console.log(rec);
+            if (rec.status) {
+              functIsFaculty();
+              setMakeRemoveFacultyReceipt("Transaction Complete.");
+              setMakeRemoveFacultyLoading(false);
+            }
+            if (rec.status !== true) {
+              setMakeRemoveFacultyLoading(false);
+              setMakeRemoveFacultyReceipt("Error occured.");
+            }
+            clearInterval(interval);
+          }
+        });
+      }, 2000);
+    } catch (err) {
+      setIsFacultyResult(err);
+      console.error(err);
+      return err;
+    }
+  }
+  const removeFaculty = async () => {
+    const { addressInput } = formAddressData;
+    try {
+      const result = await sitnftInstance.removeFaculty((addressInput).toString());
+
+      const interval = setInterval(function () {
+        console.log("awaiting transaction confirmation...");
+        setMakeRemoveFacultyReceipt("Awaiting transaction confirmation...");
+        setMakeRemoveFacultyLoading(true);
+        state.web3.eth.getTransactionReceipt(result.hash, function (err, rec) {
+          if (rec) {
+            console.log(rec);
+            if (rec.status) {
+              functIsFaculty();
+              setMakeRemoveFacultyReceipt("Transaction Complete.");
+              setMakeRemoveFacultyLoading(false);
+            }
+            if (rec.status !== true) {
+              setMakeRemoveFacultyLoading(false);
+              setMakeRemoveFacultyReceipt("Error occured.");
+            }
+            clearInterval(interval);
+          }
+        });
+      }, 2000);
+    } catch (err) {
+      setIsFacultyResult(err);
+      console.error(err);
+      return err;
+    }
+  }
 
   /** ADD STUDENT*/
   const functAddStudents = async () => {
@@ -284,7 +421,7 @@ const ManageAccounts = () => {
             <button className="btn btn-block btn-outline-danger m-2" type="button" onClick={removeAdmin}>Remove Admin</button>
             <div className="my-2 text-start">
               Result:
-              {adminResultLoading ?
+              {adminResultLoading || makeRemoveAdminLoading ?
                 <>
                   <div className="spinner-border text-secondary align-middle mx-2" role="status">
                     <span className="visually-hidden">Loading...</span>
@@ -292,6 +429,7 @@ const ManageAccounts = () => {
                 </>
                 : null
               }
+              {/* {makeRemoveAdminReceipt} */}
               <small className="ms-2">
                 {isAdminResult.toString()}
               </small>
@@ -316,7 +454,7 @@ const ManageAccounts = () => {
             <button className="btn btn-block btn-outline-danger m-2" type="button" onClick={removeFaculty}>Remove Faculty</button>
             <div className="my-2 text-start">
               Result:
-              {facultyResultLoading ?
+              {facultyResultLoading || makeRemoveFacultyLoading?
                 <>
                   <div className="spinner-border text-secondary align-middle mx-2" role="status">
                     <span className="visually-hidden">Loading...</span>
@@ -324,6 +462,7 @@ const ManageAccounts = () => {
                 </>
                 : null
               }
+              {/* {makeRemoveFacultyReceipt} */}
               <small className="ms-2">
                 {isFacultyResult.toString()}
               </small>
