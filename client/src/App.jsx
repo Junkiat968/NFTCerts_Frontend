@@ -18,12 +18,13 @@ import ManageAccounts from "./components/Pages/ManageAccounts";
 import Error from './components/Pages/Error';
 import PageNotFound from './components/Pages/PageNotFound';
 import GradeAppeals from './components/Pages/GradeAppeals';
+import AccessDenied from './components/Pages/AccessDenied';
 
 class App extends Component {
   static contextType = EthContext;
 
   render() {
-    const { loginState } = this.context;
+    const { loginState, state } = this.context;
 
     return (
       <div id="App" >
@@ -33,14 +34,37 @@ class App extends Component {
             loginState ?
               <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/SITNFT" element={<SITNFT />} />
-                <Route path='/MyGrades' element={<MyGrades />} />
-                <Route path='/ManageGrades' element={<ManageGrades />} />
-                <Route path='/TransactionLogs' element={<TransactionLogs />} />
+                {state.role === "ADMIN" && (
+                  <>
+                    <Route path="/" element={<Login />} />
+                    <Route path='/ManageAccounts' element={<ManageAccounts />} />
+                  </>
+                )}
+                {state.role === "FACULTY" && (
+                  <>
+                    <Route path="/" element={<Login />} />
+                    <Route path='/ManageGrades' element={<ManageGrades />} />
+                    <Route path='/TransactionLogs' element={<TransactionLogs />} />
+                    <Route path='/GradeAppeals' element={<GradeAppeals />} />
+                  </>
+                )}
+                {state.role === "STUDENT" && (
+                  <>
+                    <Route path="/" element={<Login />} />
+                    <Route path='/MyGrades' element={<MyGrades />} />
+                    <Route path='/TransactionLogs' element={<TransactionLogs />} />
+                  </>
+                )}
+                {/* <Route path="/SITNFT" element={<SITNFT />} /> */}
+                {/* <Route path='/ManageFaculty' element={<ManageFaculty />} /> */}
                 {/* <Route path='/PurchaseTokens' element={<PurchaseTokens />} /> */}
-                <Route path='/ManageAccounts' element={<ManageAccounts />} />
-                <Route path='/ManageFaculty' element={<ManageFaculty />} />
-                <Route path='/GradeAppeals' element={<GradeAppeals />} />
+                {/* <Route path='*' element={<PageNotFound />} /> */}
+                <Route path='/SITNFT' element={<AccessDenied />} />
+                <Route path='/ManageAccounts' element={<AccessDenied />} />
+                <Route path="/ManageGrades" element={<AccessDenied />} />
+                <Route path='/TransactionLogs' element={<AccessDenied />} />
+                <Route path='/GradeAppeals' element={<AccessDenied />} />
+                <Route path='/MyGrades' element={<AccessDenied />} />
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
               :

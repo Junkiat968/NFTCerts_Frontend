@@ -295,7 +295,7 @@ export const ContractProvider = ({ children }) => {
             const sitnftInstance = getSITNFTContract();
 
             const availableTransactions = await sitnftInstance.getAllTransactions(faculty);
-            console.log("Availabletx:,",availableTransactions);
+            // console.log("Availabletx:,",availableTransactions);
             // const structuredTransactions = [];
             // availableTransactions.forEach(transaction => {
             //     if (transaction.reviewed ==true){
@@ -323,7 +323,7 @@ export const ContractProvider = ({ children }) => {
             //   amount: parseInt(transaction.amount._hex) / (10 ** 18)
             }));
 
-            console.log("All Appeal TX:",structuredTransactions);
+            // console.log("All Appeal TX:",structuredTransactions);
             setTransactions(structuredTransactions);
 
         } catch (error) {
