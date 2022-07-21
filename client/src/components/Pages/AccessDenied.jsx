@@ -19,9 +19,9 @@ const PageNotFound = () => {
 
     return (
         <div className="container">
-            <h1 className="mt-5 pb-2 border-bottom text-start">404.</h1>
+            <h1 className="mt-5 pb-2 border-bottom text-start">Access Denied.</h1>
             <div className="text-center mt-5">
-                Page Not Found.
+                You do not have access to this page.
             </div>
             <div className="mt-3 text-center">
                 <button type="button" className="btn btn-outline-primary mt-3">
