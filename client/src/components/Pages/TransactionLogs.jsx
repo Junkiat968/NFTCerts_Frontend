@@ -29,7 +29,11 @@ const TransactionLogs = () => {
         );
         const transferEvent = await sitnftInstance.queryFilter(transferFilter);
         setItems(transferEvent);
-      }
+      } else if (state.role === "ADMIN") {
+        const transferFilter = sitnftInstance.filters.Transfer();
+        const transferEvent = await sitnftInstance.queryFilter(transferFilter);
+        setItems(transferEvent);
+        }
       // get the events
     };
     // call the function
@@ -92,6 +96,37 @@ const TransactionLogs = () => {
                 <tr key={index}>
                   <td>{d.transactionHash}</td>
                   <td>Received TokenID {d.args[2].toString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  } else if (state.role === "ADMIN") {
+    return (
+      <div className="container">
+        <h2 className="pb-2 border-bottom text-start mt-3">
+          Transaction Logs.
+        </h2>
+        <div className="container-fluid p-4 row">
+          <table>
+            <thead>
+              <tr>
+                <th> Transaction </th>
+                <th> To </th>
+                <th> Details </th>
+                <th> Tokens transacted </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {items.map((d, index) => (
+                <tr key={index}>
+                  <td>{d.transactionHash}</td>
+                  <td>{d.args.to}</td>
+                  <td>TokenID {d.args[2].toString()}</td>
+                  <td><a href={`https://rinkeby.etherscan.io/tx/${d.transactionHash}`}>view in etherscan</a></td>
                 </tr>
               ))}
             </tbody>
