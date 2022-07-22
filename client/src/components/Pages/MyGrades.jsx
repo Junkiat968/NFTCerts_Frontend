@@ -50,7 +50,9 @@ const MyGrades = () => {
   const {
     sendTransaction,
     formData,
-    handleAlertFormChange
+    handleAlertFormChange,
+    regradeRequestLoading,
+    regradeRequestReceipt
   } = useContext(ContractContext);
 
   const { state, sitnftInstance } = useEth();
@@ -164,8 +166,19 @@ const MyGrades = () => {
   return (
     <div className='container'>
       <h2 className="pb-2 border-bottom text-start my-1 mt-3">MyGrades.</h2>
-      <div className="p-1 w-100 d-inline-block">
-        <Select className="float-end w-25" isClearable={true} options={modulesArray} placeholder="Filter" onChange={changeSelected} />
+      <div className="row w-100 d-inline-block m-3">
+        <div className="">
+          {regradeRequestLoading ?
+            <div className="spinner-border text-secondary align-middle mx-1 text-start" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            : null
+          }
+          <small className="ms-2">
+            {regradeRequestReceipt.toString()}
+          </small>
+          <Select className="float-end w-25" isClearable={true} options={modulesArray} placeholder="Filter" onChange={changeSelected} />
+        </div>
       </div>
       <p className="fs-5 border-bottom mt-3 fw-bold">Year 1</p>
 

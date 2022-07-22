@@ -16,15 +16,9 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
     className="form-control mb-1"
   />
 );
-// const EvalMapping =  {
-
-// }
-
-
 
 const GradeAppeals = () => {
   const { state, sitnftInstance } = useEth();
-  // console.log(sitnftInstance);
 
   const [isStudentResult, setIsStudentResult] = useState('');
 
@@ -58,7 +52,9 @@ const GradeAppeals = () => {
     handleEvalFormChange,
     setNFTGrade,
     evalData,
-    EvalMapping
+    EvalMapping,
+    regradeLoading,
+    regradeReceipt
   } = useContext(ContractContext);
   const AlertInput = ({ placeholder, name, type, value, handleAlertFormChange }) => (
     <input
@@ -72,18 +68,18 @@ const GradeAppeals = () => {
   );
 
   const handleEvalSubmit = (e) => {
-    const { targetTokenId,newGrade } = evalData;
-  
+    const { targetTokenId, newGrade } = evalData;
+
     e.preventDefault();
-  
-    if ( !targetTokenId || !newGrade) return;
-  
+
+    if (!targetTokenId || !newGrade) return;
+
     setNFTGrade();
   };
 
   // const renderAlerts = (e) => {
   //   // const { transactions, currentAccount } = useContext(ContractContext);
-  
+
   //   return (
   //     <div class="col-sm-4">
   //     {/* <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleAlertFormChange} />
@@ -98,30 +94,30 @@ const GradeAppeals = () => {
   //         >
   //           Submit Appeal
   //         </button>
-      
+
   //    </div>
   //   );
   // };
-  const TransactionsCard = ({ addressFrom, timestamp, message,tokenName,reviewed}) => {
-    
+  const TransactionsCard = ({ addressFrom, timestamp, message, tokenName, reviewed }) => {
+
     return (
       <Card style={{ width: '20rem' }}>
-      <Card.Body>
-        <Card.Title>{message} </Card.Title>
-        <Card.Subtitle className="mb-2 text-muted">{tokenName} </Card.Subtitle>
-        <Card.Text>
+        <Card.Body>
+          <Card.Title>{message} </Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">{tokenName} </Card.Subtitle>
+          <Card.Text>
             Applied on: {timestamp}
             <br></br>
             Certificate Id: {tokenName.split("Certificate ")[1]}
-        </Card.Text>
-        <Card.Link href={`https://ropsten.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
-        <p className="">From: {addressFrom}</p>
-        </Card.Link>
-      </Card.Body>
-    </Card>
+          </Card.Text>
+          <Card.Link href={`https://ropsten.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
+            <p className="">From: {addressFrom}</p>
+          </Card.Link>
+        </Card.Body>
+      </Card>
 
       // <div className="">
-            // <a href={`https://ropsten.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
+      // <a href={`https://ropsten.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
       //         <p className="">From: {addressFrom}</p>
       //       </a>
       //       {message && (
@@ -137,12 +133,12 @@ const GradeAppeals = () => {
       // </div>
     );
   };
-  
+
   const Transactions = () => {
-  
+
     return (
       <div className="">
-          {/* {state.accounts ? (
+        {/* {state.accounts ? (
             <h3 className="text-black text-3xl text-center my-2">
               Reevaluation Requests
             </h3>
@@ -153,25 +149,24 @@ const GradeAppeals = () => {
           )} */}
         <Container>
           <Row>
-          {[...transactions].map((transaction, i) => (
-            
-           <Col md="auto">
+            {[...transactions].map((transaction, i) => (
 
-          {transaction.reviewed ? (<div></div>) : (<TransactionsCard key={i} {...transaction} />)}
-          {/* <TransactionsCard key={i} {...transaction} /> */}
- 
+              <Col md="auto">
 
-           <div hidden>
-           {EvalMapping[transaction.tokenName.split("Certificate ")[1]] = i}
-           </div>
-           {console.log("EvalMap = ",EvalMapping)}
-           
-           </Col>
-          ))}
+                {transaction.reviewed ? (<div></div>) : (<TransactionsCard key={i} {...transaction} />)}
+                {/* <TransactionsCard key={i} {...transaction} /> */}
+
+                <div hidden>
+                  {EvalMapping[transaction.tokenName.split("Certificate ")[1]] = i}
+                </div>
+                {console.log("EvalMap = ", EvalMapping)}
+
+              </Col>
+            ))}
           </Row>
         </Container>
-        
-            
+
+
       </div>
     );
   };
@@ -180,24 +175,46 @@ const GradeAppeals = () => {
     return (
       <div class="col-sm-6">
         <p></p>
-      <Input placeholder="Certificate Id" name="targetTokenId" type="text" handleChange={handleEvalFormChange} />
-      <Input placeholder="Re-evaluated Grade" name="newGrade" type="text" handleChange={handleEvalFormChange} />
-      <div class="col-sm-6" />
-          <Button
-            type="button"
-            onClick={handleEvalSubmit}
-            className=""
-          >
-            Submit Re-Evaluation
-          </Button>
-    </div>
+        <Input placeholder="Certificate Id" name="targetTokenId" type="text" handleChange={handleEvalFormChange} />
+        <Input placeholder="Re-evaluated Grade" name="newGrade" type="text" handleChange={handleEvalFormChange} />
+        <div class="col-sm-6" />
+        <Button
+          type="button"
+          onClick={handleEvalSubmit}
+          className=""
+        >
+          Submit Re-Evaluation
+        </Button>
+      </div>
     );
+  };
+
+  const renderLoading = (e) => {
+    return (
+      <>
+        <div className="row g-3 m-2">
+          <div className="row w-100 d-inline-block fs-5">
+            <div className="text-end">
+              {regradeLoading ?
+                <div className="spinner-border text-secondary align-middle m-3 text-end" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                : null
+              }
+              <small className="">
+                {regradeReceipt.toString()}
+              </small>
+            </div>
+          </div>
+        </div>
+      </>
+    )
   };
 
   return (
     <div className='page-two container mb-5'>
       <h2 className="pb-2 border-bottom text-start mt-3">Manage Appeals</h2>
-      {/* {renderAlerts()} */}
+      {renderLoading()}
       {Transactions()}
       {renderEval()}
     </div>
