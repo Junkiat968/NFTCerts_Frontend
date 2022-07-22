@@ -47,6 +47,12 @@ module.exports = {
       host: "127.0.0.1",     // Localhost (default: none)
       port: 8545,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
+      // gas: 2000000,   // <--- Twice as much
+      // gasPrice: 10000000000,
+      // from: 
+          //   gas: 8500000,           // Gas sent with each transaction (default: ~6700000)
+    //   gasPrice: 20000000000,  // 20 gwei (in wei) (default: 100 gwei)
+    //   from: <address>,        // Account to send transactions from (default: accounts[0])
     },
     //
     // An additional network, but with some advanced options…
@@ -63,14 +69,14 @@ module.exports = {
     // Note: It's important to wrap the provider as a function to ensure truffle uses a new provider every time.
     ropsten: {
       provider: function () {
-        return new HDWalletProvider('vague hope hedgehog scout trick truck animal crucial offer keen knock once', // Project secret key
+        return new HDWalletProvider('satoshi barrel primary hood oven economy elbow alter catch cable arena number', // Project secret key
           'https://ropsten.infura.io/v3/30beb588d9814d0490d2247c62063adb')
       },
       network_id: 3
     },
     rinkeby: {
       provider: function () {
-        return new HDWalletProvider('vague hope hedgehog scout trick truck animal crucial offer keen knock once', // Project secret key
+        return new HDWalletProvider('satoshi barrel primary hood oven economy elbow alter catch cable arena number', // Project secret key
           'https://rinkeby.infura.io/v3/30beb588d9814d0490d2247c62063adb')
       },
       network_id: 4
@@ -98,7 +104,7 @@ module.exports = {
         // evmVersion: 'byzantium', // Default: "petersburg"
         optimizer: {
           enabled: true,
-          runs: 1500
+          runs: 1400
         }
       }
     }

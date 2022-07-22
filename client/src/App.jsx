@@ -17,6 +17,7 @@ import ManageFaculty from "./components/Pages/ManageFaculty";
 import ManageAccounts from "./components/Pages/ManageAccounts";
 import Error from './components/Pages/Error';
 import PageNotFound from './components/Pages/PageNotFound';
+import GradeAppeals from './components/Pages/GradeAppeals';
 
 class App extends Component {
   static contextType = EthContext;
@@ -39,6 +40,7 @@ class App extends Component {
                 {/* <Route path='/PurchaseTokens' element={<PurchaseTokens />} /> */}
                 <Route path='/ManageAccounts' element={<ManageAccounts />} />
                 <Route path='/ManageFaculty' element={<ManageFaculty />} />
+                <Route path='/GradeAppeals' element={<GradeAppeals />} />
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
               :

@@ -12,6 +12,8 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
   />
 );
 
+
+
 const SITNFT = () => {
   const { state, sitnftInstance } = useEth();
   console.log(sitnftInstance);
@@ -37,9 +39,9 @@ const SITNFT = () => {
     formAddStudentData,
     handleStudent,
     studentResult,
-    getStudentAddress
+    getStudentAddress,
   } = useContext(ContractContext);
-
+  
   const handleCheckAdmin = (e) => {
     const { addressInput } = formAddressData;
     e.preventDefault();
@@ -255,6 +257,7 @@ const SITNFT = () => {
       <p className="border-bottom mt-3">Admin/Faculty check:</p>
       {renderIsAdmin()}
       {renderIsFaculty()}
+
     </div>
   );
 };
