@@ -112,7 +112,7 @@ const GradeAppeals = () => {
         <Card.Text>
             Applied on: {timestamp}
             <br></br>
-            Certificate Id: {tokenName.slice(-1)}
+            Certificate Id: {tokenName.split("Certificate ")[1]}
         </Card.Text>
         <Card.Link href={`https://ropsten.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
         <p className="">From: {addressFrom}</p>
@@ -162,7 +162,7 @@ const GradeAppeals = () => {
  
 
            <div hidden>
-           {EvalMapping[transaction.tokenName.slice(-1)] = i}
+           {EvalMapping[transaction.tokenName.split("Certificate ")[1]] = i}
            </div>
            {console.log("EvalMap = ",EvalMapping)}
            
