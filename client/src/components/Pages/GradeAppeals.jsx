@@ -66,7 +66,16 @@ const GradeAppeals = () => {
       className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
     />
   );
-
+  const filterAppeals = () => {
+    var arr = [];
+    transactions.forEach(function (item, index) {
+      EvalMapping[item.tokenName.split("Certificate ")[1]] = index;
+      if(item.reviewed == 0){
+        arr.push(transactions[index]);
+      }
+    });
+    return arr;
+  }
   const handleEvalSubmit = (e) => {
     const { targetTokenId, newGrade } = evalData;
 
@@ -135,37 +144,19 @@ const GradeAppeals = () => {
   };
 
   const Transactions = () => {
+  
     return (
       <div className="">
-        {/* {state.accounts ? (
-            <h3 className="text-black text-3xl text-center my-2">
-              Reevaluation Requests
-            </h3>
-          ) : (
-            <h3 className="text-black text-3xl text-center my-2">
-              Connect your account to see the latest transactions
-            </h3>
-          )} */}
         <Container>
-          <Row>
-            {[...transactions].map((transaction, i) => (
-
-              <Col md="auto">
-
-                {transaction.reviewed ? (<div></div>) : (<TransactionsCard key={i} {...transaction} />)}
-                {/* <TransactionsCard key={i} {...transaction} /> */}
-
-                <div hidden>
-                  {EvalMapping[transaction.tokenName.split("Certificate ")[1]] = i}
-                </div>
-                {console.log("EvalMap = ", EvalMapping)}
-
-              </Col>
-            ))}
+          <Row md={4}>
+          {[...filterAppeals()].map((appeal, i) => (
+          <div>
+            <TransactionsCard key={i} {...appeal}></TransactionsCard>
+           {/* {console.log("EvalMap = ",EvalMapping)} */}
+           </div>
+          ))}
           </Row>
         </Container>
-
-
       </div>
     );
   };
