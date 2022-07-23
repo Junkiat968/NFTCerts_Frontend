@@ -105,7 +105,12 @@ const ManageGrades = () => {
 
   const functMultiMint = async () => {
     const gradeItems = [];
-    const { moduleCodeInput, testTypeInput, trimesterInput } = mintData;
+    const { testTypeInput, trimesterInput } = mintData;
+
+    if (!testTypeInput || !trimesterInput) {
+      alert('Please enter a valid input!');
+      return;
+    }
 
     if (items.length <= 10) {
       for (let i = 0; i < items.length; i++) {
@@ -144,6 +149,7 @@ const ManageGrades = () => {
         }, 2000);
       } catch (err) {
         console.error(err);
+        setReceipt("Error " + err.reason);
         return err;
       }
     } else {

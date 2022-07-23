@@ -38,6 +38,7 @@ class App extends Component {
                   <>
                     <Route path="/" element={<Login />} />
                     <Route path='/ManageAccounts' element={<ManageAccounts />} />
+                    <Route path='/TransactionLogs' element={<TransactionLogs />} />
                   </>
                 )}
                 {state.role === "FACULTY" && (
