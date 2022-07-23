@@ -369,8 +369,8 @@ export const ContractProvider = ({ children }) => {
         try {
             const { message, tokenName, faculty } = formData;
             const sitnftInstance = getSITNFTContract();
-            console.log("SendTransaction() parameters", message, tokenName, tokenName.slice(-1), faculty);
-            const transactionHash = await sitnftInstance.addToBlockchain(message, tokenName, tokenName.slice(-1), faculty);
+            console.log("SendTransaction() parameters",message,tokenName,tokenName.split("Certificate ")[1],faculty);
+            const transactionHash = await sitnftInstance.addToBlockchain(message,tokenName,tokenName.split("Certificate ")[1],faculty);
 
             const interval = setInterval(function () {
                 console.log("awaiting transaction confirmation...");
