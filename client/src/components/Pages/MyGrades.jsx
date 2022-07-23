@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { Row, Col, Card, Container, Button } from "react-bootstrap";
+import { Row, Col, Card, Container, Button, Tabs, Tab } from "react-bootstrap";
 // import Modal from '@material-ui/core/Modal';
 import { Form } from "react-bootstrap";
 import Select from 'react-select';
@@ -8,20 +8,10 @@ import Select from 'react-select';
 import useEth from "../../contexts/EthContext/useEth";
 import { ContractContext } from '../../contexts/ContractProvider';
 import Pagination from "../Pagination";
-import PaginationY1 from "../PaginationY1";
-import PaginationY2 from "../PaginationY2";
-import PaginationY3 from "../PaginationY3";
 
 const MyGrades = () => {
   const [gradesPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const [gradesPerPageY1] = useState(4);
-  const [gradesPerPageY2] = useState(4);
-  const [gradesPerPageY3] = useState(4);
-  const [currentPageY1, setCurrentPageY1] = useState(1);
-  const [currentPageY2, setCurrentPageY2] = useState(1);
-  const [currentPageY3, setCurrentPageY3] = useState(1);
 
   const [totalTokens, setTotalTokens] = useState(0);
   const [myNoOfTokens, setMyNoOfTokens] = useState(0);
@@ -129,11 +119,7 @@ const MyGrades = () => {
             default:
           }
         }
-        // console.log(modulesArray.length);
 
-        console.log(year1Array);
-        console.log(year2Array);
-        console.log(year3Array);
         setY1NoOfTokens(year1Array.length);
         setY2NoOfTokens(year2Array.length);
         setY3NoOfTokens(year3Array.length);
@@ -174,106 +160,73 @@ const MyGrades = () => {
   const indexOfFirstGrade = indexOfLastGrade - gradesPerPage;
   const currentGrades = filteredGrades.slice(indexOfFirstGrade, indexOfLastGrade);
 
-  const indexOfLastGradeY1 = currentPageY1 * gradesPerPageY1;
-  const indexOfFirstGradeY1 = indexOfLastGradeY1 - gradesPerPageY1;
-  const currentGradesY1 = year1Array.slice(indexOfFirstGradeY1, indexOfLastGradeY1);
-
-  const indexOfLastGradeY2 = currentPageY2 * gradesPerPageY2;
-  const indexOfFirstGradeY2 = indexOfLastGradeY2 - gradesPerPageY2;
-  const currentGradesY2 = year2Array.slice(indexOfFirstGradeY2, indexOfLastGradeY2);
-
-  const indexOfLastGradeY3 = currentPageY3 * gradesPerPageY3;
-  const indexOfFirstGradeY3 = indexOfLastGradeY3 - gradesPerPageY3;
-  const currentGradesY3 = year3Array.slice(indexOfFirstGradeY3, indexOfLastGradeY3);
-
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
-  const paginateY1 = pageNumberY1 => setCurrentPageY1(pageNumberY1);
-  const paginateY2 = pageNumberY2 => setCurrentPageY2(pageNumberY2);
-  const paginateY3 = pageNumberY3 => setCurrentPageY3(pageNumberY3);
 
   return (
-    <div className='container'>
+    <div className='container mb-5'>
       <h2 className="pb-2 border-bottom text-start my-1 mt-3">MyGrades.</h2>
-      <div className="row w-100 d-inline-block m-3">
-        <div className="">
-          {regradeRequestLoading ?
-            <div className="spinner-border text-secondary align-middle mx-1 text-start" role="status">
-              <span className="visually-hidden">Loading...</span>
+      <Tabs
+        defaultActiveKey="mygrades"
+        id="gradesTabs"
+        className="my-3 fs-5"
+      >
+        <Tab eventKey="mygrades" title="My Grades">
+          <div className="row w-100 d-inline-block m-2">
+            <div className="">
+              {regradeRequestLoading ?
+                <div className="spinner-border text-secondary align-middle mx-1 text-start" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                : null
+              }
+              <small className="ms-2">
+                {regradeRequestReceipt.toString()}
+              </small>
+              <Select className="float-end w-25" isClearable={true} options={modulesArray} placeholder="Filter" onChange={changeSelected} />
             </div>
-            : null
-          }
-          <small className="ms-2">
-            {regradeRequestReceipt.toString()}
-          </small>
-          <Select className="float-end w-25" isClearable={true} options={modulesArray} placeholder="Filter" onChange={changeSelected} />
-        </div>
-      </div>
-      <p className="fs-5 border-bottom mt-3 fw-bold">Year 1</p>
-      <Year1Grades
-        currentGradesY1={currentGradesY1}
-        gradesPerPageY1={gradesPerPageY1}
-        paginateY1={paginateY1}
-        currentPageY1={currentPageY1}
-        pageLoading={pageLoading}
-        renderLoading={renderLoading}
-        year1Array={year1Array}
-        appealStruct={appealStruct}
-        setAppealStruct={setAppealStruct}
-        handleAlertFormChange={handleAlertFormChange}
-        handleAlertSubmit={handleAlertSubmit}
-        Input={Input}
-        y1NoOfTokens={y1NoOfTokens}
-      />
-      <p className="fs-5 border-bottom mt-3 fw-bold">Year 2</p>
-      <Year2Grades
-        currentGradesY2={currentGradesY2}
-        gradesPerPageY2={gradesPerPageY2}
-        paginateY2={paginateY2}
-        currentPageY2={currentPageY2}
-        pageLoading={pageLoading}
-        renderLoading={renderLoading}
-        year2Array={year2Array}
-        appealStruct={appealStruct}
-        setAppealStruct={setAppealStruct}
-        handleAlertFormChange={handleAlertFormChange}
-        handleAlertSubmit={handleAlertSubmit}
-        Input={Input}
-        y2NoOfTokens={y2NoOfTokens}
-      />
-      <p className="fs-5 border-bottom mt-3 fw-bold">Year 3</p>
-      <Year3Grades
-        currentGradesY3={currentGradesY3}
-        gradesPerPageY3={gradesPerPageY3}
-        paginateY3={paginateY3}
-        currentPageY3={currentPageY3}
-        pageLoading={pageLoading}
-        renderLoading={renderLoading}
-        year3Array={year3Array}
-        appealStruct={appealStruct}
-        setAppealStruct={setAppealStruct}
-        handleAlertFormChange={handleAlertFormChange}
-        handleAlertSubmit={handleAlertSubmit}
-        Input={Input}
-        y3NoOfTokens={y3NoOfTokens}
-      />
-      <p className="fs-5 border-bottom mt-3 fw-bold">ALL</p>
-      <ALLGRADES
-        currentGrades={currentGrades}
-        gradesPerPage={gradesPerPage}
-        paginate={paginate}
-        currentPage={currentPage}
-        pageLoading={pageLoading}
-        renderLoading={renderLoading}
-        emptyGrades={emptyGrades}
-        gradeArray={gradeArray}
-        appealStruct={appealStruct}
-        setAppealStruct={setAppealStruct}
-        handleAlertFormChange={handleAlertFormChange}
-        handleAlertSubmit={handleAlertSubmit}
-        Input={Input}
-        myNoOfTokens={myNoOfTokens}
-      />
+          </div>
+          <ALLGRADES
+            currentGrades={currentGrades}
+            gradesPerPage={gradesPerPage}
+            paginate={paginate}
+            currentPage={currentPage}
+            pageLoading={pageLoading}
+            renderLoading={renderLoading}
+            emptyGrades={emptyGrades}
+            gradeArray={gradeArray}
+            appealStruct={appealStruct}
+            setAppealStruct={setAppealStruct}
+            handleAlertFormChange={handleAlertFormChange}
+            handleAlertSubmit={handleAlertSubmit}
+            Input={Input}
+            myNoOfTokens={myNoOfTokens}
+          />
+        </Tab>
+        <Tab eventKey="transcript" title="Transcript">
+          <p className="fs-5 border-bottom mt-3 fw-bold">Year 1</p>
+          <Year1Grades
+            pageLoading={pageLoading}
+            renderLoading={renderLoading}
+            year1Array={year1Array}
+            y1NoOfTokens={y1NoOfTokens}
+          />
+          <p className="fs-5 border-bottom mt-3 fw-bold">Year 2</p>
+          <Year2Grades
+            pageLoading={pageLoading}
+            renderLoading={renderLoading}
+            year2Array={year2Array}
+            y2NoOfTokens={y2NoOfTokens}
+          />
+          <p className="fs-5 border-bottom mt-3 fw-bold">Year 3</p>
+          <Year3Grades
+            pageLoading={pageLoading}
+            renderLoading={renderLoading}
+            year3Array={year3Array}
+            y3NoOfTokens={y3NoOfTokens}
+          />
+        </Tab>
+      </Tabs>
     </div>
   );
 }
@@ -359,15 +312,9 @@ function ALLGRADES({
 }
 
 function Year1Grades({
-  currentGradesY1,
-  gradesPerPageY1,
-  paginateY1,
-  currentPageY1,
   renderLoading,
   pageLoading,
   year1Array,
-  handleAlertFormChange,
-  handleAlertSubmit,
   y1NoOfTokens
 }) {
 
@@ -381,7 +328,7 @@ function Year1Grades({
     <div className='container'>
       {
         pageLoading ?
-          renderLoading(y1NoOfTokens) :
+          renderLoading() :
           <div className="">
             {
               emptyGrades ?
@@ -394,43 +341,19 @@ function Year1Grades({
                   <div className="d-flex justify-content-around text-start mt-3">
                     <Container>
                       <Row>
-                        {Object.values(currentGradesY1).map((val, k) =>
+                        {Object.values(year1Array).map((val, k) =>
                           <Col k={k} xs={8} md={4} lg={3}>
                             <Card className="m-3" style={{ width: '12rem' }}>
                               <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.img}`} />
                               <Card.Body>
                                 <Card.Title>{val.name}</Card.Title>
-                                <div className="col-sm-12">
-                                  <Form.Group controlId={val.name}>
-                                    <Form.Control
-                                      as="select"
-                                      onChange={(e) => handleAlertFormChange(e, val.faculty)}
-                                    >
-                                      <option value="">Select Reason</option>
-                                      <option value="Re-Grade">Re-Grade</option>
-                                      <option value="Incorrect Certificate">Incorrect Certificate</option>
-                                    </Form.Control>
-                                  </Form.Group>
-                                  <Button variant="outline-danger w-100 mt-2"
-                                    type="button"
-                                    onClick={handleAlertSubmit}
-                                    className=""
-                                  >
-                                    Submit Appeal
-                                  </Button>
-                                </div></Card.Body>
+                              </Card.Body>
                             </Card>
                           </Col>
                         )}
                       </Row>
                     </Container>
                   </div>
-                  <PaginationY1 className="text-end mt-3 ms-auto"
-                    gradesPerPageY1={gradesPerPageY1}
-                    totalGradesY1={year1Array.length}
-                    paginateY1={paginateY1}
-                    currentPageY1={currentPageY1}
-                  />
                 </>
             }
           </div>
@@ -440,20 +363,13 @@ function Year1Grades({
 }
 
 function Year2Grades({
-  currentGradesY2,
-  gradesPerPageY2,
-  paginateY2,
-  currentPageY2,
   renderLoading,
   pageLoading,
   year2Array,
-  handleAlertFormChange,
-  handleAlertSubmit,
   y2NoOfTokens
 }) {
 
   let emptyGrades = false;
-  console.log(y2NoOfTokens);
 
   if (y2NoOfTokens === 0) {
     emptyGrades = true;
@@ -463,7 +379,7 @@ function Year2Grades({
     <div className='container'>
       {
         pageLoading ?
-          renderLoading(y2NoOfTokens) :
+          renderLoading() :
           <div className="">
             {
               emptyGrades ?
@@ -476,43 +392,19 @@ function Year2Grades({
                   <div className="d-flex justify-content-around text-start mt-3">
                     <Container>
                       <Row>
-                        {Object.values(currentGradesY2).map((val, k) =>
+                        {Object.values(year2Array).map((val, k) =>
                           <Col k={k} xs={8} md={4} lg={3}>
                             <Card className="m-3" style={{ width: '12rem' }}>
                               <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.img}`} />
                               <Card.Body>
                                 <Card.Title>{val.name}</Card.Title>
-                                <div className="col-sm-12">
-                                  <Form.Group controlId={val.name}>
-                                    <Form.Control
-                                      as="select"
-                                      onChange={(e) => handleAlertFormChange(e, val.faculty)}
-                                    >
-                                      <option value="">Select Reason</option>
-                                      <option value="Re-Grade">Re-Grade</option>
-                                      <option value="Incorrect Certificate">Incorrect Certificate</option>
-                                    </Form.Control>
-                                  </Form.Group>
-                                  <Button variant="outline-danger w-100 mt-2"
-                                    type="button"
-                                    onClick={handleAlertSubmit}
-                                    className=""
-                                  >
-                                    Submit Appeal
-                                  </Button>
-                                </div></Card.Body>
+                              </Card.Body>
                             </Card>
                           </Col>
                         )}
                       </Row>
                     </Container>
                   </div>
-                  <PaginationY2 className="text-end mt-3 ms-auto"
-                    gradesPerPageY2={gradesPerPageY2}
-                    totalGradesY2={year2Array.length}
-                    paginateY2={paginateY2}
-                    currentPageY2={currentPageY2}
-                  />
                 </>
             }
           </div>
@@ -522,20 +414,13 @@ function Year2Grades({
 }
 
 function Year3Grades({
-  currentGradesY3,
-  gradesPerPageY3,
-  paginateY3,
-  currentPageY3,
   renderLoading,
   pageLoading,
   year3Array,
-  handleAlertFormChange,
-  handleAlertSubmit,
   y3NoOfTokens
 }) {
 
   let emptyGrades = false;
-  console.log(y3NoOfTokens);
 
   if (y3NoOfTokens === 0) {
     emptyGrades = true;
@@ -545,7 +430,7 @@ function Year3Grades({
     <div className='container'>
       {
         pageLoading ?
-          renderLoading(y3NoOfTokens) :
+          renderLoading() :
           <div className="">
             {
               emptyGrades ?
@@ -558,43 +443,19 @@ function Year3Grades({
                   <div className="d-flex justify-content-around text-start mt-3">
                     <Container>
                       <Row>
-                        {Object.values(currentGradesY3).map((val, k) =>
+                        {Object.values(year3Array).map((val, k) =>
                           <Col k={k} xs={8} md={4} lg={3}>
                             <Card className="m-3" style={{ width: '12rem' }}>
                               <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.img}`} />
                               <Card.Body>
                                 <Card.Title>{val.name}</Card.Title>
-                                <div className="col-sm-12">
-                                  <Form.Group controlId={val.name}>
-                                    <Form.Control
-                                      as="select"
-                                      onChange={(e) => handleAlertFormChange(e, val.faculty)}
-                                    >
-                                      <option value="">Select Reason</option>
-                                      <option value="Re-Grade">Re-Grade</option>
-                                      <option value="Incorrect Certificate">Incorrect Certificate</option>
-                                    </Form.Control>
-                                  </Form.Group>
-                                  <Button variant="outline-danger w-100 mt-2"
-                                    type="button"
-                                    onClick={handleAlertSubmit}
-                                    className=""
-                                  >
-                                    Submit Appeal
-                                  </Button>
-                                </div></Card.Body>
+                              </Card.Body>
                             </Card>
                           </Col>
                         )}
                       </Row>
                     </Container>
                   </div>
-                  <PaginationY3 className="text-end mt-3 ms-auto"
-                    gradesPerPageY3={gradesPerPageY3}
-                    totalGradesY3={year3Array.length}
-                    paginateY3={paginateY3}
-                    currentPageY3={currentPageY3}
-                  />
                 </>
             }
           </div>

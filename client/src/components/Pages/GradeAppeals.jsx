@@ -101,7 +101,7 @@ const GradeAppeals = () => {
   const TransactionsCard = ({ addressFrom, timestamp, message, tokenName, reviewed }) => {
 
     return (
-      <Card style={{ width: '20rem' }}>
+      <Card className="m-3" style={{ width: '20rem' }}>
         <Card.Body>
           <Card.Title>{message} </Card.Title>
           <Card.Subtitle className="mb-2 text-muted">{tokenName} </Card.Subtitle>
@@ -135,7 +135,6 @@ const GradeAppeals = () => {
   };
 
   const Transactions = () => {
-
     return (
       <div className="">
         {/* {state.accounts ? (
