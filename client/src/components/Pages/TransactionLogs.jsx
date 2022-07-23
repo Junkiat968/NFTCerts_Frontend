@@ -9,7 +9,6 @@ export const ContractContext = React.createContext();
 const TransactionLogs = () => {
   const { state, getSITNFTContract } = useEth();
   const sitnftInstance = getSITNFTContract();
-  const [selectedLog, setSelectedLog] = useState("");
   const [items, setItems] = useState([]);
   const [transferItems, setTransferItems] = useState([]);
   const [mintItems, setMintItems] = useState([]);
@@ -54,14 +53,6 @@ const TransactionLogs = () => {
     // call the function
     fetchData().catch(console.error);
   });
-
-  //   async function getPastEvents() {
-  //     console.log(String(state.accounts));
-  //     let eventFilter = sitnftInstance.filters.IndexedLog(String(state.accounts));
-  //     let events = await sitnftInstance.queryFilter(eventFilter);
-  //     setItems(events);
-  //     console.log(events)
-  //   }
 
   const renderTransferTable = (e) => {
     return (
@@ -214,7 +205,6 @@ const TransactionLogs = () => {
                 <Nav
                   variant="pills"
                   className="flex-column p-3"
-                  onSelect={(selectedKey) => setSelectedLog(selectedKey)}
                 >
                   <Nav.Item>
                     <Nav.Link eventKey="log">Logs</Nav.Link>
@@ -258,7 +248,6 @@ const TransactionLogs = () => {
                 <Nav
                   variant="pills"
                   className="flex-column p-3"
-                  onSelect={(selectedKey) => setSelectedLog(selectedKey)}
                 >
                   <Nav.Item>
                     <Nav.Link eventKey="transfer">Transfer</Nav.Link>
@@ -296,7 +285,6 @@ const TransactionLogs = () => {
                 <Nav
                   variant="pills"
                   className="flex-column p-3"
-                  onSelect={(selectedKey) => setSelectedLog(selectedKey)}
                 >
                   <Nav.Item>
                     <Nav.Link eventKey="log">Logs</Nav.Link>
