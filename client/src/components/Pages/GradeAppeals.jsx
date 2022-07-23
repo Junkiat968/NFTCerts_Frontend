@@ -80,6 +80,17 @@ const GradeAppeals = () => {
   
     setNFTGrade();
   };
+  
+  const filterAppeals = () => {
+    var arr = [];
+    transactions.forEach(function (item, index) {
+      EvalMapping[item.tokenName.split("Certificate ")[1]] = index;
+      if(item.reviewed == 0){
+        arr.push(transactions[index]);
+      }
+    });
+    return arr;
+  }
 
   // const renderAlerts = (e) => {
   //   // const { transactions, currentAccount } = useContext(ContractContext);
@@ -152,23 +163,29 @@ const GradeAppeals = () => {
             </h3>
           )} */}
         <Container>
-          <Row>
-          {[...transactions].map((transaction, i) => (
+          <Row md={4}>
+          {/* {console.log("FILTEREDAPPEALS",filterAppeals())} */}
+          
+          {[...filterAppeals()].map((appeal, i) => (
             
-           <Col md="auto">
-
-          {transaction.reviewed ? (<div></div>) : (<TransactionsCard key={i} {...transaction} />)}
+          
+          <div>
+            {/* {transaction.reviewed == 0 && <TransactionsCard key={i} {...transaction} />} */}
+          {/* {transaction.reviewed ? (<>Filled element</>) : (<TransactionsCard key={i} {...transaction} />)} */}
           {/* <TransactionsCard key={i} {...transaction} /> */}
+            {/* <div hidden>
+              {EvalMapping[transaction.tokenName.split("Certificate ")[1]] = i}
+            </div> */}
+            <TransactionsCard key={i} {...appeal}></TransactionsCard>
  
-
-           <div hidden>
-           {EvalMapping[transaction.tokenName.split("Certificate ")[1]] = i}
-           </div>
            {console.log("EvalMap = ",EvalMapping)}
+           </div>
            
-           </Col>
+           
+           
           ))}
           </Row>
+          
         </Container>
         
             
