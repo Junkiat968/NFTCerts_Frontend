@@ -23,11 +23,11 @@ const Navigationbar = () => {
             <Nav className="me-auto">
               {/* <Nav.Link as={NavLink} to="/">Home</Nav.Link> */}
 
-              {state.role === "ADMIN" && (
+              {/* {state.role === "ADMIN" && (
                 <Nav.Link as={NavLink} to="/SITNFT">
                   SITNFT
                 </Nav.Link>
-              )}
+              )} */}
               {state.role === "STUDENT" && (
                 <Nav.Link as={NavLink} to="/MyGrades">
                   MyGrades
@@ -38,17 +38,18 @@ const Navigationbar = () => {
                   Manage Grades
                 </Nav.Link>
               )}
-              {(state.role === "FACULTY" || state.role === "STUDENT") && (
-                <Nav.Link as={NavLink} to="/TransactionLogs">
-                  Transaction Logs
-                </Nav.Link>
-              )}
-              {/* <Nav.Link as={NavLink} to="/PurchaseTokens">Purchase Tokens</Nav.Link> */}
               {state.role === "ADMIN" && (
                 <Nav.Link as={NavLink} to="/ManageAccounts">
                   Manage Accounts
                 </Nav.Link>
               )}
+              {(state.role === "FACULTY" || state.role === "STUDENT" ||
+                state.role === "ADMIN") && (
+                  <Nav.Link as={NavLink} to="/TransactionLogs">
+                    Transaction Logs
+                  </Nav.Link>
+                )}
+              {/* <Nav.Link as={NavLink} to="/PurchaseTokens">Purchase Tokens</Nav.Link> */}
               {state.role === "FACULTY" && (
                 <Nav.Link as={NavLink} to="/GradeAppeals">
                   Manage Appeals

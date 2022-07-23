@@ -1,9 +1,9 @@
 import React from "react";
 import PaginationBar from 'react-bootstrap/Pagination';
 
-const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
+const Pagination = ({ gradesPerPage, totalGrades, paginate, currentPage }) => {
   const pageNumbers = [];
-  const pageCount = Math.ceil(totalPosts / postsPerPage);
+  const pageCount = Math.ceil(totalGrades / gradesPerPage);
 
   var isFirstPage = true;
   var isLastPage = true;
@@ -18,7 +18,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
     isLastPage = false;
   }
 
-  for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(totalGrades / gradesPerPage); i++) {
     // pageNumbers.push(i);
     pageNumbers.push(
       <PaginationBar.Item key={i} active={i === currentPage} onClick={() => onPageNumberClick(i)}>

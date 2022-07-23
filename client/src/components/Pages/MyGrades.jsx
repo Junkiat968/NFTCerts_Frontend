@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { Row, Col, Card, Container, Button } from "react-bootstrap";
+import { Row, Col, Card, Container, Button, Tabs, Tab } from "react-bootstrap";
 // import Modal from '@material-ui/core/Modal';
 import { Form } from "react-bootstrap";
 import Select from 'react-select';
@@ -10,7 +10,7 @@ import { ContractContext } from '../../contexts/ContractProvider';
 import Pagination from "../Pagination";
 
 const MyGrades = () => {
-  const [postsPerPage] = useState(6);
+  const [gradesPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [totalTokens, setTotalTokens] = useState(0);
@@ -22,7 +22,14 @@ const MyGrades = () => {
   const [modulesArray, setModulesArray] = useState([]);
   const [selectedModule, setSelectedModule] = useState('');
   const [emptyGrades, setEmptyGrades] = useState(false);
-  const [appealStruct, setappealStruct] = useState({ reason: "", tokenId: "" });
+  const [appealStruct, setAppealStruct] = useState({ reason: "", tokenId: "" });
+
+  const [y1NoOfTokens, setY1NoOfTokens] = useState(0);
+  const [y2NoOfTokens, setY2NoOfTokens] = useState(0);
+  const [y3NoOfTokens, setY3NoOfTokens] = useState(0);
+  const [year1Array, setYear1Array] = useState([]);
+  const [year2Array, setYear2Array] = useState([]);
+  const [year3Array, setYear3Array] = useState([]);
 
   const changeSelected = (e) => {
     try {
@@ -30,16 +37,8 @@ const MyGrades = () => {
     } catch (error) {
       setSelectedModule("");
     }
-    // setSelectedModule({ selectedLabel: e ? e.value : "" });
   };
-  // const changeSelectedAppeal = (e) => {
-  //   try {
-  //     setappealStruct(e.value);
-  //   } catch (error) {
-  //     setSelectedModule("");
-  //   }
-  //   // setSelectedModule({ selectedLabel: e ? e.value : "" });
-  // };
+
   const Input = ({ placeholder, name, type, value, handleChange }) => (
     <input
       placeholder={placeholder}
@@ -52,43 +51,25 @@ const MyGrades = () => {
 
   // Context Constants
   const {
-    formAddressData,
-    functIsFaculty,
-    getStudentAddress,
     sendTransaction,
     formData,
     handleAlertFormChange,
-    handleEvalFormChange,
-    setNFTGrade,
-    evalData,
-    EvalMapping
+    regradeRequestLoading,
+    regradeRequestReceipt
   } = useContext(ContractContext);
+
   const { state, sitnftInstance } = useEth();
-  // const AlertInput = ({ placeholder, name, type, value, handleAlertFormChange }) => (
-  //   <input
-  //     placeholder={placeholder}
-  //     type={type}
-  //     step="0.0001"
-  //     value={value}
-  //     onChange={(e) => handleAlertFormChange(e, name)}
-  //     className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
-  //   />
-  // );
+
   const handleAlertSubmit = (e) => {
     const { message } = formData;
-    // console.log("handlealertsubmit message :",message)
-    // console.log("handlealertsubmit formdata :",formData)
-
     e.preventDefault();
 
     if (!message) {
       alert("Please select reason for grade appeal.")
       return;
     }
-
     sendTransaction();
   };
-
 
   useEffect(() => {
     const fetchGrades = async () => {
@@ -122,10 +103,26 @@ const MyGrades = () => {
 
           // Decode Image
           const currentImg = currentJson.image.split(",");
-          gradeArray.push({ module: currentJson.attributes[0].value, img: currentImg[1], name: currentJson.name, faculty:currentJson.attributes[2].value });
-          // console.log("CurrentJSON:",currentJson);
+          gradeArray.push({ module: currentJson.attributes[0].value, img: currentImg[1], name: currentJson.name, faculty: currentJson.attributes[2].value });
+
+          // console.log(currentJson.attributes[0].value);
+          switch (currentJson.attributes[0].value[3]) {
+            case "1":
+              year1Array.push({ module: currentJson.attributes[0].value, img: currentImg[1], name: currentJson.name, faculty: currentJson.attributes[2].value });
+              break;
+            case "2":
+              year2Array.push({ module: currentJson.attributes[0].value, img: currentImg[1], name: currentJson.name, faculty: currentJson.attributes[2].value });
+              break;
+            case "3":
+              year3Array.push({ module: currentJson.attributes[0].value, img: currentImg[1], name: currentJson.name, faculty: currentJson.attributes[2].value });
+              break;
+            default:
+          }
         }
-        console.log(modulesArray.length);
+
+        setY1NoOfTokens(year1Array.length);
+        setY2NoOfTokens(year2Array.length);
+        setY3NoOfTokens(year3Array.length);
 
         setTotalTokens(noOfTokens);
         setPageLoading(false);
@@ -158,70 +155,94 @@ const MyGrades = () => {
     return gradeArray.module.includes(selectedModule);
   });
 
-  // Get current posts
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filteredGrades.slice(indexOfFirstPost, indexOfLastPost);
+  // Get current grade
+  const indexOfLastGrade = currentPage * gradesPerPage;
+  const indexOfFirstGrade = indexOfLastGrade - gradesPerPage;
+  const currentGrades = filteredGrades.slice(indexOfFirstGrade, indexOfLastGrade);
 
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
-    <div className='container'>
+    <div className='container mb-5'>
       <h2 className="pb-2 border-bottom text-start my-1 mt-3">MyGrades.</h2>
-      <div className="p-1 w-100 d-inline-block">
-        <Select className="float-end w-25" isClearable={true} options={modulesArray} placeholder="Filter" onChange={changeSelected} />
-      </div>
-      {/* {
-        gradeArray.filter(gradeArray => gradeArray.module.includes(selectedModule)).map(filteredData => (
-          <li>
-            {filteredData.module}
-          </li>
-        ))
-      } */}
-      <NFTImage
-        currentPosts={currentPosts}
-        postsPerPage={postsPerPage}
-        paginate={paginate}
-        currentPage={currentPage}
-        pageLoading={pageLoading}
-        renderLoading={renderLoading}
-        emptyGrades={emptyGrades}
-        gradeArray={gradeArray}
-        appealStruct={appealStruct}
-        setappealStruct={setappealStruct}
-        handleAlertFormChange={handleAlertFormChange}
-        handleAlertSubmit={handleAlertSubmit}
-        Input={Input}
-        myNoOfTokens={myNoOfTokens}
-      // handleOpen = {handleOpen}
-      // handleClose = {handleClose}
-      // open = {open}
-      />
+      <Tabs
+        defaultActiveKey="mygrades"
+        id="gradesTabs"
+        className="my-3 fs-5"
+      >
+        <Tab eventKey="mygrades" title="My Grades">
+          <div className="row w-100 d-inline-block m-2">
+            <div className="">
+              {regradeRequestLoading ?
+                <div className="spinner-border text-secondary align-middle mx-1 text-start" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                : null
+              }
+              <small className="ms-2">
+                {regradeRequestReceipt.toString()}
+              </small>
+              <Select className="float-end w-25" isClearable={true} options={modulesArray} placeholder="Filter" onChange={changeSelected} />
+            </div>
+          </div>
+          <ALLGRADES
+            currentGrades={currentGrades}
+            gradesPerPage={gradesPerPage}
+            paginate={paginate}
+            currentPage={currentPage}
+            pageLoading={pageLoading}
+            renderLoading={renderLoading}
+            emptyGrades={emptyGrades}
+            gradeArray={gradeArray}
+            appealStruct={appealStruct}
+            setAppealStruct={setAppealStruct}
+            handleAlertFormChange={handleAlertFormChange}
+            handleAlertSubmit={handleAlertSubmit}
+            Input={Input}
+            myNoOfTokens={myNoOfTokens}
+          />
+        </Tab>
+        <Tab eventKey="transcript" title="Transcript">
+          <p className="fs-5 border-bottom mt-3 fw-bold">Year 1</p>
+          <Year1Grades
+            pageLoading={pageLoading}
+            renderLoading={renderLoading}
+            year1Array={year1Array}
+            y1NoOfTokens={y1NoOfTokens}
+          />
+          <p className="fs-5 border-bottom mt-3 fw-bold">Year 2</p>
+          <Year2Grades
+            pageLoading={pageLoading}
+            renderLoading={renderLoading}
+            year2Array={year2Array}
+            y2NoOfTokens={y2NoOfTokens}
+          />
+          <p className="fs-5 border-bottom mt-3 fw-bold">Year 3</p>
+          <Year3Grades
+            pageLoading={pageLoading}
+            renderLoading={renderLoading}
+            year3Array={year3Array}
+            y3NoOfTokens={y3NoOfTokens}
+          />
+        </Tab>
+      </Tabs>
     </div>
   );
 }
 
-function NFTImage({
-  currentPosts,
-  postsPerPage,
+function ALLGRADES({
+  currentGrades,
+  gradesPerPage,
   paginate,
   currentPage,
   renderLoading,
   pageLoading,
   emptyGrades,
   gradeArray,
-  appealStruct,
-  setappealStruct,
   handleAlertFormChange,
   handleAlertSubmit,
-  Input,
   myNoOfTokens
-  // type,
-  // setType
-  // handleOpen,
-  // handleClose,
-  // open
 }) {
 
   // useEffect(() => {
@@ -243,44 +264,25 @@ function NFTImage({
                 :
                 <>
                   <div className="d-flex justify-content-around text-start mt-3">
-                    Your Results:
                     <Container>
                       <Row>
-                        {Object.values(currentPosts).map((val, k) =>
+                        {Object.values(currentGrades).map((val, k) =>
                           <Col k={k} xs={8} md={4} lg={3}>
                             <Card className="m-3" style={{ width: '12rem' }}>
                               <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.img}`} />
                               <Card.Body>
                                 <Card.Title>{val.name}</Card.Title>
-
-                                <div class="col-sm-12">
-                                  
-                              {/* <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleAlertFormChange} />
-                              <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleAlertFormChange} />
-                              <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleAlertFormChange} /> */}
-                              {/* <Input placeholder="Enter reason for Grade Appeal and Certificate id" name="message" type="text" handleChange={handleAlertFormChange} /> */}
-                              <Form.Group controlId={val.name}>
-                                {/* <Form.Label>Select Norm Type</Form.Label> */}
-                                <Form.Control
-                                  as="select"
-                                  
-                                  // value={type}
-                                  // onChange={e => {
-                                  //   console.log("e.target.value", e.target.value);
-                                  //   // console.log("e.target.id:",e.target.id);
-                                  //   console.log("val.name",val.name)
-                                  //   setappealStruct({reason:e.target.value,tokenId:val.name})
-                                  //   console.log(appealStruct)
-                                  // }}
-                                  onChange={(e) => handleAlertFormChange(e, val.faculty)}
-                                >
-                                  <option value="">Select Reason</option>
-                                  <option value="Re-Grade">Re-Grade</option>
-                                  <option value="Incorrect Certificate">Incorrect Certificate</option>
-                                  {/* <option value="3val">3</option> */}
-                                </Form.Control>
-                                </Form.Group>
-                              
+                                <div className="col-sm-12">
+                                  <Form.Group controlId={val.name}>
+                                    <Form.Control
+                                      as="select"
+                                      onChange={(e) => handleAlertFormChange(e, val.faculty)}
+                                    >
+                                      <option value="">Select Reason</option>
+                                      <option value="Re-Grade">Re-Grade</option>
+                                      <option value="Incorrect Certificate">Incorrect Certificate</option>
+                                    </Form.Control>
+                                  </Form.Group>
                                   <Button variant="outline-danger w-100 mt-2"
                                     type="button"
                                     onClick={handleAlertSubmit}
@@ -288,12 +290,7 @@ function NFTImage({
                                   >
                                     Submit Appeal
                                   </Button>
-
-                                </div>
-                                {/* controlid = formBasicSelect0...many  */}
-
-                                {/* <Button variant="outline-danger w-100 mt-2">Submit Appeal</Button> */}
-                              </Card.Body>
+                                </div></Card.Body>
                             </Card>
                           </Col>
                         )}
@@ -301,18 +298,167 @@ function NFTImage({
                     </Container>
                   </div>
                   <Pagination className="text-end mt-3 ms-auto"
-                    postsPerPage={postsPerPage}
-                    totalPosts={gradeArray.length}
+                    gradesPerPage={gradesPerPage}
+                    totalGrades={gradeArray.length}
                     paginate={paginate}
                     currentPage={currentPage}
                   />
                 </>
             }
-
-
-
           </div>
+      }
+    </div>
+  );
+}
 
+function Year1Grades({
+  renderLoading,
+  pageLoading,
+  year1Array,
+  y1NoOfTokens
+}) {
+
+  let emptyGrades = false;
+
+  if (y1NoOfTokens === 0) {
+    emptyGrades = true;
+  }
+
+  return (
+    <div className='container'>
+      {
+        pageLoading ?
+          renderLoading() :
+          <div className="">
+            {
+              emptyGrades ?
+                <div className="text-center mt-5">
+                  <h2>There are no grades awarded to you right now.</h2>
+                  <small>Please check back again later.</small>
+                </div>
+                :
+                <>
+                  <div className="d-flex justify-content-around text-start mt-3">
+                    <Container>
+                      <Row>
+                        {Object.values(year1Array).map((val, k) =>
+                          <Col k={k} xs={8} md={4} lg={3}>
+                            <Card className="m-3" style={{ width: '12rem' }}>
+                              <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.img}`} />
+                              <Card.Body>
+                                <Card.Title>{val.name}</Card.Title>
+                              </Card.Body>
+                            </Card>
+                          </Col>
+                        )}
+                      </Row>
+                    </Container>
+                  </div>
+                </>
+            }
+          </div>
+      }
+    </div>
+  );
+}
+
+function Year2Grades({
+  renderLoading,
+  pageLoading,
+  year2Array,
+  y2NoOfTokens
+}) {
+
+  let emptyGrades = false;
+
+  if (y2NoOfTokens === 0) {
+    emptyGrades = true;
+  }
+
+  return (
+    <div className='container'>
+      {
+        pageLoading ?
+          renderLoading() :
+          <div className="">
+            {
+              emptyGrades ?
+                <div className="text-center mt-5">
+                  <h2>There are no grades awarded to you right now.</h2>
+                  <small>Please check back again later.</small>
+                </div>
+                :
+                <>
+                  <div className="d-flex justify-content-around text-start mt-3">
+                    <Container>
+                      <Row>
+                        {Object.values(year2Array).map((val, k) =>
+                          <Col k={k} xs={8} md={4} lg={3}>
+                            <Card className="m-3" style={{ width: '12rem' }}>
+                              <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.img}`} />
+                              <Card.Body>
+                                <Card.Title>{val.name}</Card.Title>
+                              </Card.Body>
+                            </Card>
+                          </Col>
+                        )}
+                      </Row>
+                    </Container>
+                  </div>
+                </>
+            }
+          </div>
+      }
+    </div>
+  );
+}
+
+function Year3Grades({
+  renderLoading,
+  pageLoading,
+  year3Array,
+  y3NoOfTokens
+}) {
+
+  let emptyGrades = false;
+
+  if (y3NoOfTokens === 0) {
+    emptyGrades = true;
+  }
+
+  return (
+    <div className='container'>
+      {
+        pageLoading ?
+          renderLoading() :
+          <div className="">
+            {
+              emptyGrades ?
+                <div className="text-center mt-5">
+                  <h2>There are no grades awarded to you right now.</h2>
+                  <small>Please check back again later.</small>
+                </div>
+                :
+                <>
+                  <div className="d-flex justify-content-around text-start mt-3">
+                    <Container>
+                      <Row>
+                        {Object.values(year3Array).map((val, k) =>
+                          <Col k={k} xs={8} md={4} lg={3}>
+                            <Card className="m-3" style={{ width: '12rem' }}>
+                              <Card.Img variant="top" src={`data:image/svg+xml;base64,${val.img}`} />
+                              <Card.Body>
+                                <Card.Title>{val.name}</Card.Title>
+                              </Card.Body>
+                            </Card>
+                          </Col>
+                        )}
+                      </Row>
+                    </Container>
+                  </div>
+                </>
+            }
+          </div>
       }
     </div>
   );

@@ -37,6 +37,12 @@ const ManageAccounts = () => {
   const [makeRemoveFacultyLoading, setMakeRemoveFacultyLoading] = useState(false);
   const [makeRemoveFacultyReceipt, setMakeRemoveFacultyReceipt] = useState([]);
 
+  /** MAKE STUDENT */
+  const [formAddStudentData, setFormAddStudentData] = useState({ studentId: "", studentAddress: "" });
+  const [studentResult, setStudentResult] = useState('');
+  const [makeStudentLoading, setMakeStudentLoading] = useState(false);
+  const [makeStudentReceipt, setMakeStudentReceipt] = useState([]);
+
   /** FACULTY UPLOAD VARIABLES */
   const [facultyItems, setFacultyItems] = useState([]);
   const [uploadedFileFaculty, setUploadedFileFaculty] = useState('');
@@ -82,6 +88,13 @@ const ManageAccounts = () => {
     }
     functIsStudent();
   };
+  function handleStudent(evt) {
+    const value = evt.target.value;
+    setFormAddStudentData({
+      ...formAddStudentData,
+      [evt.target.name]: value
+    });
+  }
 
   /** MAKE & REMOVE ADMIN */
   const makeAdmin = async () => {
@@ -211,6 +224,50 @@ const ManageAccounts = () => {
     }
   }
 
+  /** MAKE STUDENT */
+  const functMakeStudent = async () => {
+    const {
+      studentId,
+      studentAddress,
+    } = formAddStudentData;
+
+    const sitnftInstance = getSITNFTContract();
+    try {
+      const result = await sitnftInstance.addStudentAddress(
+        studentId,
+        studentAddress,
+      );
+
+      const interval = setInterval(function () {
+        console.log("awaiting transaction confirmation...");
+        setMakeStudentReceipt("Awaiting transaction confirmation...");
+        setMakeStudentLoading(true);
+        state.web3.eth.getTransactionReceipt(result.hash, function (err, rec) {
+          if (rec) {
+            console.log(rec);
+            if (rec.status) {
+              setMakeStudentReceipt("Transaction Complete.");
+              setMakeStudentLoading(false);
+            }
+            if (rec.status !== true) {
+              setMakeStudentLoading(false);
+              setMakeStudentReceipt("Error occured.");
+            }
+            clearInterval(interval);
+          }
+        });
+      }, 2000);
+
+      console.log(result);
+      setMakeStudentReceipt(result);
+      return result;
+    } catch (err) {
+      console.error(err);
+      setMakeStudentReceipt(err);
+      return err;
+    }
+  }
+
   /** ADD STUDENT*/
   const functAddStudents = async () => {
     const sitnftInstance = getSITNFTContract();
@@ -279,7 +336,6 @@ const ManageAccounts = () => {
         });
       }, 2000);
 
-      console.log(result);
       return result;
     } catch (err) {
       console.error(err);
@@ -293,7 +349,6 @@ const ManageAccounts = () => {
       setAdminResultLoading(true);
       const { addressInput } = formAddressData;
       const sitnftInstance = getSITNFTContract();
-      console.log(sitnftInstance);
       const result = await sitnftInstance.isAdmin((addressInput).toString());
       setIsAdminResult(result);
       setAdminResultLoading(false);
@@ -449,7 +504,7 @@ const ManageAccounts = () => {
             <button className="btn btn-block btn-outline-danger m-2" type="button" onClick={removeFaculty}>Remove Faculty</button>
             <div className="my-2 text-start">
               Result:
-              {facultyResultLoading || makeRemoveFacultyLoading?
+              {facultyResultLoading || makeRemoveFacultyLoading ?
                 <>
                   <div className="spinner-border text-secondary align-middle mx-2" role="status">
                     <span className="visually-hidden">Loading...</span>
@@ -473,6 +528,7 @@ const ManageAccounts = () => {
     return (
       <>
         <div className="row g-3 mt-1">
+          <p className="border-bottom fw-bold m-1">Check Student</p>
           <div className="col-sm-6 w-100 d-inline-block">
             <Input placeholder="Address e.g. 0x........." name="addressInput" type="text" handleChange={handleChange} />
           </div>
@@ -495,13 +551,42 @@ const ManageAccounts = () => {
     )
   };
 
+  /** CHECK STUDENT */
+  const renderMakeStudent = (e) => {
+    return (
+      <>
+        <div className="row g-3 mt-1">
+          <p className="border-bottom fw-bold m-1">Add Student</p>
+          <div className="col-sm-6 w-100 d-inline-block">
+            <input placeholder="Student ID" className="form-control mb-1" type="text" name="studentId" value={formAddStudentData.studentId} onChange={handleStudent} />
+            <input placeholder="Student Address" className="form-control mb-1" type="text" name="studentAddress" value={formAddStudentData.studentAddress} onChange={handleStudent} />
+          </div>
+          <div className="col-sm-6 w-100 d-inline-block mt-1 text-center">
+            <button className="btn btn-block btn-primary mt-3" type="button" onClick={functMakeStudent}>Add Student</button>
+            <div className="my-2 text-start">
+              Result:
+              {makeStudentLoading ?
+                <div className="spinner-border text-secondary align-middle mx-2" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div> : null
+              }
+              <small className="ms-2">
+                {makeStudentReceipt.toString()}
+              </small>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  };
+
   useEffect(() => {
     setInputStudentFile(document.getElementById("input-file-Student"));
     setInputFacultyFile(document.getElementById("input-file-Faculty"));
   }, []);
 
   return (
-    <div className='container' >
+    <div className='container mb-5' >
       <h2 className="border-bottom text-start mt-3">Manage Accounts.</h2>
       <Tab.Container id="left-tabs" defaultActiveKey="Admin">
         <Row className="p-1">
@@ -574,7 +659,8 @@ const ManageAccounts = () => {
               </Tab.Pane>
               <Tab.Pane eventKey="Students">
                 {renderIsStudent()}
-                <p className="border-bottom mt-3 fw-bold">Upload Students:</p>
+                {renderMakeStudent()}
+                <p className="border-bottom mt-4 fw-bold">Upload Students:</p>
                 <div className="w-100 d-inline-block">
                   <div className="float-start align-middle">
                     {studentUploadLoading ?
