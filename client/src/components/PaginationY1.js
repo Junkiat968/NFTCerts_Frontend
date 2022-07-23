@@ -1,46 +1,46 @@
 import React from "react";
 import PaginationBar from 'react-bootstrap/Pagination';
 
-const Pagination = ({ gradesPerPage, totalGrades, paginate, currentPage }) => {
+const PaginationY1 = ({ gradesPerPageY1, totalGradesY1, paginateY1, currentPageY1}) => {
   const pageNumbers = [];
-  const pageCount = Math.ceil(totalGrades / gradesPerPage);
+  const pageCount = Math.ceil(totalGradesY1 / gradesPerPageY1);
 
   var isFirstPage = true;
   var isLastPage = true;
-  if (currentPage === 1) {
+  if (currentPageY1 === 1) {
     isFirstPage = true;
   } else {
     isFirstPage = false;
   }
-  if (currentPage === pageCount) {
+  if (currentPageY1 === pageCount) {
     isLastPage = true;
   } else {
     isLastPage = false;
   }
 
-  for (let i = 1; i <= Math.ceil(totalGrades / gradesPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(totalGradesY1 / gradesPerPageY1); i++) {
     // pageNumbers.push(i);
     pageNumbers.push(
-      <PaginationBar.Item key={i} active={i === currentPage} onClick={() => onPageNumberClick(i)}>
+      <PaginationBar.Item key={i} active={i === currentPageY1} onClick={() => onPageNumberClick(i)}>
         {i}
       </PaginationBar.Item>
     );
   }
 
   const onFirstPageClick = () => {
-    paginate(currentPage => 1);
+    paginateY1(currentPage => 1);
   };
   const onPageNumberClick = pageNumber => {
-    paginate(pageNumber);
+    paginateY1(pageNumber);
   };
   const onPreviousPageClick = () => {
-    paginate(currentPage => currentPage - 1);
+    paginateY1(currentPage => currentPage - 1);
   };
   const onNextPageClick = () => {
-    paginate(currentPage => currentPage + 1);
+    paginateY1(currentPage => currentPage + 1);
   };
   const onLastPageClick = () => {
-    paginate(currentPage => pageCount);
+    paginateY1(currentPage => pageCount);
   };
 
   return (
@@ -54,4 +54,4 @@ const Pagination = ({ gradesPerPage, totalGrades, paginate, currentPage }) => {
   );
 };
 
-export default Pagination;
+export default PaginationY1;

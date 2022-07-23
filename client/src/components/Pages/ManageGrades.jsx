@@ -15,6 +15,8 @@ const ManageGrades = () => {
   const [receipt, setReceipt] = useState([]);
   const [receiptLoading, setReceiptLoading] = useState(false);
 
+  const moduleArr = ["ICT1001", "ICT1002", "ICT2101", "ICT2102", "ICT3101", "ICT3102"];
+
   function handleMint(evt) {
     const value = evt.target.value;
     setMintData({
@@ -160,7 +162,16 @@ const ManageGrades = () => {
                 <Nav.Link eventKey="ICT1001">ICT1001 Introduction to Computing</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="ICT2102">ICT2102 Introduction to Software Engineering</Nav.Link>
+                <Nav.Link eventKey="ICT1002">ICT1002 Programming Fundamentals</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="ICT2101">ICT2101 Introduction to Software Engineering</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="ICT2102">ICT2102 Human Computer Interaction</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="ICT3101">ICT3101 Software Verification And Validation</Nav.Link>
               </Nav.Item>
             </Nav>
           </Col>
@@ -197,7 +208,100 @@ const ManageGrades = () => {
                   {renderTable()}
                 </div>
               </Tab.Pane>
+              <Tab.Pane eventKey="ICT1002">
+                <div>
+                  <div className="p-3 w-100 d-inline-block">
+                    <div className="float-start align-middle">
+                      {receiptLoading ?
+                        <div className="spinner-border text-secondary align-middle me-2" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        :
+                        null
+                      }
+                      {receipt}
+                    </div>
+                    {uploadedFileName ? renderButtons() : null}
+                    <input
+                      id="input-file"
+                      onChange={handleDisplayFileDetails}
+                      className="d-none"
+                      type="file"
+                    />
+                    <button
+                      onClick={handleUpload}
+                      className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
+                        }`}
+                    >
+                      {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+                    </button>
+                  </div>
+                  {renderTable()}
+                </div>
+              </Tab.Pane>
+              <Tab.Pane eventKey="ICT2101">
+                <div>
+                  <div className="p-3 w-100 d-inline-block">
+                    <div className="float-start align-middle">
+                      {receiptLoading ?
+                        <div className="spinner-border text-secondary align-middle me-2" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        :
+                        null
+                      }
+                      {receipt}
+                    </div>
+                    {uploadedFileName ? renderButtons() : null}
+                    <input
+                      id="input-file"
+                      onChange={handleDisplayFileDetails}
+                      className="d-none"
+                      type="file"
+                    />
+                    <button
+                      onClick={handleUpload}
+                      className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
+                        }`}
+                    >
+                      {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+                    </button>
+                  </div>
+                  {renderTable()}
+                </div>
+              </Tab.Pane>
               <Tab.Pane eventKey="ICT2102">
+                <div>
+                  <div className="p-3 w-100 d-inline-block">
+                    <div className="float-start align-middle">
+                      {receiptLoading ?
+                        <div className="spinner-border text-secondary align-middle me-2" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        :
+                        null
+                      }
+                      {receipt}
+                    </div>
+                    {uploadedFileName ? renderButtons() : null}
+                    <input
+                      id="input-file"
+                      onChange={handleDisplayFileDetails}
+                      className="d-none"
+                      type="file"
+                    />
+                    <button
+                      onClick={handleUpload}
+                      className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
+                        }`}
+                    >
+                      {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+                    </button>
+                  </div>
+                  {renderTable()}
+                </div>
+              </Tab.Pane>
+              <Tab.Pane eventKey="ICT3101">
                 <div>
                   <div className="p-3 w-100 d-inline-block">
                     <div className="float-start align-middle">
