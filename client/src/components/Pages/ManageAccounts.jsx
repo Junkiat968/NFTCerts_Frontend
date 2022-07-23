@@ -258,13 +258,12 @@ const ManageAccounts = () => {
         });
       }, 2000);
 
-
       console.log(result);
-      setStudentResult(result);
+      setMakeStudentReceipt(result);
       return result;
     } catch (err) {
       console.error(err);
-      setStudentResult(err);
+      setMakeStudentReceipt(err);
       return err;
     }
   }
