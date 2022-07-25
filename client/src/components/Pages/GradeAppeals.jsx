@@ -70,7 +70,7 @@ const GradeAppeals = () => {
     var arr = [];
     transactions.forEach(function (item, index) {
       EvalMapping[item.tokenName.split("Certificate ")[1]] = index;
-      if(item.reviewed == 0){
+      if (item.reviewed == 0) {
         arr.push(transactions[index]);
       }
     });
@@ -81,7 +81,10 @@ const GradeAppeals = () => {
 
     e.preventDefault();
 
-    if (!targetTokenId || !newGrade) return;
+    if (!targetTokenId || !newGrade) {
+      alert("Please complete the required fields.")
+      return;
+    }
 
     setNFTGrade();
   };
@@ -144,17 +147,17 @@ const GradeAppeals = () => {
   };
 
   const Transactions = () => {
-  
+
     return (
       <div className="">
         <Container>
           <Row md={4}>
-          {[...filterAppeals()].map((appeal, i) => (
-          <div>
-            <TransactionsCard key={i} {...appeal}></TransactionsCard>
-           {/* {console.log("EvalMap = ",EvalMapping)} */}
-           </div>
-          ))}
+            {[...filterAppeals()].map((appeal, i) => (
+              <div>
+                <TransactionsCard key={i} {...appeal}></TransactionsCard>
+                {/* {console.log("EvalMap = ",EvalMapping)} */}
+              </div>
+            ))}
           </Row>
         </Container>
       </div>
