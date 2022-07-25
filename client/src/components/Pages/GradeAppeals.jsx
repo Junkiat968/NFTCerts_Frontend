@@ -152,6 +152,7 @@ const GradeAppeals = () => {
       <div className="">
         <Container>
           <Row md={4}>
+            {filterAppeals().length == 0 && <p>No Appeals found</p>}
             {[...filterAppeals()].map((appeal, i) => (
               <div>
                 <TransactionsCard key={i} {...appeal}></TransactionsCard>
