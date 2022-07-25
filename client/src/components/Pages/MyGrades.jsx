@@ -294,7 +294,8 @@ function ALLGRADES({
                                   >
                                     Submit Appeal
                                   </Button>
-                                </div></Card.Body>
+                                </div>
+                              </Card.Body>
                             </Card>
                           </Col>
                         )}

@@ -10,7 +10,7 @@
   "sourceMap": "196:2170:17:-:0;;;;;;;;;;;;;;;-1:-1:-1;;;196:2170:17;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "196:2170:17:-:0;;;;;;;;",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\n/// @title Base64\r\n/// @author Brecht Devos - <brecht@loopring.org>\r\n/// @notice Provides a function for encoding some bytes in base64\r\nlibrary Base64 {\r\n    string internal constant TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';\r\n\r\n    function encode(bytes memory data) internal pure returns (string memory) {\r\n        if (data.length == 0) return '';\r\n        \r\n        // load the table into memory\r\n        string memory table = TABLE;\r\n\r\n        // multiply by 4/3 rounded up\r\n        uint256 encodedLen = 4 * ((data.length + 2) / 3);\r\n\r\n        // add some extra buffer at the end required for the writing\r\n        string memory result = new string(encodedLen + 32);\r\n\r\n        assembly {\r\n            // set the actual output length\r\n            mstore(result, encodedLen)\r\n            \r\n            // prepare the lookup table\r\n            let tablePtr := add(table, 1)\r\n            \r\n            // input ptr\r\n            let dataPtr := data\r\n            let endPtr := add(dataPtr, mload(data))\r\n            \r\n            // result ptr, jump over length\r\n            let resultPtr := add(result, 32)\r\n            \r\n            // run over the input, 3 bytes at a time\r\n            for {} lt(dataPtr, endPtr) {}\r\n            {\r\n               dataPtr := add(dataPtr, 3)\r\n               \r\n               // read 3 bytes\r\n               let input := mload(dataPtr)\r\n               \r\n               // write 4 characters\r\n               mstore(resultPtr, shl(248, mload(add(tablePtr, and(shr(18, input), 0x3F)))))\r\n               resultPtr := add(resultPtr, 1)\r\n               mstore(resultPtr, shl(248, mload(add(tablePtr, and(shr(12, input), 0x3F)))))\r\n               resultPtr := add(resultPtr, 1)\r\n               mstore(resultPtr, shl(248, mload(add(tablePtr, and(shr( 6, input), 0x3F)))))\r\n               resultPtr := add(resultPtr, 1)\r\n               mstore(resultPtr, shl(248, mload(add(tablePtr, and(        input,  0x3F)))))\r\n               resultPtr := add(resultPtr, 1)\r\n            }\r\n            \r\n            // padding with '='\r\n            switch mod(mload(data), 3)\r\n            case 1 { mstore(sub(resultPtr, 2), shl(240, 0x3d3d)) }\r\n            case 2 { mstore(sub(resultPtr, 1), shl(248, 0x3d)) }\r\n        }\r\n        \r\n        return result;\r\n    }\r\n}",
-  "sourcePath": "C:\\Users\\ngjun\\Downloads\\Blockchain-Trusted-Model\\contracts\\Base64.sol",
+  "sourcePath": "C:\\Users\\jaspz\\Documents\\GitHub\\ITP\\Blockchain-Trusted-Model\\contracts\\Base64.sol",
   "ast": {
     "absolutePath": "project:/contracts/Base64.sol",
     "exportedSymbols": {
@@ -1751,9 +1751,8 @@
       "transactionHash": "0x9fcde9244b50d706c767ae31c3d4bd286274b458cd6dd5450f27bbd31583a588"
     }
   },
-  "schemaVersion": "3.4.8",
-  "updatedAt": "2022-07-20T10:20:46.796Z",
-  "networkType": "ethereum",
+  "schemaVersion": "3.4.7",
+  "updatedAt": "2022-07-25T12:18:42.087Z",
   "devdoc": {
     "author": "Brecht Devos - <brecht@loopring.org>",
     "kind": "dev",
