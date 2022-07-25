@@ -169,22 +169,26 @@ const MyGrades = () => {
       <Tabs
         defaultActiveKey="mygrades"
         id="gradesTabs"
-        className="my-3 fs-5"
+        className="my-3 fs-6 fw-bold container"
       >
         <Tab eventKey="mygrades" title="My Grades">
           <div className="row w-100 d-inline-block m-2">
-            <div className="">
-              {regradeRequestLoading ?
-                <div className="spinner-border text-secondary align-middle mx-1 text-start" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                : null
-              }
-              <small className="ms-2">
-                {regradeRequestReceipt.toString()}
-              </small>
-              <Select className="float-end w-25" isClearable={true} options={modulesArray} placeholder="Filter" onChange={changeSelected} />
-            </div>
+            <Row>
+              <Col sm={6}>
+                {regradeRequestLoading ?
+                  <div className="spinner-border text-secondary align-middle mx-1 text-start" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  : null
+                }
+                <small className="ms-2">
+                  {regradeRequestReceipt.toString()}
+                </small>
+              </Col>
+              <Col sm={6}>
+                <Select className="float-end w-100" isClearable={true} options={modulesArray} placeholder="Filter" onChange={changeSelected} />
+              </Col>
+            </Row>
           </div>
           <ALLGRADES
             currentGrades={currentGrades}
@@ -203,7 +207,7 @@ const MyGrades = () => {
             myNoOfTokens={myNoOfTokens}
           />
         </Tab>
-        <Tab eventKey="transcript" title="Transcript">
+        <Tab eventKey="transcript" title="Transcript" className="container">
           <p className="fs-5 border-bottom mt-3 fw-bold">Year 1</p>
           <Year1Grades
             pageLoading={pageLoading}

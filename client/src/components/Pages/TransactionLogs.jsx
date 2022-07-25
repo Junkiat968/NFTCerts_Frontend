@@ -198,13 +198,13 @@ const TransactionLogs = () => {
         <h2 className="pb-2 border-bottom text-start mt-3">
           Transaction Logs.
         </h2>
-        <div className="container-fluid p-4 row">
+        <div className="container-fluid p-3 row">
           <Tab.Container id="left-tabs" defaultActiveKey="log">
             <Row className="p-1">
               <Col sm={3}>
                 <Nav
                   variant="pills"
-                  className="flex-column p-3"
+                  className="flex-column pb-3"
                 >
                   <Nav.Item>
                     <Nav.Link eventKey="log">Logs</Nav.Link>
@@ -241,13 +241,13 @@ const TransactionLogs = () => {
         <h2 className="pb-2 border-bottom text-start mt-3">
           Transaction Logs.
         </h2>
-        <div className="container-fluid p-4 row">
+        <div className="container-fluid p-3 row">
           <Tab.Container id="left-tabs" defaultActiveKey="transfer">
             <Row className="p-1">
               <Col sm={3}>
                 <Nav
                   variant="pills"
-                  className="flex-column p-3"
+                  className="flex-column pb-3"
                 >
                   <Nav.Item>
                     <Nav.Link eventKey="transfer">Transfer</Nav.Link>
@@ -278,13 +278,13 @@ const TransactionLogs = () => {
         <h2 className="pb-2 border-bottom text-start mt-3">
           Transaction Logs.
         </h2>
-        <div className="container-fluid p-4 row">
+        <div className="container-fluid p-3 row">
           <Tab.Container id="left-tabs" defaultActiveKey="log">
             <Row className="p-1">
               <Col sm={3}>
                 <Nav
                   variant="pills"
-                  className="flex-column p-3"
+                  className="flex-column pb-3"
                 >
                   <Nav.Item>
                     <Nav.Link eventKey="log">Logs</Nav.Link>

@@ -20,43 +20,43 @@ const Navigationbar = () => {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
+            <Nav className="me-auto text-end">
               {/* <Nav.Link as={NavLink} to="/">Home</Nav.Link> */}
 
               {/* {state.role === "ADMIN" && (
-                <Nav.Link as={NavLink} to="/SITNFT">
+                <Nav.Link as={NavLink} to="/SITNFT" className="m-1">
                   SITNFT
                 </Nav.Link>
               )} */}
               {state.role === "STUDENT" && (
-                <Nav.Link as={NavLink} to="/MyGrades">
+                <Nav.Link as={NavLink} to="/MyGrades" className="m-1">
                   MyGrades
                 </Nav.Link>
               )}
               {state.role === "FACULTY" && (
-                <Nav.Link as={NavLink} to="/ManageGrades">
+                <Nav.Link as={NavLink} to="/ManageGrades" className="m-1">
                   Manage Grades
                 </Nav.Link>
               )}
               {state.role === "ADMIN" && (
-                <Nav.Link as={NavLink} to="/ManageAccounts">
+                <Nav.Link as={NavLink} to="/ManageAccounts" className="m-1">
                   Manage Accounts
                 </Nav.Link>
               )}
               {(state.role === "FACULTY" || state.role === "STUDENT" ||
                 state.role === "ADMIN") && (
-                  <Nav.Link as={NavLink} to="/TransactionLogs">
+                  <Nav.Link as={NavLink} to="/TransactionLogs" className="m-1">
                     Transaction Logs
                   </Nav.Link>
                 )}
               {/* <Nav.Link as={NavLink} to="/PurchaseTokens">Purchase Tokens</Nav.Link> */}
               {state.role === "FACULTY" && (
-                <Nav.Link as={NavLink} to="/GradeAppeals">
+                <Nav.Link as={NavLink} to="/GradeAppeals" className="m-1">
                   Manage Appeals
                 </Nav.Link>
               )}
             </Nav>
-            <Nav>
+            <Nav className="text-end m-1">
               <li className="nav-item text-white">
                 <Button
                   className="btn btn-sm btn-outline-dark"
