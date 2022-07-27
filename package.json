@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "@material-ui/core": "^4.12.4",
-    "@truffle/hdwallet-provider": "^2.0.10"
+    "@truffle/hdwallet-provider": "^2.0.10",
+    "eth-sig-util": "^3.0.1"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "^4.7.0"

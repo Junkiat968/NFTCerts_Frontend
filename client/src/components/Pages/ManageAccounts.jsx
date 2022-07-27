@@ -124,6 +124,7 @@ const ManageAccounts = () => {
       }, 2000);
     } catch (err) {
       setIsAdminResult(err);
+      setMakeRemoveAdminLoading(false);
       console.error(err);
       return err;
     }
@@ -155,6 +156,7 @@ const ManageAccounts = () => {
       }, 2000);
     } catch (err) {
       setIsAdminResult(err);
+      setMakeRemoveAdminLoading(false);
       console.error(err);
       return err;
     }
@@ -188,6 +190,7 @@ const ManageAccounts = () => {
       }, 2000);
     } catch (err) {
       setIsFacultyResult(err);
+      setMakeRemoveFacultyLoading(false);
       console.error(err);
       return err;
     }
@@ -219,6 +222,7 @@ const ManageAccounts = () => {
       }, 2000);
     } catch (err) {
       setIsFacultyResult(err);
+      setMakeRemoveFacultyLoading(false);
       console.error(err);
       return err;
     }
@@ -264,6 +268,7 @@ const ManageAccounts = () => {
     } catch (err) {
       console.error(err);
       setMakeStudentReceipt(err);
+      setMakeStudentLoading(false);
       return err;
     }
   }
@@ -299,6 +304,8 @@ const ManageAccounts = () => {
       return result;
     } catch (err) {
       console.error(err);
+      setStudentReceipt(err.toString());
+      setStudentUploadLoading(false);
       return err;
     }
   }
@@ -339,6 +346,8 @@ const ManageAccounts = () => {
       return result;
     } catch (err) {
       console.error(err);
+      setFacultyReceipt(err.toString());
+      setFacultyUploadLoading(false);
       return err;
     }
   }
@@ -355,6 +364,7 @@ const ManageAccounts = () => {
       return result;
     } catch (err) {
       setIsAdminResult(err);
+      setAdminResultLoading(false);
       console.error(err);
       return err;
     }
@@ -371,8 +381,9 @@ const ManageAccounts = () => {
       setFacultyResultLoading(false);
       return result;
     } catch (err) {
-      setIsFacultyResult(err);
       console.error(err);
+      setIsFacultyResult(err);
+      setFacultyResultLoading(false);
       return err;
     }
   }
@@ -387,8 +398,9 @@ const ManageAccounts = () => {
       setStudentResultLoading(false);
       return result;
     } catch (err) {
-      setIsStudentResult(err);
       console.error(err);
+      setIsStudentResult(err);
+      setStudentResultLoading(false);
       return err;
     }
   }
@@ -470,7 +482,7 @@ const ManageAccounts = () => {
             <button className="btn btn-block btn-outline-secondary m-2" type="button" onClick={makeAdmin}>Make Admin</button>
             <button className="btn btn-block btn-outline-danger m-2" type="button" onClick={removeAdmin}>Remove Admin</button>
             <div className="my-2 text-start">
-              Result:
+              <label for="adminResult" className="fw-bold m-1 me-2">Result:</label>
               {adminResultLoading || makeRemoveAdminLoading ?
                 <>
                   <div className="spinner-border text-secondary align-middle mx-2" role="status">
@@ -503,7 +515,7 @@ const ManageAccounts = () => {
             <button className="btn btn-block btn-outline-secondary m-2" type="button" onClick={makeFaculty}>Make Faculty</button>
             <button className="btn btn-block btn-outline-danger m-2" type="button" onClick={removeFaculty}>Remove Faculty</button>
             <div className="my-2 text-start">
-              Result:
+              <label for="facultyResult" className="fw-bold m-1 me-2">Result:</label>
               {facultyResultLoading || makeRemoveFacultyLoading ?
                 <>
                   <div className="spinner-border text-secondary align-middle mx-2" role="status">
@@ -535,7 +547,7 @@ const ManageAccounts = () => {
           <div className="col-sm-6 w-100 d-inline-block mt-1 text-center">
             <button className="btn btn-block btn-primary m-2" type="button" onClick={handleCheckStudent}>Check Student</button>
             <div className="my-2 text-start">
-              Result:
+              <label for="studentResult" className="fw-bold m-1 me-2">Result:</label>
               {studentResultLoading ?
                 <div className="spinner-border text-secondary align-middle mx-2" role="status">
                   <span className="visually-hidden">Loading...</span>
@@ -562,9 +574,9 @@ const ManageAccounts = () => {
             <input placeholder="Student Address" className="form-control mb-1" type="text" name="studentAddress" value={formAddStudentData.studentAddress} onChange={handleStudent} />
           </div>
           <div className="col-sm-6 w-100 d-inline-block mt-1 text-center">
-            <button className="btn btn-block btn-primary mt-3" type="button" onClick={functMakeStudent}>Add Student</button>
+            <button className="btn btn-block btn-primary mt-3" type="button" onClick={functMakeStudent}>Make Student</button>
             <div className="my-2 text-start">
-              Result:
+              <label for="addStudentResult" className="fw-bold m-1 me-2">Result:</label>
               {makeStudentLoading ?
                 <div className="spinner-border text-secondary align-middle mx-2" role="status">
                   <span className="visually-hidden">Loading...</span>
@@ -580,6 +592,22 @@ const ManageAccounts = () => {
     )
   };
 
+  const renderFacultyUploadBtn = (e) => {
+    return (
+      <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
+        onClick={functAddFaculty}>Confirm
+      </button>
+    );
+  };
+
+  const renderStudentUploadBtn = (e) => {
+    return (
+      <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
+        onClick={functAddStudents}>Confirm
+      </button>
+    );
+  };
+
   useEffect(() => {
     setInputStudentFile(document.getElementById("input-file-Student"));
     setInputFacultyFile(document.getElementById("input-file-Faculty"));
@@ -587,7 +615,7 @@ const ManageAccounts = () => {
 
   return (
     <div className='container mb-5' >
-      <h2 className="border-bottom text-start mt-3">Manage Accounts.</h2>
+      <h2 className="border-bottom text-start mt-3">Manage Accounts</h2>
       <Tab.Container id="left-tabs" defaultActiveKey="Admin">
         <Row className="p-1">
           <Col sm={3}>
@@ -612,7 +640,7 @@ const ManageAccounts = () => {
                 {renderIsFaculty()}
                 <p className="border-bottom mt-3 fw-bold">Upload Faculty:</p>
                 <div className=" w-100 d-inline-block">
-                  <div className="float-start align-middle">
+                  <div className="float-start align-middle m-2 mb-3">
                     {facultyUploadLoading ?
                       <div className="spinner-border text-secondary align-middle me-2" role="status">
                         <span className="visually-hidden">Loading...</span>
@@ -622,20 +650,18 @@ const ManageAccounts = () => {
                     }
                     {facultyReceipt}
                   </div>
+                  {uploadedFileFaculty ? renderFacultyUploadBtn() : null}
                   <input
                     id="input-file-Faculty"
                     onChange={handleDisplayFacultyFileDetails}
                     className="d-none"
                     type="file"
                   />
-                  <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
-                    onClick={functAddFaculty}>Upload
-                  </button>
                   <button onClick={handleFacultyUpload}
                     className={`float-end btn btn-outline-${uploadedFileFaculty ? "success" : "primary"
                       }`}
                   >
-                    {uploadedFileFaculty ? uploadedFileFaculty : 'Select excel'}
+                    {uploadedFileFaculty ? uploadedFileFaculty : 'Select Excel'}
                   </button>
                 </div>
                 <div>
@@ -662,7 +688,7 @@ const ManageAccounts = () => {
                 {renderMakeStudent()}
                 <p className="border-bottom mt-4 fw-bold">Upload Students:</p>
                 <div className="w-100 d-inline-block">
-                  <div className="float-start align-middle">
+                  <div className="float-start align-middle m-2 mb-3">
                     {studentUploadLoading ?
                       <div className="spinner-border text-secondary align-middle me-2" role="status">
                         <span className="visually-hidden">Loading...</span>
@@ -672,20 +698,18 @@ const ManageAccounts = () => {
                     }
                     {studentReceipt}
                   </div>
+                  {uploadedFileStudent ? renderStudentUploadBtn() : null}
                   <input
                     id="input-file-Student"
                     onChange={handleDisplayStudentFileDetails}
                     className="d-none"
                     type="file"
                   />
-                  <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
-                    onClick={functAddStudents}>Upload
-                  </button>
                   <button onClick={handleStudentUpload}
                     className={`float-end btn btn-outline-${uploadedFileStudent ? "success" : "primary"
                       }`}
                   >
-                    {uploadedFileStudent ? uploadedFileStudent : 'Select excel'}
+                    {uploadedFileStudent ? uploadedFileStudent : 'Select Excel'}
                   </button>
                 </div>
                 <div>
@@ -711,7 +735,7 @@ const ManageAccounts = () => {
           </Col>
         </Row>
       </Tab.Container>
-    </div>
+    </div >
   );
 };
 

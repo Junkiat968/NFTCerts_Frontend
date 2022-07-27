@@ -21,6 +21,8 @@ const GradeAppeals = () => {
   const { state, sitnftInstance } = useEth();
 
   const [isStudentResult, setIsStudentResult] = useState('');
+  // var emptyAppeal = false;
+  const [emptyAppeal, setEmptyAppeal] = useState(false);
 
   const {
     functIsAdmin,
@@ -66,13 +68,25 @@ const GradeAppeals = () => {
       className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
     />
   );
-
+  const filterAppeals = () => {
+    var arr = [];
+    transactions.forEach(function (item, index) {
+      EvalMapping[item.tokenName.split("Certificate ")[1]] = index;
+      if (item.reviewed == 0) {
+        arr.push(transactions[index]);
+      }
+    });
+    return arr;
+  }
   const handleEvalSubmit = (e) => {
     const { targetTokenId, newGrade } = evalData;
 
     e.preventDefault();
 
-    if (!targetTokenId || !newGrade) return;
+    if (!targetTokenId || !newGrade) {
+      alert("Please complete the required fields.")
+      return;
+    }
 
     setNFTGrade();
   };
@@ -103,7 +117,7 @@ const GradeAppeals = () => {
     return (
       <Card className="m-3" style={{ width: '20rem' }}>
         <Card.Body>
-          <Card.Title>{message} </Card.Title>
+          <Card.Title>{message}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">{tokenName} </Card.Subtitle>
           <Card.Text>
             Applied on: {timestamp}
@@ -135,54 +149,43 @@ const GradeAppeals = () => {
   };
 
   const Transactions = () => {
+
     return (
       <div className="">
-        {/* {state.accounts ? (
-            <h3 className="text-black text-3xl text-center my-2">
-              Reevaluation Requests
-            </h3>
-          ) : (
-            <h3 className="text-black text-3xl text-center my-2">
-              Connect your account to see the latest transactions
-            </h3>
-          )} */}
         <Container>
-          <Row>
-            {[...transactions].map((transaction, i) => (
-
-              <Col md="auto">
-
-                {transaction.reviewed ? (<div></div>) : (<TransactionsCard key={i} {...transaction} />)}
-                {/* <TransactionsCard key={i} {...transaction} /> */}
-
-                <div hidden>
-                  {EvalMapping[transaction.tokenName.split("Certificate ")[1]] = i}
-                </div>
-                {console.log("EvalMap = ", EvalMapping)}
-
-              </Col>
+          <Row md={4}>
+            {filterAppeals().length == 0 ?
+              <div className="text-center m-5">
+                <h2>No appeals found.</h2>
+              </div>
+              :
+              null
+            }
+            {[...filterAppeals()].map((appeal, i) => (
+              <div>
+                <TransactionsCard key={i} {...appeal}></TransactionsCard>
+                {/* {console.log("EvalMap = ",EvalMapping)} */}
+              </div>
             ))}
           </Row>
         </Container>
-
-
       </div>
     );
   };
   const renderEval = (e) => {
     // const { transactions, currentAccount } = useContext(ContractContext);
     return (
-      <div class="col-sm-6">
+      <div class="col-sm-6 m-3">
         <p></p>
-        <Input placeholder="Certificate Id" name="targetTokenId" type="text" handleChange={handleEvalFormChange} />
-        <Input placeholder="Re-evaluated Grade" name="newGrade" type="text" handleChange={handleEvalFormChange} />
+        <Input placeholder="Certificate Id (example: 6)" name="targetTokenId" type="text" handleChange={handleEvalFormChange} />
+        <Input placeholder="New Grade" name="newGrade" type="text" handleChange={handleEvalFormChange} />
         <div class="col-sm-6" />
         <Button
           type="button"
           onClick={handleEvalSubmit}
           className=""
         >
-          Submit Re-Evaluation
+          Confirm
         </Button>
       </div>
     );
@@ -215,6 +218,7 @@ const GradeAppeals = () => {
       <h2 className="pb-2 border-bottom text-start mt-3">Manage Appeals</h2>
       {renderLoading()}
       {Transactions()}
+      {/* {emptyAppeal ? null : renderEval()} */}
       {renderEval()}
     </div>
   );
