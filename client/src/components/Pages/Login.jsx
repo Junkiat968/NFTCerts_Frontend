@@ -4,34 +4,49 @@ import useEth from "../../contexts/EthContext/useEth";
 const Login = () => {
   const { state, init } = useEth();
 
+  function refreshPage() {
+    window.location.reload(false);
+  }
+
   const renderAcc = (e) => {
     if (state.accounts !== null) {
       return (
         <div>
-          <section className="text-center">
-            <div className="row py-lg-1">
-              <small className="px-2">Account: {state.accounts}</small>
-              <small>Role: {state.role}</small>
-            </div>
-          </section>
-          <div className="mt-5">
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5">
-              <div
-                className="card text-center mt-5 mx-auto"
-                style={{ width: "18rem" }}
-              >
-                <div className="card-body">
-                  <h5 className="card-title mb-3">Note.</h5>
-                  <h6 className="card-subtitle mb-1 text-muted">
-                    To disconnect wallet:
-                  </h6>
-                  <p className="card-text">
-                    Use the MetaMask extension on your browser.
-                  </p>
+          {
+            state.role === "NONE" ?
+              <>
+                <p className="lead fs-2 fw-bold">Invalid Account. </p>
+                <small className="fs-5 m-1">Please use a valid account or contact your system administrator.</small>
+              </>
+              :
+              <>
+                <h1 className="fw-light mb-3">Welcome to GradeGo.</h1>
+                <section className="text-center">
+                  <div className="row py-lg-1">
+                    <small className="px-2">Account: {state.accounts}</small>
+                    <small>Role: {state.role}</small>
+                  </div>
+                </section>
+                <div className="mt-5">
+                  <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-5">
+                    <div
+                      className="card text-center mt-5 mx-auto"
+                      style={{ width: "18rem" }}
+                    >
+                      <div className="card-body">
+                        <h5 className="card-title mb-3">Note.</h5>
+                        <h6 className="card-subtitle mb-1 text-muted">
+                          To disconnect wallet:
+                        </h6>
+                        <p className="card-text">
+                          Use the MetaMask extension on your browser.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
+              </>
+          }
         </div>
       );
     } else {
@@ -57,7 +72,6 @@ const Login = () => {
       <section className="py-5 text-center">
         <div className="row py-lg-5">
           <div className="col-lg-6 col-md-8 mx-auto">
-            <h1 className="fw-light mb-3">Welcome to GradeGo.</h1>
             {renderAcc()}
           </div>
         </div>
