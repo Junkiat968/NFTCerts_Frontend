@@ -30,7 +30,7 @@ const Navigationbar = () => {
               )} */}
               {state.role === "STUDENT" && (
                 <Nav.Link as={NavLink} to="/MyGrades" className="m-1">
-                  MyGrades
+                  Grades
                 </Nav.Link>
               )}
               {state.role === "FACULTY" && (

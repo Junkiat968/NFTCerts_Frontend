@@ -196,7 +196,7 @@ const TransactionLogs = () => {
     return (
       <div className="container">
         <h2 className="pb-2 border-bottom text-start mt-3">
-          Transaction Logs.
+          Transactions
         </h2>
         <div className="container-fluid p-3 row">
           <Tab.Container id="left-tabs" defaultActiveKey="log">
@@ -213,7 +213,7 @@ const TransactionLogs = () => {
                     <Nav.Link eventKey="mint">Mint</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="remod">Remod Request</Nav.Link>
+                    <Nav.Link eventKey="remod">Re-Evaluation Requests</Nav.Link>
                   </Nav.Item>
                 </Nav>
               </Col>
@@ -239,7 +239,7 @@ const TransactionLogs = () => {
     return (
       <div className="container">
         <h2 className="pb-2 border-bottom text-start mt-3">
-          Transaction Logs.
+          Transactions
         </h2>
         <div className="container-fluid p-3 row">
           <Tab.Container id="left-tabs" defaultActiveKey="transfer">
@@ -253,7 +253,7 @@ const TransactionLogs = () => {
                     <Nav.Link eventKey="transfer">Transfer</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="remod">Remod Request</Nav.Link>
+                    <Nav.Link eventKey="remod">Re-Evaluation Requests</Nav.Link>
                   </Nav.Item>
                 </Nav>
               </Col>
@@ -276,7 +276,7 @@ const TransactionLogs = () => {
     return (
       <div className="container">
         <h2 className="pb-2 border-bottom text-start mt-3">
-          Transaction Logs.
+          Transactions
         </h2>
         <div className="container-fluid p-3 row">
           <Tab.Container id="left-tabs" defaultActiveKey="log">
@@ -296,7 +296,7 @@ const TransactionLogs = () => {
                     <Nav.Link eventKey="mint">Mint</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="remod">Remod Request</Nav.Link>
+                    <Nav.Link eventKey="remod">Re-Evaluation Requests</Nav.Link>
                   </Nav.Item>
                 </Nav>
               </Col>

@@ -65,7 +65,7 @@ const ManageGrades = () => {
   const renderButtons = (e) => {
     return (
       <button className="float-end btn btn-block btn-outline-primary ms-3" type="button"
-        onClick={functMultiMint}>Mint
+        onClick={functMultiMint}>Confirm
       </button>
     );
   };
@@ -208,7 +208,7 @@ const ManageGrades = () => {
                       className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
                         }`}
                     >
-                      {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+                      {uploadedFileName ? uploadedFileName : 'Select Excel'}
                     </button>
                   </div>
                   {renderTable()}
@@ -239,7 +239,7 @@ const ManageGrades = () => {
                       className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
                         }`}
                     >
-                      {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+                      {uploadedFileName ? uploadedFileName : 'Select Excel'}
                     </button>
                   </div>
                   {renderTable()}
@@ -270,7 +270,7 @@ const ManageGrades = () => {
                       className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
                         }`}
                     >
-                      {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+                      {uploadedFileName ? uploadedFileName : 'Select Excel'}
                     </button>
                   </div>
                   {renderTable()}
@@ -301,7 +301,7 @@ const ManageGrades = () => {
                       className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
                         }`}
                     >
-                      {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+                      {uploadedFileName ? uploadedFileName : 'Select Excel'}
                     </button>
                   </div>
                   {renderTable()}
@@ -332,7 +332,7 @@ const ManageGrades = () => {
                       className={`float-end btn btn-outline-${uploadedFileName ? "success" : "primary"
                         }`}
                     >
-                      {uploadedFileName ? uploadedFileName : 'Upload Grades'}
+                      {uploadedFileName ? uploadedFileName : 'Select Excel'}
                     </button>
                   </div>
                   {renderTable()}

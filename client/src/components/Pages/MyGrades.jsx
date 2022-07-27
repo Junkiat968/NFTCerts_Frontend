@@ -165,13 +165,13 @@ const MyGrades = () => {
 
   return (
     <div className='container mb-5'>
-      <h2 className="pb-2 border-bottom text-start my-1 mt-3">MyGrades.</h2>
+      <h2 className="pb-2 border-bottom text-start my-1 mt-3">Grades</h2>
       <Tabs
         defaultActiveKey="mygrades"
         id="gradesTabs"
         className="my-3 fs-6 fw-bold container"
       >
-        <Tab eventKey="mygrades" title="My Grades">
+        <Tab eventKey="mygrades" title="Grades">
           <div className="row w-100 d-inline-block m-2">
             <Row>
               <Col sm={6}>
@@ -292,7 +292,7 @@ function ALLGRADES({
                                     onClick={handleAlertSubmit}
                                     className=""
                                   >
-                                    Submit Appeal
+                                    Submit Request
                                   </Button>
                                 </div>
                               </Card.Body>

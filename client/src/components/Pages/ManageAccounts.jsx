@@ -574,7 +574,7 @@ const ManageAccounts = () => {
             <input placeholder="Student Address" className="form-control mb-1" type="text" name="studentAddress" value={formAddStudentData.studentAddress} onChange={handleStudent} />
           </div>
           <div className="col-sm-6 w-100 d-inline-block mt-1 text-center">
-            <button className="btn btn-block btn-primary mt-3" type="button" onClick={functMakeStudent}>Add Student</button>
+            <button className="btn btn-block btn-primary mt-3" type="button" onClick={functMakeStudent}>Make Student</button>
             <div className="my-2 text-start">
               <label for="addStudentResult" className="fw-bold m-1 me-2">Result:</label>
               {makeStudentLoading ?
@@ -595,7 +595,7 @@ const ManageAccounts = () => {
   const renderFacultyUploadBtn = (e) => {
     return (
       <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
-        onClick={functAddFaculty}>Upload
+        onClick={functAddFaculty}>Confirm
       </button>
     );
   };
@@ -603,7 +603,7 @@ const ManageAccounts = () => {
   const renderStudentUploadBtn = (e) => {
     return (
       <button className="float-end btn btn-block btn-outline-primary mx-3" type="button"
-        onClick={functAddStudents}>Upload
+        onClick={functAddStudents}>Confirm
       </button>
     );
   };
@@ -615,7 +615,7 @@ const ManageAccounts = () => {
 
   return (
     <div className='container mb-5' >
-      <h2 className="border-bottom text-start mt-3">Manage Accounts.</h2>
+      <h2 className="border-bottom text-start mt-3">Manage Accounts</h2>
       <Tab.Container id="left-tabs" defaultActiveKey="Admin">
         <Row className="p-1">
           <Col sm={3}>
@@ -661,7 +661,7 @@ const ManageAccounts = () => {
                     className={`float-end btn btn-outline-${uploadedFileFaculty ? "success" : "primary"
                       }`}
                   >
-                    {uploadedFileFaculty ? uploadedFileFaculty : 'Select excel'}
+                    {uploadedFileFaculty ? uploadedFileFaculty : 'Select Excel'}
                   </button>
                 </div>
                 <div>
@@ -709,7 +709,7 @@ const ManageAccounts = () => {
                     className={`float-end btn btn-outline-${uploadedFileStudent ? "success" : "primary"
                       }`}
                   >
-                    {uploadedFileStudent ? uploadedFileStudent : 'Select excel'}
+                    {uploadedFileStudent ? uploadedFileStudent : 'Select Excel'}
                   </button>
                 </div>
                 <div>

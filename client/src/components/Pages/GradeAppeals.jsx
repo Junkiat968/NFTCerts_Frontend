@@ -21,6 +21,8 @@ const GradeAppeals = () => {
   const { state, sitnftInstance } = useEth();
 
   const [isStudentResult, setIsStudentResult] = useState('');
+  // var emptyAppeal = false;
+  const [emptyAppeal, setEmptyAppeal] = useState(false);
 
   const {
     functIsAdmin,
@@ -115,7 +117,7 @@ const GradeAppeals = () => {
     return (
       <Card className="m-3" style={{ width: '20rem' }}>
         <Card.Body>
-          <Card.Title>{message} </Card.Title>
+          <Card.Title>{message}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">{tokenName} </Card.Subtitle>
           <Card.Text>
             Applied on: {timestamp}
@@ -152,7 +154,13 @@ const GradeAppeals = () => {
       <div className="">
         <Container>
           <Row md={4}>
-            {filterAppeals().length == 0 && <p>No Appeals found</p>}
+            {filterAppeals().length == 0 ?
+              <div className="text-center m-5">
+                <h2>No appeals found.</h2>
+              </div>
+              :
+              null
+            }
             {[...filterAppeals()].map((appeal, i) => (
               <div>
                 <TransactionsCard key={i} {...appeal}></TransactionsCard>
@@ -167,17 +175,17 @@ const GradeAppeals = () => {
   const renderEval = (e) => {
     // const { transactions, currentAccount } = useContext(ContractContext);
     return (
-      <div class="col-sm-6">
+      <div class="col-sm-6 m-3">
         <p></p>
-        <Input placeholder="Certificate Id" name="targetTokenId" type="text" handleChange={handleEvalFormChange} />
-        <Input placeholder="Re-evaluated Grade" name="newGrade" type="text" handleChange={handleEvalFormChange} />
+        <Input placeholder="Certificate Id (example: 6)" name="targetTokenId" type="text" handleChange={handleEvalFormChange} />
+        <Input placeholder="New Grade" name="newGrade" type="text" handleChange={handleEvalFormChange} />
         <div class="col-sm-6" />
         <Button
           type="button"
           onClick={handleEvalSubmit}
           className=""
         >
-          Submit Re-Evaluation
+          Confirm
         </Button>
       </div>
     );
@@ -210,6 +218,7 @@ const GradeAppeals = () => {
       <h2 className="pb-2 border-bottom text-start mt-3">Manage Appeals</h2>
       {renderLoading()}
       {Transactions()}
+      {/* {emptyAppeal ? null : renderEval()} */}
       {renderEval()}
     </div>
   );
