@@ -46,7 +46,7 @@ const Navigationbar = () => {
               {(state.role === "FACULTY" || state.role === "STUDENT" ||
                 state.role === "ADMIN") && (
                   <Nav.Link as={NavLink} to="/TransactionLogs" className="m-1">
-                    Transaction Logs
+                    Transactions
                   </Nav.Link>
                 )}
               {/* <Nav.Link as={NavLink} to="/PurchaseTokens">Purchase Tokens</Nav.Link> */}
