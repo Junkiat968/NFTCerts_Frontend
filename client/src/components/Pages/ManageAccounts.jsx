@@ -690,7 +690,7 @@ const ManageAccounts = () => {
                 {renderMakeStudent()}
                 <p className="border-bottom mt-4 fw-bold">Upload Students:</p>
                 <div className="pb-2 w-100 d-inline-block">
-                <Button type='primary' onClick={(e) => templateFile("grades")}>Template File</Button>
+                <Button type='primary' onClick={(e) => templateFile("accounts")}>Template File</Button>
                   <div className="float-start align-middle m-2 mb-3">
                     {studentUploadLoading ?
                       <div className="spinner-border text-secondary align-middle me-2" role="status">
