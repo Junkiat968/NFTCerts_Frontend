@@ -16,6 +16,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^4.0.3",
     "react-select": "^5.4.0",
+    "react-transition-group": "^4.4.3",
     "web3": "^1.7.3",
     "xlsx": "^0.18.5"
   },
