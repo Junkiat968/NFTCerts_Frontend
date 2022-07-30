@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import * as XLSX from "xlsx";
-import { Col, Row, Nav, Tab, Table } from 'react-bootstrap';
+import { Col, Row, Nav, Tab, Table, Button } from 'react-bootstrap';
 import useEth from "../../contexts/EthContext/useEth";
 import { ContractContext } from '../../contexts/ContractProvider';
+import templateFile from "../Pages/generateExcel";
 
 // import Sidebar from "./Sidebar";
 import "./table.css";
@@ -482,7 +483,7 @@ const ManageAccounts = () => {
             <button className="btn btn-block btn-outline-secondary m-2" type="button" onClick={makeAdmin}>Make Admin</button>
             <button className="btn btn-block btn-outline-danger m-2" type="button" onClick={removeAdmin}>Remove Admin</button>
             <div className="my-2 text-start">
-              <label for="adminResult" className="fw-bold m-1 me-2">Result:</label>
+              <label htmlFor="adminResult" className="fw-bold m-1 me-2">Result:</label>
               {adminResultLoading || makeRemoveAdminLoading ?
                 <>
                   <div className="spinner-border text-secondary align-middle mx-2" role="status">
@@ -515,7 +516,7 @@ const ManageAccounts = () => {
             <button className="btn btn-block btn-outline-secondary m-2" type="button" onClick={makeFaculty}>Make Faculty</button>
             <button className="btn btn-block btn-outline-danger m-2" type="button" onClick={removeFaculty}>Remove Faculty</button>
             <div className="my-2 text-start">
-              <label for="facultyResult" className="fw-bold m-1 me-2">Result:</label>
+              <label htmlFor="facultyResult" className="fw-bold m-1 me-2">Result:</label>
               {facultyResultLoading || makeRemoveFacultyLoading ?
                 <>
                   <div className="spinner-border text-secondary align-middle mx-2" role="status">
@@ -547,7 +548,7 @@ const ManageAccounts = () => {
           <div className="col-sm-6 w-100 d-inline-block mt-1 text-center">
             <button className="btn btn-block btn-primary m-2" type="button" onClick={handleCheckStudent}>Check Student</button>
             <div className="my-2 text-start">
-              <label for="studentResult" className="fw-bold m-1 me-2">Result:</label>
+              <label htmlFor="studentResult" className="fw-bold m-1 me-2">Result:</label>
               {studentResultLoading ?
                 <div className="spinner-border text-secondary align-middle mx-2" role="status">
                   <span className="visually-hidden">Loading...</span>
@@ -576,7 +577,7 @@ const ManageAccounts = () => {
           <div className="col-sm-6 w-100 d-inline-block mt-1 text-center">
             <button className="btn btn-block btn-primary mt-3" type="button" onClick={functMakeStudent}>Make Student</button>
             <div className="my-2 text-start">
-              <label for="addStudentResult" className="fw-bold m-1 me-2">Result:</label>
+              <label htmlFor="addStudentResult" className="fw-bold m-1 me-2">Result:</label>
               {makeStudentLoading ?
                 <div className="spinner-border text-secondary align-middle mx-2" role="status">
                   <span className="visually-hidden">Loading...</span>
@@ -639,7 +640,8 @@ const ManageAccounts = () => {
               <Tab.Pane eventKey="Faculty">
                 {renderIsFaculty()}
                 <p className="border-bottom mt-3 fw-bold">Upload Faculty:</p>
-                <div className=" w-100 d-inline-block">
+                <div className="pb-2 w-100 d-inline-block">
+                <Button type='primary' onClick={(e) => templateFile("accounts")}>Template File</Button>
                   <div className="float-start align-middle m-2 mb-3">
                     {facultyUploadLoading ?
                       <div className="spinner-border text-secondary align-middle me-2" role="status">
@@ -687,7 +689,8 @@ const ManageAccounts = () => {
                 {renderIsStudent()}
                 {renderMakeStudent()}
                 <p className="border-bottom mt-4 fw-bold">Upload Students:</p>
-                <div className="w-100 d-inline-block">
+                <div className="pb-2 w-100 d-inline-block">
+                <Button type='primary' onClick={(e) => templateFile("accounts")}>Template File</Button>
                   <div className="float-start align-middle m-2 mb-3">
                     {studentUploadLoading ?
                       <div className="spinner-border text-secondary align-middle me-2" role="status">

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
-import { Col, Row, Nav, Tab, Table } from 'react-bootstrap';
+import { Col, Row, Nav, Tab, Table, Button } from 'react-bootstrap';
 import useEth from "../../contexts/EthContext/useEth";
+import templateFile from "../Pages/generateExcel";
 
 // import Sidebar from "./Sidebar";
 import "./table.css";
@@ -186,6 +187,7 @@ const ManageGrades = () => {
               <Tab.Pane eventKey="ICT1001">
                 <div>
                   <div className="p-3 w-100 d-inline-block">
+                  <Button type='primary' onClick={(e) => templateFile("grades")}>Template File</Button>
                     <div className="float-start align-middle">
                       {receiptLoading ?
                         <div className="spinner-border text-secondary align-middle me-2" role="status">
@@ -217,6 +219,7 @@ const ManageGrades = () => {
               <Tab.Pane eventKey="ICT1002">
                 <div>
                   <div className="p-3 w-100 d-inline-block">
+                  <Button type='primary' onClick={(e) => templateFile("grades")}>Template File</Button>
                     <div className="float-start align-middle">
                       {receiptLoading ?
                         <div className="spinner-border text-secondary align-middle me-2" role="status">
@@ -248,6 +251,7 @@ const ManageGrades = () => {
               <Tab.Pane eventKey="ICT2101">
                 <div>
                   <div className="p-3 w-100 d-inline-block">
+                  <Button type='primary' onClick={(e) => templateFile("grades")}>Template File</Button>
                     <div className="float-start align-middle">
                       {receiptLoading ?
                         <div className="spinner-border text-secondary align-middle me-2" role="status">
@@ -279,6 +283,7 @@ const ManageGrades = () => {
               <Tab.Pane eventKey="ICT2102">
                 <div>
                   <div className="p-3 w-100 d-inline-block">
+                  <Button type='primary' onClick={(e) => templateFile("grades")}>Template File</Button>
                     <div className="float-start align-middle">
                       {receiptLoading ?
                         <div className="spinner-border text-secondary align-middle me-2" role="status">
@@ -310,6 +315,7 @@ const ManageGrades = () => {
               <Tab.Pane eventKey="ICT3101">
                 <div>
                   <div className="p-3 w-100 d-inline-block">
+                  <Button type='primary' onClick={(e) => templateFile("grades")}>Template File</Button>
                     <div className="float-start align-middle">
                       {receiptLoading ?
                         <div className="spinner-border text-secondary align-middle me-2" role="status">

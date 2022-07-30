@@ -13,7 +13,6 @@ import MyGrades from './components/Pages/MyGrades.jsx';
 import ManageGrades from "./components/Pages/ManageGrades";
 import TransactionLogs from "./components/Pages/TransactionLogs";
 import PurchaseTokens from "./components/Pages/PurchaseTokens";
-import ManageFaculty from "./components/Pages/ManageFaculty";
 import ManageAccounts from "./components/Pages/ManageAccounts";
 import Error from './components/Pages/Error';
 import PageNotFound from './components/Pages/PageNotFound';
