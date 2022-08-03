@@ -1,18 +1,16 @@
 import React, { Component } from "react";
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import { EthProvider, EthContext } from "./contexts/EthContext";
+import { EthContext } from "./contexts/EthContext";
 import "./App.css";
 
 // Import Components
 import Navigationbar from './components/Navbar.jsx';
 
 // Import Pages
-import SITNFT from './components/Pages/SITNFT.jsx';
 import Login from './components/Pages/Login';
 import MyGrades from './components/Pages/MyGrades.jsx';
 import ManageGrades from "./components/Pages/ManageGrades";
 import TransactionLogs from "./components/Pages/TransactionLogs";
-import PurchaseTokens from "./components/Pages/PurchaseTokens";
 import ManageAccounts from "./components/Pages/ManageAccounts";
 import Error from './components/Pages/Error';
 import PageNotFound from './components/Pages/PageNotFound';
@@ -55,10 +53,6 @@ class App extends Component {
                     <Route path='/TransactionLogs' element={<TransactionLogs />} />
                   </>
                 )}
-                {/* <Route path="/SITNFT" element={<SITNFT />} /> */}
-                {/* <Route path='/ManageFaculty' element={<ManageFaculty />} /> */}
-                {/* <Route path='/PurchaseTokens' element={<PurchaseTokens />} /> */}
-                {/* <Route path='*' element={<PageNotFound />} /> */}
                 <Route path='/SITNFT' element={<AccessDenied />} />
                 <Route path='/ManageAccounts' element={<AccessDenied />} />
                 <Route path="/ManageGrades" element={<AccessDenied />} />

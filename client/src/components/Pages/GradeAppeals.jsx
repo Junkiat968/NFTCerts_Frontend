@@ -20,37 +20,8 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 const GradeAppeals = () => {
   const { state, sitnftInstance } = useEth();
 
-  const [isStudentResult, setIsStudentResult] = useState('');
-  // var emptyAppeal = false;
-  const [emptyAppeal, setEmptyAppeal] = useState(false);
-
   const {
-    functIsAdmin,
-    makeAdmin,
-    removeAdmin,
-    handleChange,
-    formAddressData,
-    isAdminResult,
-    functIsFaculty,
-    isFacultyResult,
-    makeFaculty,
-    removeFaculty,
-    functMint,
-    mintData,
-    mintResult,
-    handleMint,
-    functAddStudent,
-    formAddStudentData,
-    handleStudent,
-    studentResult,
-    getStudentAddress,
-    transactionCount,
     transactions,
-    getAllTransactions,
-    isLoading,
-    sendTransaction,
-    formData,
-    handleAlertFormChange,
     handleEvalFormChange,
     setNFTGrade,
     evalData,
@@ -58,6 +29,7 @@ const GradeAppeals = () => {
     regradeLoading,
     regradeReceipt
   } = useContext(ContractContext);
+
   const AlertInput = ({ placeholder, name, type, value, handleAlertFormChange }) => (
     <input
       placeholder={placeholder}
@@ -91,29 +63,7 @@ const GradeAppeals = () => {
     setNFTGrade();
   };
 
-  // const renderAlerts = (e) => {
-  //   // const { transactions, currentAccount } = useContext(ContractContext);
-
-  //   return (
-  //     <div class="col-sm-4">
-  //     {/* <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleAlertFormChange} />
-  //     <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleAlertFormChange} />
-  //     <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleAlertFormChange} /> */}
-  //     <Input placeholder="Enter reason for Grade Appeal and Certificate id" name="message" type="text" handleChange={handleAlertFormChange} />
-  //     <div class="col-sm-3" />
-  //         <button
-  //           type="button"
-  //           onClick={handleAlertSubmit}
-  //           className=""
-  //         >
-  //           Submit Appeal
-  //         </button>
-
-  //    </div>
-  //   );
-  // };
   const TransactionsCard = ({ addressFrom, timestamp, message, tokenName, reviewed }) => {
-
     return (
       <Card className="m-3" style={{ width: '20rem' }}>
         <Card.Body>
@@ -129,22 +79,6 @@ const GradeAppeals = () => {
           </Card.Link>
         </Card.Body>
       </Card>
-
-      // <div className="">
-      // <a href={`https://ropsten.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
-      //         <p className="">From: {addressFrom}</p>
-      //       </a>
-      //       {message && (
-      //         <>
-      //           <p className="text-black text-base">
-      //           Appeal Reason: {message} 
-      //           <br></br> 
-      //           Certificate Name: {tokenName} 
-      //           </p>
-      //         </>
-      //       )}
-      //       <p className="">{timestamp}</p>
-      // </div>
     );
   };
 
@@ -164,7 +98,6 @@ const GradeAppeals = () => {
             {[...filterAppeals()].map((appeal, i) => (
               <div>
                 <TransactionsCard key={i} {...appeal}></TransactionsCard>
-                {/* {console.log("EvalMap = ",EvalMapping)} */}
               </div>
             ))}
           </Row>
@@ -173,13 +106,12 @@ const GradeAppeals = () => {
     );
   };
   const renderEval = (e) => {
-    // const { transactions, currentAccount } = useContext(ContractContext);
     return (
-      <div class="col-sm-6 m-3">
+      <div className="col-sm-6 m-3">
         <p></p>
         <Input placeholder="Certificate Id (example: 6)" name="targetTokenId" type="text" handleChange={handleEvalFormChange} />
         <Input placeholder="New Grade" name="newGrade" type="text" handleChange={handleEvalFormChange} />
-        <div class="col-sm-6" />
+        <div className="col-sm-6" />
         <Button
           type="button"
           onClick={handleEvalSubmit}
@@ -218,7 +150,6 @@ const GradeAppeals = () => {
       <h2 className="pb-2 border-bottom text-start mt-3">Manage Appeals</h2>
       {renderLoading()}
       {Transactions()}
-      {/* {emptyAppeal ? null : renderEval()} */}
       {renderEval()}
     </div>
   );

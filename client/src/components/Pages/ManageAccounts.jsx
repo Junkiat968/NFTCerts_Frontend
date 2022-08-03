@@ -3,9 +3,7 @@ import * as XLSX from "xlsx";
 import { Col, Row, Nav, Tab, Table, Button } from 'react-bootstrap';
 import useEth from "../../contexts/EthContext/useEth";
 import { ContractContext } from '../../contexts/ContractProvider';
-import templateFile from "../Pages/generateExcel";
 
-// import Sidebar from "./Sidebar";
 import "./table.css";
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
@@ -641,7 +639,6 @@ const ManageAccounts = () => {
                 {renderIsFaculty()}
                 <p className="border-bottom mt-3 fw-bold">Upload Faculty:</p>
                 <div className="pb-2 w-100 d-inline-block">
-                <Button type='primary' onClick={(e) => templateFile("accounts")}>Template File</Button>
                   <div className="float-start align-middle m-2 mb-3">
                     {facultyUploadLoading ?
                       <div className="spinner-border text-secondary align-middle me-2" role="status">
@@ -690,7 +687,6 @@ const ManageAccounts = () => {
                 {renderMakeStudent()}
                 <p className="border-bottom mt-4 fw-bold">Upload Students:</p>
                 <div className="pb-2 w-100 d-inline-block">
-                <Button type='primary' onClick={(e) => templateFile("accounts")}>Template File</Button>
                   <div className="float-start align-middle m-2 mb-3">
                     {studentUploadLoading ?
                       <div className="spinner-border text-secondary align-middle me-2" role="status">

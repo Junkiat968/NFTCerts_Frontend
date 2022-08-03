@@ -4,10 +4,6 @@ import useEth from "../../contexts/EthContext/useEth";
 const Login = () => {
   const { state, init } = useEth();
 
-  function refreshPage() {
-    window.location.reload(false);
-  }
-
   const renderAcc = (e) => {
     if (state.accounts !== null) {
       return (

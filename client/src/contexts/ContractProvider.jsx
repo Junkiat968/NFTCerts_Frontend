@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import useEth from "./EthContext/useEth";
-import { ethers } from "ethers";
 export const ContractContext = React.createContext();
 const { ethereum } = window;
 /** Local/Persistent Storage */
