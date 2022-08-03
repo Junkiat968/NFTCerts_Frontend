@@ -10,9 +10,11 @@ $ npm start
 2. In Root Directory run the following:
 ```sh
 $ truffle develop
-$ migrate --reset --network rinkeby (or roptsten)
+$ migrate --reset --network rinkeby (or ropsten)
 ```
 3. Copy and replace the sitnftContractAddress variable in client\src\utils\constants.js
+4. Start the react dev server.
+
 
 [^1]: The address that the contract is deployed on is automatically made an Admin.
 
