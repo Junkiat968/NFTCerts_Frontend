@@ -22,7 +22,8 @@ $ migrate --reset --network rinkeby (or roptsten)
 - The address that the contract is deployed on is automatically made an Admin.
 
 ## Notes
-- Due to React **StrictMode** some functions in the application may run twice. This is not an issue when running in production.
+- Due to React **StrictMode** some functions in the application may run twice. 
+  This is only present in the development environment. This is not an issue when running in production.
 
 ## Troubleshooting
 - __Possible additional modules to install (if module not found).__
