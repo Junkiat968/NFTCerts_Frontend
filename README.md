@@ -15,7 +15,7 @@ In the root Directory, run:
 
    ![image](https://user-images.githubusercontent.com/20179214/182641062-b6a33849-032a-41c4-bc40-582a262c8170.png)
 
-5. Reset the migration to redeploy the contract on the testnet [2]:
+5. Reset the migration to redeploy the contract on the testnet [^2]:
     ```sh
     $ migrate --reset --network rinkeby (or ropsten)
     ```
