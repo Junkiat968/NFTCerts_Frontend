@@ -49,4 +49,4 @@ In the root Directory, run:
     - npm install --save ethers
 
 [^1]: The address that the contract is deployed on is automatically made an Admin.
-[^2]: Contract deplopment may fail due to Etheruem network congestion. 
+[^2]: Depending on the Ethereum network status, Contract deplopments may fail due at times. 
